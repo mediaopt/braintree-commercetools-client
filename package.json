@@ -1,6 +1,6 @@
 {
   "name": "braintree-commercetools-client",
-  "version": "0.0.4",
+  "version": "0.0.10",
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -21,8 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "clean": "rimraf lib",
-    "copy-files": "copyfiles -e **/*.ts -e **/*.tsx -u 1 src/**/*.scss lib/esm/src",
+    "clean": "rimraf dist",
+    "copy-files": "copyfiles -e **/*.ts -e **/*.tsx -u 1 src/**/*.scss dist/esm/src",
     "tsc": "npm run clean && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-files",
     "prepare": "npm run tsc"
   },
