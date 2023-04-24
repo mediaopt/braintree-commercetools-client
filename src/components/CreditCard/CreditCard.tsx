@@ -1,9 +1,24 @@
 import React from "react";
 
-interface Props {
-    label: string;
-}
+import { TokenProvider } from "../../app/useToken";
+import { RenderPurchase } from "../../components/RenderPurchase";
 
-export const CreditCard: React.FC<Props> = ({label}: Props) => {
-    return (<button>{label}</button>)
-}
+import { GeneralComponentsProps } from "../../types";
+
+export const CreditCard: React.FC<GeneralComponentsProps> = ({
+  getClientTokenUrl,
+  paymentId,
+  paymentVersion,
+}: GeneralComponentsProps) => {
+  return (
+    <TokenProvider
+      getClientTokenUrl={getClientTokenUrl}
+      paymentId={paymentId}
+      paymentVersion={paymentVersion}
+    >
+      <RenderPurchase>
+        <button>Purchase</button>
+      </RenderPurchase>
+    </TokenProvider>
+  );
+};

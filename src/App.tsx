@@ -1,16 +1,16 @@
-import React from "react"
-import './App.css';
+import React from "react";
+import "./App.css";
 
-import { PayPalCheckout } from './components/PayPalCheckout';
-import { PayPal } from './components/PayPal';
-import { CreditCard } from './components/CreditCard';
+import { CreditCard } from "./components/CreditCard";
 
 function App() {
   return (
     <div className="App">
-      <PayPalCheckout label='PayPalCheckout' />
-      <PayPal label='PayPal' />
-      <CreditCard label='CreditCard'/>
+      <CreditCard
+        getClientTokenUrl="/mock-api/getClientToken.json"
+        paymentId="01c5c18a-1495-46bd-bc48-68d8b2470a2b"
+        paymentVersion={1}
+      />
     </div>
   );
 }
