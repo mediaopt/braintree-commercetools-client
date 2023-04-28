@@ -1,13 +1,9 @@
 import { FC } from "react";
 
-import { useToken } from "../../app/useToken";
+import { usePayment } from "../../app/usePayment";
 
 export const RenderPurchase: FC<React.PropsWithChildren> = ({ children }) => {
-  const { clientToken } = useToken();
+  const { errorMessage } = usePayment();
 
-  return clientToken ? (
-    <>{children}</>
-  ) : (
-    <span>There is no client token to process</span>
-  );
+  return errorMessage ? <span>{errorMessage}</span> : <>{children}</>;
 };

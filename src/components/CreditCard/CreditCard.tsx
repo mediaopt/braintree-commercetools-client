@@ -1,24 +1,29 @@
 import React from "react";
 
-import { TokenProvider } from "../../app/useToken";
+import { PaymentProvider } from "../../app/usePayment";
 import { RenderPurchase } from "../../components/RenderPurchase";
 
 import { GeneralComponentsProps } from "../../types";
+import { CreditCardButton } from "./CreditCardButton";
 
 export const CreditCard: React.FC<GeneralComponentsProps> = ({
+  createPaymentUrl,
   getClientTokenUrl,
-  paymentId,
-  paymentVersion,
+  purchaseUrl,
+  sessionKey,
+  sessionValue,
 }: GeneralComponentsProps) => {
   return (
-    <TokenProvider
+    <PaymentProvider
       getClientTokenUrl={getClientTokenUrl}
-      paymentId={paymentId}
-      paymentVersion={paymentVersion}
+      createPaymentUrl={createPaymentUrl}
+      purchaseUrl={purchaseUrl}
+      sessionKey={sessionKey}
+      sessionValue={sessionValue}
     >
       <RenderPurchase>
-        <button>Purchase</button>
+        <CreditCardButton />
       </RenderPurchase>
-    </TokenProvider>
+    </PaymentProvider>
   );
 };

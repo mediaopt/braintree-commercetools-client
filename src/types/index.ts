@@ -4,9 +4,18 @@ export type ClientTokenRequest = {
 };
 
 export type GeneralComponentsProps = {
+  purchaseUrl: string;
+  createPaymentUrl: string;
   getClientTokenUrl: string;
-} & ClientTokenRequest;
+  sessionKey: string;
+  sessionValue: string;
+};
 
 export type ClientTokenResponse = {
   clientToken: string;
+};
+
+export type CreatePaymentResponse = {
+  id: string;
+  version: number;
 };

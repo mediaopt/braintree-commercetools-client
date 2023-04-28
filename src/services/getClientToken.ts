@@ -3,6 +3,8 @@ import { makeRequest } from "../api";
 import { ClientTokenResponse, ClientTokenRequest } from "../types";
 
 export const getClientToken = async (
+  sessionKey: string,
+  sessionValue: string,
   url: string,
   paymentId: string,
   paymentVersion: number
@@ -11,6 +13,8 @@ export const getClientToken = async (
     const data: ClientTokenRequest = { paymentId, paymentVersion };
 
     const result = await makeRequest<ClientTokenResponse, ClientTokenRequest>(
+      sessionKey,
+      sessionValue,
       url,
       "POST",
       data
