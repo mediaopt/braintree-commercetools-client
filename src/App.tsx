@@ -1,16 +1,18 @@
-import React from "react"
-import './App.css';
+import React from "react";
+import "./App.css";
 
-import { PayPalCheckout } from './components/PayPalCheckout';
-import { PayPal } from './components/PayPal';
-import { CreditCard } from './components/CreditCard';
+import { CreditCard } from "./components/CreditCard";
 
 function App() {
   return (
     <div className="App">
-      <PayPalCheckout label='PayPalCheckout' />
-      <PayPal label='PayPal' />
-      <CreditCard label='CreditCard'/>
+      <CreditCard
+        createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
+        getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
+        purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/purchase"
+        sessionKey="frontastic-session"
+        sessionValue="XXXXX"
+      />
     </div>
   );
 }
