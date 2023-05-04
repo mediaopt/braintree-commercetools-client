@@ -19,3 +19,7 @@ export type CreatePaymentResponse = {
   id: string;
   version: number;
 };
+
+export type CreditCardMaskProps = {
+  clientToken: string;
+};
