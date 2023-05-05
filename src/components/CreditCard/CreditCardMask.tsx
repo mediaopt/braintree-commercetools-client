@@ -1,18 +1,19 @@
 import React, {useEffect} from "react";
-import {CreditCardMaskProps} from "../../types";
 import {client as braintreeClient, hostedFields} from "braintree-web";
 import "./styling.css";
+import {usePayment} from "../../app/usePayment";
+import {Client} from "braintree-web"
 
-export const CreditCardMask: React.FC<React.PropsWithChildren<CreditCardMaskProps>> = ({clientToken, children}) => {
+export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
+    const { handlePurchase, clientToken } = usePayment();
 
     const ccFormRef = React.useRef<HTMLFormElement>(null);
-    clientToken = 'sandbox_g42y39zw_348pk9cgf3bgyw2b';
     useEffect(() => {
         const form = ccFormRef.current;
 
         braintreeClient.create({
             authorization: clientToken
-        }, function(err, clientInstance) {
+        }, function(err, clientInstance: Client) {
             if (err) {
                 console.error(err);
                 return;
@@ -20,7 +21,7 @@ export const CreditCardMask: React.FC<React.PropsWithChildren<CreditCardMaskProp
             createHostedFields(clientInstance);
         });
 
-        function createHostedFields(clientInstance:any) {
+        function createHostedFields(clientInstance:Client) {
             hostedFields.create({
                 client: clientInstance,
                 styles: {
@@ -71,15 +72,15 @@ export const CreditCardMask: React.FC<React.PropsWithChildren<CreditCardMaskProp
                             alert('Something went wrong. Check your card details and try again.');
                             return;
                         }
-
-                        alert('Submit your nonce (' + payload?.nonce + ') to your server here!');
+                        console.info('Submit your nonce (' + payload?.nonce + ') to your server here!');
+                        handlePurchase();
                     });
                 };
 
                 form.addEventListener('submit', tokenize, false);
             });
         }
-    }, [clientToken])
+    });
 
 
     return (<>
