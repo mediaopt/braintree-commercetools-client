@@ -1,6 +1,7 @@
 import { FC, createContext, useMemo, useContext, useState } from "react";
 
 import { getClientToken, createPayment } from "../services";
+import { Result } from "../components/Result";
 
 import {
   GeneralComponentsProps,
@@ -33,9 +34,12 @@ export const PaymentProvider: FC<
   purchaseUrl,
   sessionKey,
   sessionValue,
+  purchaseCallback,
   children,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -92,6 +96,9 @@ export const PaymentProvider: FC<
 
       const response = await makeTransactionSaleRequest(sessionKey, sessionValue, purchaseUrl, payload);
       console.info(response);
+
+      setShowResult(true);
+      if (purchaseCallback) purchaseCallback();
     };
 
     return {
@@ -104,7 +111,9 @@ export const PaymentProvider: FC<
   }, [clientToken, gettingClientToken, errorMessage]);
 
   return (
-    <PaymentContext.Provider value={value}>{children}</PaymentContext.Provider>
+    <PaymentContext.Provider value={value}>
+      {showResult ? <Result /> : children}
+    </PaymentContext.Provider>
   );
 };
 
