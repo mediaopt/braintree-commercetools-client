@@ -12,6 +12,7 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   purchaseUrl,
   sessionKey,
   sessionValue,
+  purchaseCallback,
 }: GeneralComponentsProps) => {
   return (
     <PaymentProvider
@@ -20,6 +21,7 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
       purchaseUrl={purchaseUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
+      purchaseCallback={purchaseCallback}
     >
       <RenderPurchase>
         <CreditCardButton />

@@ -12,6 +12,9 @@ function App() {
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/purchase"
         sessionKey="frontastic-session"
         sessionValue="XXXXX"
+        purchaseCallback={() => {
+          console.log("Do something");
+        }}
       />
     </div>
   );
