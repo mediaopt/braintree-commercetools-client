@@ -7,13 +7,14 @@ import {
   ClientTokenResponse,
   CreatePaymentResponse,
 } from "../types";
+import {makeTransactionSaleRequest} from "../services/makeTransactionSaleRequest";
 
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
   errorMessage: string;
   handleGetClientToken: () => void;
-  handlePurchase: () => void;
+  handlePurchase: (paymentNonce: string) => void;
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -21,7 +22,7 @@ const PaymentContext = createContext<PaymentContextT>({
   clientToken: "",
   errorMessage: "",
   handleGetClientToken: () => {},
-  handlePurchase: () => {},
+  handlePurchase: (paymentNonce: string) => {},
 });
 
 export const PaymentProvider: FC<
@@ -65,6 +66,9 @@ export const PaymentProvider: FC<
         }
 
         setErrorMessage("There is an error in getting client token!");
+        /* @todo remove - just used as fallback for when the call fails while testing */
+        setClientToken('sandbox_g42y39zw_348pk9cgf3bgyw2b');
+        setGettingClientToken(false);
       } catch (error) {
         setErrorMessage("Authentication Error!");
         console.error(error);
@@ -72,8 +76,22 @@ export const PaymentProvider: FC<
       setGettingClientToken(false);
     };
 
-    const handlePurchase = async () => {
-      console.log(purchaseUrl);
+    const handlePurchase = async (paymentNonce: string) => {
+      console.info(`Send the none: ${paymentNonce} to ${purchaseUrl}`);
+
+      const payload = {
+        "version": 'payment-version',
+        "actions": [
+            {
+              "action" : "setCustomField",
+              "name" : "transactionSaleRequest",
+              "value" : paymentNonce
+            }
+            ]
+      };
+
+      const response = await makeTransactionSaleRequest(sessionKey, sessionValue, purchaseUrl, payload);
+      console.info(response);
     };
 
     return {

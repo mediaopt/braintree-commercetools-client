@@ -82,3 +82,7 @@
     margin: 0 auto;
     padding: 1.875em;
 }
+
+.hidden {
+    display: none;
+}

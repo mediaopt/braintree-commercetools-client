@@ -9,6 +9,6 @@ export const CreditCardButton: React.FC = () => {
   return clientToken ? (
       <CreditCardMask />
   ) : (
-    <button onClick={handleGetClientToken}>Get Client Token</button>
+    <button onClick={handleGetClientToken}>Pay €80</button>
   );
 };
