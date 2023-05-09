@@ -1,9 +1,20 @@
 import { FC } from "react";
 
-export const Result: FC<React.PropsWithChildren> = ({ children }) => {
+type ResultProps = {
+  success?: boolean;
+  message?: string;
+};
+
+export const Result: FC<React.PropsWithChildren<ResultProps>> = ({
+  success = true,
+  message,
+  children,
+}) => {
   return (
-    <div>
-      Thank you for your purchase! <div>{children}</div>
+    <div className={!success ? "result-error" : "result-success"}>
+      {message ?? "Thank you for your purchase!"}
+
+      <div>{children}</div>
     </div>
   );
 };
