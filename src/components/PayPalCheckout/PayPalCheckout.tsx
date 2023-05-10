@@ -1,9 +1,9 @@
 import React from "react";
 
 interface Props {
-    label: string;
+  label: string;
 }
 
-export const PayPalCheckout: React.FC<Props> = ({label}: Props) => {
-    return (<button>{label}</button>)
-}
+export const PayPalCheckout: React.FC<Props> = ({ label }: Props) => {
+  return <button>{label}</button>;
+};

@@ -1,25 +1,25 @@
-import {client} from "braintree-web";
-import {useEffect, useState} from "react";
-import {usePayment} from "./usePayment";
+import { client } from "braintree-web";
+import { useEffect, useState } from "react";
+import { usePayment } from "./usePayment";
 
 export const useBraintreeClient = () => {
-    const { clientToken } = usePayment();
-    const [clientInstance, setClientInstance] = useState(undefined);
+  const { clientToken } = usePayment();
+  const [clientInstance, setClientInstance] = useState(undefined);
 
-    useEffect(() => {
+  useEffect(() => {
+    client.create(
+      {
+        authorization: clientToken,
+      },
+      function (err, braintreeClientInstance) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        setClientInstance(braintreeClientInstance);
+      }
+    );
+  }, [clientToken]);
 
-        client.create({
-            authorization: clientToken
-        }, function (err, braintreeClientInstance) {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log('client created');
-            setClientInstance(braintreeClientInstance);
-        });
-    }, [clientToken]);
-
-    return clientInstance;
+  return clientInstance;
 };
-

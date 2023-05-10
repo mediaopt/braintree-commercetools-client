@@ -8,7 +8,7 @@ import {
   ClientTokenResponse,
   CreatePaymentResponse,
 } from "../types";
-import {makeTransactionSaleRequest} from "../services/makeTransactionSaleRequest";
+import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 
 type PaymentContextT = {
   gettingClientToken: boolean;
@@ -42,7 +42,7 @@ export const PaymentProvider: FC<
 
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [paymentInfo, setPaymentInfo] = useState({id:'',version:0});
+  const [paymentInfo, setPaymentInfo] = useState({ id: "", version: 0 });
 
   const value = useMemo(() => {
     const handleGetClientToken = async () => {
@@ -63,7 +63,10 @@ export const PaymentProvider: FC<
             createPaymentResult.version
           )) as ClientTokenResponse;
 
-          setPaymentInfo({id: createPaymentResult.id, version: clientTokenresult.paymentVersion});
+          setPaymentInfo({
+            id: createPaymentResult.id,
+            version: clientTokenresult.paymentVersion,
+          });
 
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
@@ -81,15 +84,18 @@ export const PaymentProvider: FC<
     };
 
     const handlePurchase = async (paymentNonce: string) => {
-
       const requestBody = {
-        "paymentVersion": paymentInfo.version,
-        "paymentId": paymentInfo.id,
-        "paymentMethodNonce": paymentNonce
-      }
+        paymentVersion: paymentInfo.version,
+        paymentId: paymentInfo.id,
+        paymentMethodNonce: paymentNonce,
+      };
 
-      const response = await makeTransactionSaleRequest(sessionKey, sessionValue, purchaseUrl, requestBody);
-      console.info(response);
+      const response = await makeTransactionSaleRequest(
+        sessionKey,
+        sessionValue,
+        purchaseUrl,
+        requestBody
+      );
 
       setShowResult(true);
       if (purchaseCallback) purchaseCallback();
