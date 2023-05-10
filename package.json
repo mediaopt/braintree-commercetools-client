@@ -1,6 +1,6 @@
 {
   "name": "braintree-commercetools-client",
-  "version": "0.0.26",
+  "version": "0.0.52",
   "private": false,
   "type": "module",
   "dependencies": {
@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean": "rimraf dist",
-    "copy-files": "copyfiles -e **/*.ts -e **/*.tsx -u 1 src/**/*.scss dist/esm/src",
+    "copy-files": "copyfiles -e *.ts -e **/*.ts -e **/*.tsx -u 1 src/**/**/*.css dist/esm/src",
     "tsc": "npm run clean && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-files",
     "prepare": "npm run tsc"
   },
@@ -48,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@types/braintree-web": "^3.75.23"
+    "@types/braintree-web": "^3.75.23",
+    "tailwindcss": "^3.3.2"
   }
 }
