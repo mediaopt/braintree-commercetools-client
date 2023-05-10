@@ -14,6 +14,7 @@ export type GeneralComponentsProps = {
 
 export type ClientTokenResponse = {
   clientToken: string;
+  paymentVersion: number;
 };
 
 export type CreatePaymentResponse = {

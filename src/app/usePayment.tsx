@@ -8,13 +8,14 @@ import {
   ClientTokenResponse,
   CreatePaymentResponse,
 } from "../types";
+import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
   errorMessage: string;
   handleGetClientToken: () => void;
-  handlePurchase: () => void;
+  handlePurchase: (paymentNonce: string) => void;
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -22,7 +23,7 @@ const PaymentContext = createContext<PaymentContextT>({
   clientToken: "",
   errorMessage: "",
   handleGetClientToken: () => {},
-  handlePurchase: () => {},
+  handlePurchase: (paymentNonce: string) => {},
 });
 
 export const PaymentProvider: FC<
@@ -41,6 +42,7 @@ export const PaymentProvider: FC<
 
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [paymentInfo, setPaymentInfo] = useState({ id: "", version: 0 });
 
   const value = useMemo(() => {
     const handleGetClientToken = async () => {
@@ -61,6 +63,11 @@ export const PaymentProvider: FC<
             createPaymentResult.version
           )) as ClientTokenResponse;
 
+          setPaymentInfo({
+            id: createPaymentResult.id,
+            version: clientTokenresult.paymentVersion,
+          });
+
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
@@ -76,8 +83,19 @@ export const PaymentProvider: FC<
       setGettingClientToken(false);
     };
 
-    const handlePurchase = async () => {
-      console.log(purchaseUrl);
+    const handlePurchase = async (paymentNonce: string) => {
+      const requestBody = {
+        paymentVersion: paymentInfo.version,
+        paymentId: paymentInfo.id,
+        paymentMethodNonce: paymentNonce,
+      };
+
+      const response = await makeTransactionSaleRequest(
+        sessionKey,
+        sessionValue,
+        purchaseUrl,
+        requestBody
+      );
 
       setShowResult(true);
       if (purchaseCallback) purchaseCallback();
