@@ -42,6 +42,7 @@ export const PaymentProvider: FC<
 
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [paymentInfo, setPaymentInfo] = useState({id:'',version:0});
 
   const value = useMemo(() => {
     const handleGetClientToken = async () => {
@@ -62,6 +63,8 @@ export const PaymentProvider: FC<
             createPaymentResult.version
           )) as ClientTokenResponse;
 
+          setPaymentInfo({id: createPaymentResult.id, version: clientTokenresult.paymentVersion});
+
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
@@ -70,9 +73,6 @@ export const PaymentProvider: FC<
         }
 
         setErrorMessage("There is an error in getting client token!");
-        /* @todo remove - just used as fallback for when the call fails while testing */
-        setClientToken('sandbox_g42y39zw_348pk9cgf3bgyw2b');
-        setGettingClientToken(false);
       } catch (error) {
         setErrorMessage("Authentication Error!");
         console.error(error);
@@ -81,20 +81,14 @@ export const PaymentProvider: FC<
     };
 
     const handlePurchase = async (paymentNonce: string) => {
-      console.info(`Send the none: ${paymentNonce} to ${purchaseUrl}`);
 
-      const payload = {
-        "version": 'payment-version',
-        "actions": [
-            {
-              "action" : "setCustomField",
-              "name" : "transactionSaleRequest",
-              "value" : paymentNonce
-            }
-            ]
-      };
+      const requestBody = {
+        "paymentVersion": paymentInfo.version,
+        "paymentId": paymentInfo.id,
+        "paymentMethodNonce": paymentNonce
+      }
 
-      const response = await makeTransactionSaleRequest(sessionKey, sessionValue, purchaseUrl, payload);
+      const response = await makeTransactionSaleRequest(sessionKey, sessionValue, purchaseUrl, requestBody);
       console.info(response);
 
       setShowResult(true);
