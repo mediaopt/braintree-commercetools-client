@@ -1,25 +1,43 @@
-import { client } from "braintree-web";
+import { Client, client, ThreeDSecure, threeDSecure } from "braintree-web";
 import { useEffect, useState } from "react";
 import { usePayment } from "./usePayment";
 
 export const useBraintreeClient = () => {
   const { clientToken } = usePayment();
-  const [clientInstance, setClientInstance] = useState(undefined);
+  const [clientInstance, setClientInstance] = useState<Client>();
+  const [threeDSecureInstance, setThreeDSecureInstance] =
+    useState<ThreeDSecure>();
 
   useEffect(() => {
-    client.create(
-      {
+    client
+      .create({
         authorization: clientToken,
-      },
-      function (err, braintreeClientInstance) {
-        if (err) {
-          console.error(err);
-          return;
-        }
+      })
+      .then(function (braintreeClientInstance) {
         setClientInstance(braintreeClientInstance);
-      }
-    );
+        return threeDSecure.create({
+          version: 2, // Will use 3DS2 whenever possible
+          client: braintreeClientInstance,
+        });
+      })
+      .then(function (threeDSecureInstance) {
+        threeDSecure.on("lookup-complete", function (data, next) {
+          // check lookup data
+          console.log("lookup complete with");
+          console.log(data);
+          if (next) {
+            next();
+          }
+        });
+        setThreeDSecureInstance(threeDSecureInstance);
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   }, [clientToken]);
 
-  return clientInstance;
+  return {
+    client: clientInstance,
+    threeDS: threeDSecureInstance,
+  };
 };

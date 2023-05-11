@@ -4,16 +4,17 @@ import { hostedFields } from "braintree-web";
 import "./styling.css";
 import { usePayment } from "../../app/usePayment";
 import { useBraintreeClient } from "../../app/useBraintreeClient";
+import { mockAddress } from "./addressMockData";
 
 export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
   const { handlePurchase } = usePayment();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
-  const client = useBraintreeClient();
+  const { client, threeDS } = useBraintreeClient();
 
   const ccFormRef = React.useRef<HTMLFormElement>(null);
   useEffect(() => {
-    if (!client) return;
+    if (!client || !threeDS) return;
     const form = ccFormRef.current;
 
     hostedFields.create(
@@ -66,24 +67,42 @@ export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
           event.preventDefault();
 
           hostedFieldsInstance.tokenize(function (err, payload) {
-            if (err) {
+            if (err || !payload) {
               alert(
                 "Something went wrong. Check your card details and try again."
               );
               return;
             }
-            if (payload?.nonce) {
-              handlePurchase(payload.nonce);
-            } else {
-              console.error("no payment nonce");
-            }
+
+            console.log(payload);
+            let amount = 500.0;
+            let threeDSecureParameters = {
+              amount: amount,
+              nonce: payload.nonce,
+              bin: payload.details.bin,
+              email: "test@example.com",
+              ...mockAddress,
+            };
+            threeDS
+              .verifyCard(threeDSecureParameters)
+              .then(function (response) {
+                // Send response.nonce to your server for use in your integration
+                // The 3D Secure Authentication ID can be found
+                //  at response.threeDSecureInfo.threeDSecureAuthenticationId
+                console.log(response);
+                handlePurchase(response.nonce);
+              })
+              .catch(function (error) {
+                // Handle error
+                console.error(error);
+              });
           });
         };
         form.addEventListener("submit", tokenize, false);
         setHostedFieldsCreated(true);
       }
     );
-  }, [client]);
+  }, [client, threeDS]);
 
   return (
     <>
