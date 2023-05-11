@@ -6,7 +6,7 @@ import { useBraintreeClient } from "../../app/useBraintreeClient";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
-  "h-12 box-border w-full p-3 inline-block shadow-none font-semibold text-sm rounded-md border border-violet-50 leading-5 bg-slate-50 mb-3";
+  "h-12 box-border w-full inline-block shadow-none font-semibold text-sm rounded-md border border-violet-50 leading-5 bg-slate-50 mb-3";
 
 export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
   const { handlePurchase } = usePayment();
@@ -106,22 +106,22 @@ export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
           <label className={HOSTED_FIELDS_LABEL} htmlFor="card-number">
             Card Number
           </label>
-          <div id="card-number" className={HOSTED_FIELDS}></div>
+          <div id="card-number" className={`${HOSTED_FIELDS} px-3`}></div>
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
             Name
           </label>
-          <div id="cc-name" className={HOSTED_FIELDS}></div>
+          <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="expiration-date">
             Expiration Date
           </label>
-          <div id="expiration-date" className={HOSTED_FIELDS}></div>
+          <div id="expiration-date" className={`${HOSTED_FIELDS} p-3`}></div>
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="cvv">
             CVV
           </label>
-          <div id="cvv" className={HOSTED_FIELDS}></div>
+          <div id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
 
           <div className="block text-center">
             <input
