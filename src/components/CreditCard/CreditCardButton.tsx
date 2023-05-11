@@ -9,6 +9,11 @@ export const CreditCardButton: React.FC = () => {
   return clientToken ? (
     <CreditCardMask />
   ) : (
-    <button onClick={handleGetClientToken}>Pay</button>
+    <button
+      className="justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-blue-500 hover:bg-blue-600  shadow-sm"
+      onClick={handleGetClientToken}
+    >
+      Pay
+    </button>
   );
 };

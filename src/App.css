@@ -37,11 +37,3 @@
         transform: rotate(360deg);
     }
 }
-
-.result-success {
-    color: green;
-}
-
-.result-error {
-    color: red;
-}

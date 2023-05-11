@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { hostedFields } from "braintree-web";
-import "./styling.css";
 import { usePayment } from "../../app/usePayment";
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { mockAddress } from "./addressMockData";
+
+const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
+const HOSTED_FIELDS =
+  "h-12 box-border w-full inline-block shadow-none font-semibold text-sm rounded-md border border-violet-50 leading-5 bg-slate-50 mb-3";
 
 export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
   const { handlePurchase } = usePayment();
@@ -112,31 +115,37 @@ export const CreditCardMask: React.FC<React.PropsWithChildren> = () => {
           hidden: !hostedFieldsCreated,
         })}
       >
-        <form ref={ccFormRef} action="/" method="post" id="cardForm">
-          <label className="hosted-fields--label" htmlFor="card-number">
+        <form
+          ref={ccFormRef}
+          action="/"
+          method="post"
+          id="cardForm"
+          className="m-auto p-8 max-w-screen-md"
+        >
+          <label className={HOSTED_FIELDS_LABEL} htmlFor="card-number">
             Card Number
           </label>
-          <div id="card-number" className="hosted-field"></div>
+          <div id="card-number" className={`${HOSTED_FIELDS} px-3`}></div>
 
-          <label className="hosted-fields--label" htmlFor="cc-name">
+          <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
             Name
           </label>
-          <div id="cc-name" className="hosted-field"></div>
+          <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
 
-          <label className="hosted-fields--label" htmlFor="expiration-date">
+          <label className={HOSTED_FIELDS_LABEL} htmlFor="expiration-date">
             Expiration Date
           </label>
-          <div id="expiration-date" className="hosted-field"></div>
+          <div id="expiration-date" className={`${HOSTED_FIELDS} p-3`}></div>
 
-          <label className="hosted-fields--label" htmlFor="cvv">
+          <label className={HOSTED_FIELDS_LABEL} htmlFor="cvv">
             CVV
           </label>
-          <div id="cvv" className="hosted-field"></div>
+          <div id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
 
-          <div className="button-container">
+          <div className="block text-center">
             <input
               type="submit"
-              className="button button--small button--green"
+              className="justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-blue-500 hover:bg-blue-600  shadow-sm"
               value="Purchase"
               id="submit"
             />
