@@ -11,10 +11,12 @@ function App() {
         getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI1YTkzZDE4Zi03NmE2LTQzZmMtODI3Zi0wNTE3NzRkY2ZmMGIifQ.Eg3k1OGjj5whHK-pIY23WQMnsmjxo75BbJrm82W5cG8"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhN2Q0NjZhNC02OTFhLTQzMzktYTJiYS1kYmI0NjY3OTZkOTUifQ.TA3uecV7CcxM1FMQazb0QjFIRxVBPl25Rq23HvvsQ_U"
         purchaseCallback={() => {
           console.log("Do something");
         }}
+        fullWidth={true}
+        buttonText={"Pay €80"}
       />
     </div>
   );

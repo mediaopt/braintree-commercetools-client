@@ -21,10 +21,7 @@ export const useBraintreeClient = () => {
         });
       })
       .then(function (threeDSecureInstance) {
-        threeDSecure.on("lookup-complete", function (data, next) {
-          // check lookup data
-          console.log("lookup complete with");
-          console.log(data);
+        threeDSecureInstance.on("lookup-complete", function (data, next) {
           if (next) {
             next();
           }

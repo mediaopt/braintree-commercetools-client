@@ -10,6 +10,8 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: () => void;
+  fullWidth?: boolean;
+  buttonText?: string;
 };
 
 export type ClientTokenResponse = {
