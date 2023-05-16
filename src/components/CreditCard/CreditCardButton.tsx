@@ -10,7 +10,7 @@ export const CreditCardButton: React.FC<{
 }> = ({ fullWidth = true, buttonText }) => {
   const { handleGetClientToken, clientToken } = usePayment();
 
-  return clientToken || false ? (
+  return clientToken ? (
     <CreditCardMask fullWidth={fullWidth} buttonText={buttonText} />
   ) : (
     <button
