@@ -10,6 +10,7 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: () => void;
+  cartInformation: CartInformation;
 };
 
 export type ClientTokenResponse = {
@@ -20,4 +21,28 @@ export type ClientTokenResponse = {
 export type CreatePaymentResponse = {
   id: string;
   version: number;
+};
+
+export type CartInformation = {
+  account: {
+    email: string;
+  };
+  billing: {
+    firstName: string;
+    lastName: string;
+    streetName: string;
+    streetNumber: string;
+    city: string;
+    country: string;
+    postalCode: string;
+  };
+  shipping: {
+    firstName: string;
+    lastName: string;
+    streetName: string;
+    streetNumber: string;
+    city: string;
+    country: string;
+    postalCode: string;
+  };
 };
