@@ -1,12 +1,15 @@
 import React from "react";
 import "./App.css";
 
-import { CreditCard } from "./components/CreditCard";
+import { PayPal } from "./components/PayPal";
 
 function App() {
   return (
     <div className="App">
-      <CreditCard
+      <PayPal
+        currency="USD"
+        amount={10.0}
+        flow="capture"
         createPaymentUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
         getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
