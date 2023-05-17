@@ -39,6 +39,8 @@ export const PaymentProvider: FC<
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
+  const [resultSuccess, setResultSuccess] = useState<boolean>();
+  const [resultMessage, setResultMessage] = useState<string>();
 
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -97,8 +99,12 @@ export const PaymentProvider: FC<
         requestBody
       );
 
+      const { message, success } = response.result.transactionSaleResponse;
+      setResultSuccess(success);
+      setResultMessage(message);
+
       setShowResult(true);
-      if (purchaseCallback) purchaseCallback();
+      if (purchaseCallback && success !== false) purchaseCallback();
     };
 
     return {
@@ -112,7 +118,11 @@ export const PaymentProvider: FC<
 
   return (
     <PaymentContext.Provider value={value}>
-      {showResult ? <Result /> : children}
+      {showResult ? (
+        <Result success={resultSuccess} message={resultMessage} />
+      ) : (
+        children
+      )}
     </PaymentContext.Provider>
   );
 };
