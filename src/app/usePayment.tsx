@@ -100,7 +100,7 @@ export const PaymentProvider: FC<
       );
 
       setShowResult(true);
-      if (purchaseCallback) purchaseCallback();
+      if (purchaseCallback) purchaseCallback(response);
     };
 
     return {

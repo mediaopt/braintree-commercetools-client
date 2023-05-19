@@ -9,7 +9,7 @@ export type GeneralComponentsProps = {
   getClientTokenUrl: string;
   sessionKey: string;
   sessionValue: string;
-  purchaseCallback: () => void;
+  purchaseCallback: (result: any) => void;
   cartInformation: CartInformation;
 };
 
