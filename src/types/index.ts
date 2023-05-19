@@ -12,6 +12,7 @@ export type GeneralComponentsProps = {
   purchaseCallback: () => void;
   fullWidth?: boolean;
   buttonText?: string;
+  showPostalCode?: boolean;
 };
 
 export type ClientTokenResponse = {

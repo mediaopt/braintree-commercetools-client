@@ -8,11 +8,14 @@ import { mockAddress } from "./addressMockData";
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
   "h-12 box-border w-full inline-block shadow-none font-semibold text-sm rounded-md border border-violet-50 leading-5 bg-slate-50 mb-3";
-const PAY_BUTTON_TEXT_FALLBACK = "Purchase";
 
 export const CreditCardMask: React.FC<
-  React.PropsWithChildren<{ fullWidth?: boolean; buttonText?: string }>
-> = ({ fullWidth = true, buttonText = PAY_BUTTON_TEXT_FALLBACK }) => {
+  React.PropsWithChildren<{
+    fullWidth?: boolean;
+    buttonText: string;
+    showPostalCode: boolean;
+  }>
+> = ({ fullWidth = true, buttonText, showPostalCode }) => {
   const { handlePurchase } = usePayment();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
@@ -22,6 +25,34 @@ export const CreditCardMask: React.FC<
   useEffect(() => {
     if (!client || !threeDS) return;
     const form = ccFormRef.current;
+
+    let hostedFieldsInputs: object = {
+      number: {
+        container: "#card-number",
+        placeholder: "4111 1111 1111 1111",
+      },
+      cvv: {
+        container: "#cvv",
+        placeholder: "123",
+      },
+      expirationDate: {
+        container: "#expiration-date",
+        placeholder: "MM/YYYY",
+      },
+      cardholderName: {
+        container: "#cc-name",
+        placeholder: "name",
+      },
+    };
+
+    if (showPostalCode) {
+      hostedFieldsInputs = {
+        ...hostedFieldsInputs,
+        postalCode: {
+          container: "#postal-code",
+        },
+      };
+    }
 
     hostedFields.create(
       {
@@ -41,25 +72,7 @@ export const CreditCardMask: React.FC<
           },
         },
         fields: {
-          number: {
-            container: "#card-number",
-            placeholder: "4111 1111 1111 1111",
-          },
-          cvv: {
-            container: "#cvv",
-            placeholder: "123",
-          },
-          expirationDate: {
-            container: "#expiration-date",
-            placeholder: "MM/YYYY",
-          },
-          cardholderName: {
-            container: "#cc-name",
-            placeholder: "name",
-          },
-          postalCode: {
-            container: "#postal-code",
-          },
+          ...hostedFieldsInputs,
         },
       },
       function (err, hostedFieldsInstance) {
@@ -94,62 +107,42 @@ export const CreditCardMask: React.FC<
             threeDS
               .verifyCard(threeDSecureParameters)
               .then(function (response) {
-                // Send response.nonce to your server for use in your integration
-                // The 3D Secure Authentication ID can be found
-                //  at response.threeDSecureInfo.threeDSecureAuthenticationId
                 if (response.threeDSecureInfo.liabilityShifted) {
-                  // Liability has shifted to bank, proceed with nonce
                   handlePurchase(response.nonce);
                 } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-                  // Liability may still be shifted
-                  // Decide if you want to submit the nonce
                   /**
+                   * @todo liability shift possible - Decide if you want to submit the nonce
                    * user failed 3D Secure authentication.
                    * In this situation, the card brands recommend asking the user for another form of payment.
                    * However, if you have server-side risk assessment processes that allow for it, you can still use the new nonce to create a transaction.
                    * If you want to use a nonce that did not pass 3D Secure authentication, you need to set the required option to false in your server integration.
                    */
-                  alert("liability shift possible - todo implement handling of this case");
                 } else {
-                  // Liability has not shifted and will not shift
-                  // Decide if you want to submit the nonce
                   /**
+                   * @todo no liability shift - Decide if you want to submit the nonce
                    * If both of the above values are false then this card was ineligible for 3D Secure.
                    * You can continue to create the transaction with the new nonce.
                    * However, liability shift will not apply to this transaction.
                    * This case may be useful if you would like to ask the user for additional verification (AVS, etc).
                    */
-                  alert("no liability shift - todo implement handling of this case");
                 }
               })
               .catch(function (error) {
-                console.error(error);
                 if (error.code.indexOf("THREEDS_LOOKUP") === 0) {
-                  // an error occurred during the initial lookup request
                   if (
                     error.code ===
                     "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
                   ) {
-                    // either the passed payment method nonce does not exist
-                    // or it was already consumed before the lookup call was made
-                    console.error("nonce error");
+                    // @todo notify error - nonce does not exist / was already consumed
                   } else if (
                     error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
                   ) {
-                    // a validation error occurred
-                    // likely some non-ascii characters were included in the billing
-                    // address given name or surname fields, or the cardholdername field
-                    // Instruct your user to check their data and try again
-                    console.error(
-                      "check data and try again. If it continues, try other card or payment method"
-                    );
+                    // @todo notify validation error - try again / or different payment
                   } else {
-                    // an unknown lookup error occurred
-                    console.error("unknown lookup error");
+                    // @todo notify - unknown error
                   }
                 } else {
-                  // some other kind of error
-                  console.error("something went wrong");
+                  // @todo notify - generic error
                 }
               });
           });
@@ -190,10 +183,14 @@ export const CreditCardMask: React.FC<
           </label>
           <div id="expiration-date" className={`${HOSTED_FIELDS} p-3`}></div>
 
-          <label className={HOSTED_FIELDS_LABEL} htmlFor="postal-code">
-            Postal code
-          </label>
-          <div id="postal-code" className={`${HOSTED_FIELDS} p-3`}></div>
+          {showPostalCode && (
+            <>
+              <label className={HOSTED_FIELDS_LABEL} htmlFor="postal-code">
+                Postal code
+              </label>
+              <div id="postal-code" className={`${HOSTED_FIELDS} p-3`}></div>
+            </>
+          )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="cvv">
             CVV

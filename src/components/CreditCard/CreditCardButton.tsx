@@ -4,14 +4,25 @@ import { usePayment } from "../../app/usePayment";
 import { CreditCardMask } from "./CreditCardMask";
 import classNames from "classnames";
 
+const PAY_BUTTON_TEXT_FALLBACK = "Purchase";
+
 export const CreditCardButton: React.FC<{
   fullWidth?: boolean;
   buttonText?: string;
-}> = ({ fullWidth = true, buttonText }) => {
+  showPostalCode: boolean;
+}> = ({
+  fullWidth = true,
+  buttonText = PAY_BUTTON_TEXT_FALLBACK,
+  showPostalCode,
+}) => {
   const { handleGetClientToken, clientToken } = usePayment();
 
   return clientToken ? (
-    <CreditCardMask fullWidth={fullWidth} buttonText={buttonText} />
+    <CreditCardMask
+      fullWidth={fullWidth}
+      buttonText={buttonText}
+      showPostalCode={showPostalCode}
+    />
   ) : (
     <button
       className={classNames({
@@ -21,7 +32,7 @@ export const CreditCardButton: React.FC<{
       })}
       onClick={handleGetClientToken}
     >
-      Pay
+      {buttonText}
     </button>
   );
 };

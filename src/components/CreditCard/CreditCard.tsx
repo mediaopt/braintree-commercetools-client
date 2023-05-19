@@ -15,6 +15,7 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   purchaseCallback,
   fullWidth,
   buttonText,
+  showPostalCode = false,
 }: GeneralComponentsProps) => {
   return (
     <PaymentProvider
@@ -26,7 +27,11 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
       purchaseCallback={purchaseCallback}
     >
       <RenderPurchase>
-        <CreditCardButton buttonText={buttonText} fullWidth={fullWidth} />
+        <CreditCardButton
+          buttonText={buttonText}
+          fullWidth={fullWidth}
+          showPostalCode={showPostalCode}
+        />
       </RenderPurchase>
     </PaymentProvider>
   );
