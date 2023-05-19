@@ -106,7 +106,7 @@ export const PaymentProvider: FC<
       setResultMessage(message);
 
       setShowResult(true);
-      if (purchaseCallback && success !== false) purchaseCallback();
+      if (purchaseCallback && success !== false) purchaseCallback(response);
     };
 
     return {
