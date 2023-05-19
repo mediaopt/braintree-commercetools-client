@@ -7,10 +7,12 @@ import classNames from "classnames";
 const PAY_BUTTON_TEXT_FALLBACK = "Purchase";
 
 export const CreditCardButton: React.FC<{
+  disabled: boolean;
   fullWidth?: boolean;
   buttonText?: string;
   showPostalCode: boolean;
 }> = ({
+    disabled,
   fullWidth = true,
   buttonText = PAY_BUTTON_TEXT_FALLBACK,
   showPostalCode,
@@ -31,6 +33,7 @@ export const CreditCardButton: React.FC<{
         "w-full": fullWidth,
       })}
       onClick={handleGetClientToken}
+      disabled={disabled}
     >
       {buttonText}
     </button>
