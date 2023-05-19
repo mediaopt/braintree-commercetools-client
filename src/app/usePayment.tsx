@@ -36,6 +36,7 @@ export const PaymentProvider: FC<
   sessionValue,
   purchaseCallback,
   children,
+  cartInformation,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -53,7 +54,8 @@ export const PaymentProvider: FC<
         const createPaymentResult = (await createPayment(
           sessionKey,
           sessionValue,
-          createPaymentUrl
+          createPaymentUrl,
+          cartInformation
         )) as CreatePaymentResponse;
 
         if (createPaymentResult.id && createPaymentResult.version) {
