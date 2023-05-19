@@ -14,6 +14,9 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   sessionValue,
   purchaseCallback,
   cartInformation,
+  fullWidth,
+  buttonText,
+  showPostalCode = false,
 }: GeneralComponentsProps) => {
   return (
     <PaymentProvider
@@ -32,6 +35,9 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
             !cartInformation.billing ||
             !cartInformation.shipping
           }
+          buttonText={buttonText}
+          fullWidth={fullWidth}
+          showPostalCode={showPostalCode}
         />
       </RenderPurchase>
     </PaymentProvider>

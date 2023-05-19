@@ -11,6 +11,9 @@ export type GeneralComponentsProps = {
   sessionValue: string;
   purchaseCallback: (result: any) => void;
   cartInformation: CartInformation;
+  fullWidth?: boolean;
+  buttonText?: string;
+  showPostalCode?: boolean;
 };
 
 export type ClientTokenResponse = {
