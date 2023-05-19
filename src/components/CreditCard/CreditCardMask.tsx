@@ -110,21 +110,9 @@ export const CreditCardMask: React.FC<
                 if (response.threeDSecureInfo.liabilityShifted) {
                   handlePurchase(response.nonce);
                 } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-                  /**
-                   * @todo liability shift possible - Decide if you want to submit the nonce
-                   * user failed 3D Secure authentication.
-                   * In this situation, the card brands recommend asking the user for another form of payment.
-                   * However, if you have server-side risk assessment processes that allow for it, you can still use the new nonce to create a transaction.
-                   * If you want to use a nonce that did not pass 3D Secure authentication, you need to set the required option to false in your server integration.
-                   */
+                  // @todo liability shift possible - Decide if you want to submit the nonce
                 } else {
-                  /**
-                   * @todo no liability shift - Decide if you want to submit the nonce
-                   * If both of the above values are false then this card was ineligible for 3D Secure.
-                   * You can continue to create the transaction with the new nonce.
-                   * However, liability shift will not apply to this transaction.
-                   * This case may be useful if you would like to ask the user for additional verification (AVS, etc).
-                   */
+                  // @todo no liability shift - Decide if you want to submit the nonce
                 }
               })
               .catch(function (error) {
