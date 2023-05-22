@@ -3,7 +3,11 @@ import classNames from "classnames";
 import { hostedFields } from "braintree-web";
 import { usePayment } from "../../app/usePayment";
 import { useBraintreeClient } from "../../app/useBraintreeClient";
-import { mockAddress } from "./addressMockData";
+import {
+  ThreeDSecureVerifyOptions,
+  ThreeDSecureAdditionalInformation,
+  ThreeDSecureBillingAddress,
+} from "braintree-web/modules/three-d-secure";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -11,11 +15,23 @@ const HOSTED_FIELDS =
 
 export const CreditCardMask: React.FC<
   React.PropsWithChildren<{
+    fullCartAmount: number;
     fullWidth?: boolean;
     buttonText: string;
     showPostalCode: boolean;
+    threeDSBillingAddress?: ThreeDSecureBillingAddress;
+    threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+    email?: string;
   }>
-> = ({ fullWidth = true, buttonText, showPostalCode }) => {
+> = ({
+  fullWidth = true,
+  buttonText,
+  showPostalCode,
+  fullCartAmount,
+  threeDSAdditionalInformation,
+  threeDSBillingAddress,
+  email,
+}) => {
   const { handlePurchase } = usePayment();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
@@ -96,13 +112,13 @@ export const CreditCardMask: React.FC<
               return;
             }
 
-            let amount = 500.0;
-            let threeDSecureParameters = {
-              amount: amount,
+            let threeDSecureParameters: ThreeDSecureVerifyOptions = {
+              amount: fullCartAmount,
               nonce: payload.nonce,
               bin: payload.details.bin,
-              email: "test@example.com",
-              ...mockAddress,
+              email: email,
+              billingAddress: threeDSBillingAddress,
+              additionalInformation: threeDSAdditionalInformation,
             };
             threeDS
               .verifyCard(threeDSecureParameters)
