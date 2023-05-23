@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PaymentProvider } from "../../app/usePayment";
-import { RenderPurchase } from "../../components/RenderPurchase";
+import { RenderPurchase } from "../RenderPurchase";
 
 import { GeneralComponentsProps } from "../../types";
 import { CreditCardButton } from "./CreditCardButton";
@@ -13,6 +13,14 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   sessionKey,
   sessionValue,
   purchaseCallback,
+  cartInformation,
+  fullWidth,
+  buttonText,
+  showPostalCode = false,
+  showCardHoldersName = false,
+  email,
+  threeDSBillingAddress,
+  threeDSAdditionalInformation,
 }: GeneralComponentsProps) => {
   return (
     <PaymentProvider
@@ -22,9 +30,23 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
+      cartInformation={cartInformation}
     >
       <RenderPurchase>
-        <CreditCardButton />
+        <CreditCardButton
+          disabled={
+            !cartInformation.account ||
+            !cartInformation.billing ||
+            !cartInformation.shipping
+          }
+          buttonText={buttonText}
+          fullWidth={fullWidth}
+          showPostalCode={showPostalCode}
+          showCardHoldersName={showCardHoldersName}
+          email={email}
+          threeDSBillingAddress={threeDSBillingAddress}
+          threeDSAdditionalInformation={threeDSAdditionalInformation}
+        />
       </RenderPurchase>
     </PaymentProvider>
   );

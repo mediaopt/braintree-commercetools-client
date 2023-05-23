@@ -7,6 +7,7 @@ import {
   GeneralComponentsProps,
   ClientTokenResponse,
   CreatePaymentResponse,
+  PaymentInfo,
 } from "../types";
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 
@@ -16,6 +17,7 @@ type PaymentContextT = {
   errorMessage: string;
   handleGetClientToken: () => void;
   handlePurchase: (paymentNonce: string) => void;
+  paymentInfo: PaymentInfo;
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -24,6 +26,7 @@ const PaymentContext = createContext<PaymentContextT>({
   errorMessage: "",
   handleGetClientToken: () => {},
   handlePurchase: (paymentNonce: string) => {},
+  paymentInfo: { version: 0, id: "", amount: 0 },
 });
 
 export const PaymentProvider: FC<
@@ -36,13 +39,20 @@ export const PaymentProvider: FC<
   sessionValue,
   purchaseCallback,
   children,
+  cartInformation,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
+  const [resultSuccess, setResultSuccess] = useState<boolean>();
+  const [resultMessage, setResultMessage] = useState<string>();
 
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [paymentInfo, setPaymentInfo] = useState({ id: "", version: 0 });
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
+    version: 0,
+    id: "",
+    amount: 0,
+  });
 
   const value = useMemo(() => {
     const handleGetClientToken = async () => {
@@ -51,7 +61,8 @@ export const PaymentProvider: FC<
         const createPaymentResult = (await createPayment(
           sessionKey,
           sessionValue,
-          createPaymentUrl
+          createPaymentUrl,
+          cartInformation
         )) as CreatePaymentResponse;
 
         if (createPaymentResult.id && createPaymentResult.version) {
@@ -66,6 +77,7 @@ export const PaymentProvider: FC<
           setPaymentInfo({
             id: createPaymentResult.id,
             version: clientTokenresult.paymentVersion,
+            amount: createPaymentResult.amountPlanned.centAmount,
           });
 
           if (clientTokenresult.clientToken) {
@@ -97,8 +109,16 @@ export const PaymentProvider: FC<
         requestBody
       );
 
+      if (response.ok === false) {
+        // @todo implement handling of failed response
+      }
+
+      const { message, success } = response.result.transactionSaleResponse;
+      setResultSuccess(success);
+      setResultMessage(message);
+
       setShowResult(true);
-      if (purchaseCallback) purchaseCallback();
+      if (purchaseCallback && success !== false) purchaseCallback(response);
     };
 
     return {
@@ -107,12 +127,17 @@ export const PaymentProvider: FC<
       errorMessage,
       handleGetClientToken,
       handlePurchase,
+      paymentInfo,
     };
   }, [clientToken, gettingClientToken, errorMessage]);
 
   return (
     <PaymentContext.Provider value={value}>
-      {showResult ? <Result /> : children}
+      {showResult ? (
+        <Result success={resultSuccess} message={resultMessage} />
+      ) : (
+        children
+      )}
     </PaymentContext.Provider>
   );
 };
