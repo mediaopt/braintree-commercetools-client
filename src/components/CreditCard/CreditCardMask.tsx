@@ -79,12 +79,13 @@ export const CreditCardMask: React.FC<
       },
       function (err, hostedFieldsInstance) {
         if (err) {
+          notify("Error", "Something went wrong.");
           console.error(err);
           return;
         }
 
         if (!hostedFieldsInstance || !form) {
-          console.error("no hosted fields or form available");
+          notify("Error", "Credit card fields are not available.");
           return;
         }
         var tokenize = function (event: any) {
@@ -92,7 +93,8 @@ export const CreditCardMask: React.FC<
 
           hostedFieldsInstance.tokenize(function (err, payload) {
             if (err || !payload) {
-              alert(
+              notify(
+                "Error",
                 "Something went wrong. Check your card details and try again."
               );
               return;
@@ -123,16 +125,22 @@ export const CreditCardMask: React.FC<
                     error.code ===
                     "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
                   ) {
-                    // @todo notify error - nonce does not exist / was already consumed
+                    notify(
+                      "Error",
+                      "Payment nonce does not exist or was already used"
+                    );
                   } else if (
                     error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
                   ) {
-                    // @todo notify validation error - try again / or different payment
+                    notify(
+                      "Error",
+                      "Validation error - check your input or try a different payment"
+                    );
                   } else {
-                    // @todo notify - unknown error
+                    notify("Error", "Something went wrong - try again");
                   }
                 } else {
-                  // @todo notify - generic error
+                  notify("Error", "Something went wrong - try again");
                 }
               });
           });
@@ -143,20 +151,8 @@ export const CreditCardMask: React.FC<
     );
   }, [client, threeDS]);
 
-  const notice = () => {
-    notify("Info", "Updating campaign");
-  };
-
   return (
     <>
-      <button
-        className={
-          "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-blue-500 hover:bg-blue-600  shadow-sm"
-        }
-        onClick={notice}
-      >
-        click me
-      </button>
       <div
         className={classNames({
           "demo-frame": true,

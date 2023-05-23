@@ -21,7 +21,7 @@ const NotificationContext = createContext<NotificationContextT>({
   notify: () => {},
 });
 
-const NOTIFICATION_DURATION_MS = 3000;
+const NOTIFICATION_DURATION_MS = 5000;
 const NOTIFICATION_DELAY_MS = 500;
 
 export const NotificationsProvider: FC<React.PropsWithChildren> = ({
@@ -68,7 +68,7 @@ export const NotificationsProvider: FC<React.PropsWithChildren> = ({
 
   return (
     <NotificationContext.Provider value={value}>
-      <div className="fixed bottom-0 z-50 w-full md:left-[256px] md:w-[calc(100%-256px)]">
+      <div className="fixed bottom-0 z-50 w-full">
         {notifications.map((n) => (
           <NotificationTypeBanner
             key={n.id}
