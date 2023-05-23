@@ -15,7 +15,7 @@ export const CreditCardButton: React.FC<{
   fullWidth?: boolean;
   buttonText?: string;
   showPostalCode: boolean;
-  fullCartAmount: number;
+  showCardHoldersName: boolean;
   threeDSBillingAddress?: ThreeDSecureBillingAddress;
   threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
   email?: string;
@@ -24,7 +24,7 @@ export const CreditCardButton: React.FC<{
   fullWidth = true,
   buttonText = PAY_BUTTON_TEXT_FALLBACK,
   showPostalCode,
-  fullCartAmount,
+  showCardHoldersName,
   email,
   threeDSAdditionalInformation,
   threeDSBillingAddress,
@@ -33,10 +33,10 @@ export const CreditCardButton: React.FC<{
 
   return clientToken ? (
     <CreditCardMask
-      fullCartAmount={fullCartAmount}
       fullWidth={fullWidth}
       buttonText={buttonText}
       showPostalCode={showPostalCode}
+      showCardHoldersName={showCardHoldersName}
       email={email}
       threeDSAdditionalInformation={threeDSAdditionalInformation}
       threeDSBillingAddress={threeDSBillingAddress}

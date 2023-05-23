@@ -35,14 +35,13 @@ function App() {
         getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIzZmVkMmY0Yi1mY2M4LTQyYjMtYjVhOC1lZTJiYTYyZDk1ODIifQ.KxnjCwM-8WGb2ID4NHbPewD04l1H7Toegj_bKkmnn6g"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhOGM4YzQ3ZC03YTE1LTRlMTAtOWZhOS0wZTJkNDdkMTFkNDcifQ.6Yp_wRwganBaaZJfSHhCPLOxNHkjSfVAq3r6Hq3V5cc"
         purchaseCallback={() => {
           console.log("Do something");
         }}
         fullWidth={true}
-        buttonText={"Pay €80"}
+        buttonText={"Pay €X"}
         cartInformation={cartInformation}
-        fullCartAmount={149}
       />
     </div>
   );

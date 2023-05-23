@@ -15,10 +15,10 @@ const HOSTED_FIELDS =
 
 export const CreditCardMask: React.FC<
   React.PropsWithChildren<{
-    fullCartAmount: number;
     fullWidth?: boolean;
     buttonText: string;
     showPostalCode: boolean;
+    showCardHoldersName: boolean;
     threeDSBillingAddress?: ThreeDSecureBillingAddress;
     threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
     email?: string;
@@ -27,12 +27,12 @@ export const CreditCardMask: React.FC<
   fullWidth = true,
   buttonText,
   showPostalCode,
-  fullCartAmount,
   threeDSAdditionalInformation,
   threeDSBillingAddress,
   email,
+  showCardHoldersName,
 }) => {
-  const { handlePurchase } = usePayment();
+  const { handlePurchase, paymentInfo } = usePayment();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
   const { client, threeDS } = useBraintreeClient();
@@ -55,10 +55,6 @@ export const CreditCardMask: React.FC<
         container: "#expiration-date",
         placeholder: "MM/YYYY",
       },
-      cardholderName: {
-        container: "#cc-name",
-        placeholder: "name",
-      },
     };
 
     if (showPostalCode) {
@@ -66,6 +62,16 @@ export const CreditCardMask: React.FC<
         ...hostedFieldsInputs,
         postalCode: {
           container: "#postal-code",
+        },
+      };
+    }
+
+    if (showCardHoldersName) {
+      hostedFieldsInputs = {
+        ...hostedFieldsInputs,
+        cardholderName: {
+          container: "#cc-name",
+          placeholder: "name",
         },
       };
     }
@@ -113,7 +119,7 @@ export const CreditCardMask: React.FC<
             }
 
             let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-              amount: fullCartAmount,
+              amount: paymentInfo.amount,
               nonce: payload.nonce,
               bin: payload.details.bin,
               email: email,
@@ -177,10 +183,14 @@ export const CreditCardMask: React.FC<
           </label>
           <div id="card-number" className={`${HOSTED_FIELDS} px-3`}></div>
 
-          <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
-            Name
-          </label>
-          <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
+          {showCardHoldersName && (
+            <>
+              <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
+                Name
+              </label>
+              <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
+            </>
+          )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="expiration-date">
             Expiration Date
