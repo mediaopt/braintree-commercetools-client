@@ -4,6 +4,7 @@ import { hostedFields } from "braintree-web";
 import { usePayment } from "../../app/usePayment";
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { mockAddress } from "./addressMockData";
+import { useNotifications } from "../../app/useNotifications";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -17,6 +18,7 @@ export const CreditCardMask: React.FC<
   }>
 > = ({ fullWidth = true, buttonText, showPostalCode }) => {
   const { handlePurchase } = usePayment();
+  const { notify } = useNotifications();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
   const { client, threeDS } = useBraintreeClient();
@@ -141,8 +143,20 @@ export const CreditCardMask: React.FC<
     );
   }, [client, threeDS]);
 
+  const notice = () => {
+    notify("Info", "Updating campaign");
+  };
+
   return (
     <>
+      <button
+        className={
+          "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-blue-500 hover:bg-blue-600  shadow-sm"
+        }
+        onClick={notice}
+      >
+        click me
+      </button>
       <div
         className={classNames({
           "demo-frame": true,

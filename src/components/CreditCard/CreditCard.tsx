@@ -1,6 +1,7 @@
 import React from "react";
 
 import { PaymentProvider } from "../../app/usePayment";
+import { NotificationsProvider } from "../../app/useNotifications";
 import { RenderPurchase } from "../../components/RenderPurchase";
 
 import { GeneralComponentsProps } from "../../types";
@@ -28,18 +29,20 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
     >
-      <RenderPurchase>
-        <CreditCardButton
-          disabled={
-            !cartInformation.account ||
-            !cartInformation.billing ||
-            !cartInformation.shipping
-          }
-          buttonText={buttonText}
-          fullWidth={fullWidth}
-          showPostalCode={showPostalCode}
-        />
-      </RenderPurchase>
+      <NotificationsProvider>
+        <RenderPurchase>
+          <CreditCardButton
+            disabled={
+              !cartInformation.account ||
+              !cartInformation.billing ||
+              !cartInformation.shipping
+            }
+            buttonText={buttonText}
+            fullWidth={fullWidth}
+            showPostalCode={showPostalCode}
+          />
+        </RenderPurchase>
+      </NotificationsProvider>
     </PaymentProvider>
   );
 };
