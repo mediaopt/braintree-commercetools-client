@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 
 import { PayPal } from "./components/PayPal";
+import { CreditCard } from "./components/CreditCard";
 
 function App() {
   const cartInformation = {
@@ -31,14 +32,12 @@ function App() {
   return (
     <div className="App">
       <PayPal
-        currency="USD"
-        amount={10.0}
         flow="capture"
-        createPaymentUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
-        getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
-        purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
+        createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
+        getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
+        purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhOGM4YzQ3ZC03YTE1LTRlMTAtOWZhOS0wZTJkNDdkMTFkNDcifQ.6Yp_wRwganBaaZJfSHhCPLOxNHkjSfVAq3r6Hq3V5cc"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiM2UwMjIwN2YtNWJmZS00YjdkLThlMGItZTg1OWU2ODMwZTNiIiwiY2FydElkIjoiOGM3Mjk0MmUtZTAyYS00NDBhLTkxMzAtNDhkMTU3ZWIxOThhIn0.w46GfB80VXcxwNrBAkfCBMCmBi882ECgyubNLE60-8Q"
         purchaseCallback={() => {
           console.log("Do something");
         }}

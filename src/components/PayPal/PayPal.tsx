@@ -3,11 +3,12 @@ import React from "react";
 import { PaymentProvider } from "../../app/usePayment";
 import { RenderPurchase } from "../../components/RenderPurchase";
 
+import { PayPalButton } from "./PayPalButton";
+import { isPayButtonDisabled } from "../PayButton";
+
 import { GeneralComponentsProps } from "../../types";
 
 type PayPalProps = {
-  currency: string;
-  amount: number;
   flow: "vault" | "capture";
 } & GeneralComponentsProps;
 
@@ -18,6 +19,9 @@ export const PayPal: React.FC<PayPalProps> = ({
   sessionKey,
   sessionValue,
   purchaseCallback,
+  cartInformation,
+  fullWidth,
+  buttonText,
 }: GeneralComponentsProps) => {
   return (
     <PaymentProvider
@@ -27,8 +31,15 @@ export const PayPal: React.FC<PayPalProps> = ({
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
+      cartInformation={cartInformation}
     >
-      <RenderPurchase>test</RenderPurchase>
+      <RenderPurchase>
+        <PayPalButton
+          disabled={isPayButtonDisabled(cartInformation)}
+          buttonText={buttonText}
+          fullWidth={fullWidth}
+        />
+      </RenderPurchase>
     </PaymentProvider>
   );
 };
