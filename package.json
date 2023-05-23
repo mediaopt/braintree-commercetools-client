@@ -1,6 +1,6 @@
 {
   "name": "braintree-commercetools-client",
-  "version": "0.0.57",
+  "version": "0.0.58",
   "private": false,
   "type": "module",
   "dependencies": {

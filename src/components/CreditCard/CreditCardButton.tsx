@@ -3,6 +3,10 @@ import React from "react";
 import { usePayment } from "../../app/usePayment";
 import { CreditCardMask } from "./CreditCardMask";
 import classNames from "classnames";
+import {
+  ThreeDSecureAdditionalInformation,
+  ThreeDSecureBillingAddress,
+} from "braintree-web/modules/three-d-secure";
 
 const PAY_BUTTON_TEXT_FALLBACK = "Purchase";
 
@@ -11,11 +15,19 @@ export const CreditCardButton: React.FC<{
   fullWidth?: boolean;
   buttonText?: string;
   showPostalCode: boolean;
+  showCardHoldersName: boolean;
+  threeDSBillingAddress?: ThreeDSecureBillingAddress;
+  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+  email?: string;
 }> = ({
-    disabled,
+  disabled,
   fullWidth = true,
   buttonText = PAY_BUTTON_TEXT_FALLBACK,
   showPostalCode,
+  showCardHoldersName,
+  email,
+  threeDSAdditionalInformation,
+  threeDSBillingAddress,
 }) => {
   const { handleGetClientToken, clientToken } = usePayment();
 
@@ -24,6 +36,10 @@ export const CreditCardButton: React.FC<{
       fullWidth={fullWidth}
       buttonText={buttonText}
       showPostalCode={showPostalCode}
+      showCardHoldersName={showCardHoldersName}
+      email={email}
+      threeDSAdditionalInformation={threeDSAdditionalInformation}
+      threeDSBillingAddress={threeDSBillingAddress}
     />
   ) : (
     <button

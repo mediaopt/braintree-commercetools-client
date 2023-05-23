@@ -3,7 +3,11 @@ import classNames from "classnames";
 import { hostedFields } from "braintree-web";
 import { usePayment } from "../../app/usePayment";
 import { useBraintreeClient } from "../../app/useBraintreeClient";
-import { mockAddress } from "./addressMockData";
+import {
+  ThreeDSecureVerifyOptions,
+  ThreeDSecureAdditionalInformation,
+  ThreeDSecureBillingAddress,
+} from "braintree-web/modules/three-d-secure";
 import { useNotifications } from "../../app/useNotifications";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
@@ -15,9 +19,21 @@ export const CreditCardMask: React.FC<
     fullWidth?: boolean;
     buttonText: string;
     showPostalCode: boolean;
+    showCardHoldersName: boolean;
+    threeDSBillingAddress?: ThreeDSecureBillingAddress;
+    threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+    email?: string;
   }>
-> = ({ fullWidth = true, buttonText, showPostalCode }) => {
-  const { handlePurchase } = usePayment();
+> = ({
+  fullWidth = true,
+  buttonText,
+  showPostalCode,
+  threeDSAdditionalInformation,
+  threeDSBillingAddress,
+  email,
+  showCardHoldersName,
+}) => {
+  const { handlePurchase, paymentInfo } = usePayment();
   const { notify } = useNotifications();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
@@ -41,10 +57,6 @@ export const CreditCardMask: React.FC<
         container: "#expiration-date",
         placeholder: "MM/YYYY",
       },
-      cardholderName: {
-        container: "#cc-name",
-        placeholder: "name",
-      },
     };
 
     if (showPostalCode) {
@@ -52,6 +64,16 @@ export const CreditCardMask: React.FC<
         ...hostedFieldsInputs,
         postalCode: {
           container: "#postal-code",
+        },
+      };
+    }
+
+    if (showCardHoldersName) {
+      hostedFieldsInputs = {
+        ...hostedFieldsInputs,
+        cardholderName: {
+          container: "#cc-name",
+          placeholder: "name",
         },
       };
     }
@@ -100,13 +122,13 @@ export const CreditCardMask: React.FC<
               return;
             }
 
-            let amount = 500.0;
-            let threeDSecureParameters = {
-              amount: amount,
+            let threeDSecureParameters: ThreeDSecureVerifyOptions = {
+              amount: paymentInfo.amount,
               nonce: payload.nonce,
               bin: payload.details.bin,
-              email: "test@example.com",
-              ...mockAddress,
+              email: email,
+              billingAddress: threeDSBillingAddress,
+              additionalInformation: threeDSAdditionalInformation,
             };
             threeDS
               .verifyCard(threeDSecureParameters)
@@ -171,10 +193,14 @@ export const CreditCardMask: React.FC<
           </label>
           <div id="card-number" className={`${HOSTED_FIELDS} px-3`}></div>
 
-          <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
-            Name
-          </label>
-          <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
+          {showCardHoldersName && (
+            <>
+              <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
+                Name
+              </label>
+              <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
+            </>
+          )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="expiration-date">
             Expiration Date

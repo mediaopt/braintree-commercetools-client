@@ -2,7 +2,7 @@ import React from "react";
 
 import { PaymentProvider } from "../../app/usePayment";
 import { NotificationsProvider } from "../../app/useNotifications";
-import { RenderPurchase } from "../../components/RenderPurchase";
+import { RenderPurchase } from "../RenderPurchase";
 
 import { GeneralComponentsProps } from "../../types";
 import { CreditCardButton } from "./CreditCardButton";
@@ -18,6 +18,10 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   fullWidth,
   buttonText,
   showPostalCode = false,
+  showCardHoldersName = false,
+  email,
+  threeDSBillingAddress,
+  threeDSAdditionalInformation,
 }: GeneralComponentsProps) => {
   return (
     <PaymentProvider
@@ -40,7 +44,10 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
             buttonText={buttonText}
             fullWidth={fullWidth}
             showPostalCode={showPostalCode}
-          />
+          showCardHoldersName={showCardHoldersName}
+          email={email}
+          threeDSBillingAddress={threeDSBillingAddress}
+          threeDSAdditionalInformation={threeDSAdditionalInformation}/>
         </RenderPurchase>
       </NotificationsProvider>
     </PaymentProvider>
