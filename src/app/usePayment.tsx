@@ -8,6 +8,7 @@ import {
   ClientTokenResponse,
   CreatePaymentResponse,
   PaymentInfo,
+  CartInformationInitial,
 } from "../types";
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
@@ -21,13 +22,23 @@ type PaymentContextT = {
   paymentInfo: PaymentInfo;
 };
 
+const PaymentInfoInitialObject = {
+  version: 0,
+  id: "",
+  amount: 0,
+  currency: "",
+  lineItems: [],
+  shippingMethod: {},
+  cartInformation: CartInformationInitial,
+};
+
 const PaymentContext = createContext<PaymentContextT>({
   gettingClientToken: false,
   clientToken: "",
   errorMessage: "",
   handleGetClientToken: () => {},
   handlePurchase: (paymentNonce: string) => {},
-  paymentInfo: { version: 0, id: "", amount: 0 },
+  paymentInfo: PaymentInfoInitialObject,
 });
 
 export const PaymentProvider: FC<
@@ -49,11 +60,9 @@ export const PaymentProvider: FC<
 
   const [clientToken, setClientToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
-    version: 0,
-    id: "",
-    amount: 0,
-  });
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
+    PaymentInfoInitialObject
+  );
 
   const { notify } = useNotifications();
 
@@ -77,10 +86,17 @@ export const PaymentProvider: FC<
             createPaymentResult.version
           )) as ClientTokenResponse;
 
+          const { amountPlanned, lineItems, shippingMethod } =
+            createPaymentResult;
+
           setPaymentInfo({
             id: createPaymentResult.id,
             version: clientTokenresult.paymentVersion,
-            amount: createPaymentResult.amountPlanned.centAmount,
+            amount: amountPlanned.centAmount / 100,
+            currency: amountPlanned.currencyCode,
+            lineItems: lineItems,
+            shippingMethod: shippingMethod,
+            cartInformation: cartInformation,
           });
 
           if (clientTokenresult.clientToken) {

@@ -1,8 +1,3 @@
-import {
-  ThreeDSecureAdditionalInformation,
-  ThreeDSecureBillingAddress,
-} from "braintree-web/modules/three-d-secure";
-
 export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
@@ -18,11 +13,6 @@ export type GeneralComponentsProps = {
   cartInformation: CartInformation;
   fullWidth?: boolean;
   buttonText?: string;
-  showPostalCode?: boolean;
-  showCardHoldersName?: boolean;
-  threeDSBillingAddress?: ThreeDSecureBillingAddress;
-  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-  email?: string;
 };
 
 export type ClientTokenResponse = {
@@ -46,6 +36,10 @@ export type PaymentInfo = {
   id: string;
   version: number;
   amount: number;
+  currency: string;
+  lineItems: Array<any>;
+  shippingMethod: {};
+  cartInformation: CartInformation;
 };
 
 export type CartInformation = {
@@ -70,4 +64,28 @@ export type CartInformation = {
     country: string;
     postalCode: string;
   };
+};
+
+export const CartInformationInitial: CartInformation = {
+  account: {
+    email: "",
+  },
+  billing: {
+    firstName: "",
+    lastName: "",
+    streetName: "",
+    streetNumber: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  },
+  shipping: {
+    firstName: "",
+    lastName: "",
+    streetName: "",
+    streetNumber: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  },
 };
