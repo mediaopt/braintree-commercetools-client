@@ -24,16 +24,16 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   threeDSAdditionalInformation,
 }: GeneralComponentsProps) => {
   return (
-    <PaymentProvider
-      getClientTokenUrl={getClientTokenUrl}
-      createPaymentUrl={createPaymentUrl}
-      purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
-      purchaseCallback={purchaseCallback}
-      cartInformation={cartInformation}
-    >
-      <NotificationsProvider>
+    <NotificationsProvider>
+      <PaymentProvider
+        getClientTokenUrl={getClientTokenUrl}
+        createPaymentUrl={createPaymentUrl}
+        purchaseUrl={purchaseUrl}
+        sessionKey={sessionKey}
+        sessionValue={sessionValue}
+        purchaseCallback={purchaseCallback}
+        cartInformation={cartInformation}
+      >
         <RenderPurchase>
           <CreditCardButton
             disabled={
@@ -44,12 +44,13 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
             buttonText={buttonText}
             fullWidth={fullWidth}
             showPostalCode={showPostalCode}
-          showCardHoldersName={showCardHoldersName}
-          email={email}
-          threeDSBillingAddress={threeDSBillingAddress}
-          threeDSAdditionalInformation={threeDSAdditionalInformation}/>
+            showCardHoldersName={showCardHoldersName}
+            email={email}
+            threeDSBillingAddress={threeDSBillingAddress}
+            threeDSAdditionalInformation={threeDSAdditionalInformation}
+          />
         </RenderPurchase>
-      </NotificationsProvider>
-    </PaymentProvider>
+      </PaymentProvider>
+    </NotificationsProvider>
   );
 };

@@ -10,6 +10,7 @@ import {
   PaymentInfo,
 } from "../types";
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
+import { useNotifications } from "./useNotifications";
 
 type PaymentContextT = {
   gettingClientToken: boolean;
@@ -54,6 +55,8 @@ export const PaymentProvider: FC<
     amount: 0,
   });
 
+  const { notify } = useNotifications();
+
   const value = useMemo(() => {
     const handleGetClientToken = async () => {
       setGettingClientToken(true);
@@ -87,9 +90,9 @@ export const PaymentProvider: FC<
           }
         }
 
-        setErrorMessage("There is an error in getting client token!");
+        notify("Error", "There is an error in getting client token!");
       } catch (error) {
-        setErrorMessage("Authentication Error!");
+        notify("Error", "Authentication Error!");
         console.error(error);
       }
       setGettingClientToken(false);
@@ -110,7 +113,8 @@ export const PaymentProvider: FC<
       );
 
       if (response.ok === false) {
-        // @todo implement handling of failed response
+        notify("Error", response.message);
+        return;
       }
 
       const { message, success } = response.result.transactionSaleResponse;
