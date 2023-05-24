@@ -1,9 +1,50 @@
 import React from "react";
 
-interface Props {
-  label: string;
-}
+import { NotificationsProvider } from "../../app/useNotifications";
+import { PaymentProvider } from "../../app/usePayment";
+import { RenderPurchase } from "../../components/RenderPurchase";
 
-export const PayPal: React.FC<Props> = ({ label }: Props) => {
-  return <button>{label}</button>;
+import { PayPalButton } from "./PayPalButton";
+import { isPayButtonDisabled } from "../PayButton";
+
+import { GeneralComponentsProps } from "../../types";
+
+type PayPalProps = {
+  flow: "vault" | "checkout";
+} & GeneralComponentsProps;
+
+export const PayPal: React.FC<PayPalProps> = ({
+  flow,
+  createPaymentUrl,
+  getClientTokenUrl,
+  purchaseUrl,
+  sessionKey,
+  sessionValue,
+  purchaseCallback,
+  cartInformation,
+  fullWidth,
+  buttonText,
+}: PayPalProps) => {
+  return (
+    <PaymentProvider
+      getClientTokenUrl={getClientTokenUrl}
+      createPaymentUrl={createPaymentUrl}
+      purchaseUrl={purchaseUrl}
+      sessionKey={sessionKey}
+      sessionValue={sessionValue}
+      purchaseCallback={purchaseCallback}
+      cartInformation={cartInformation}
+    >
+      <NotificationsProvider>
+        <RenderPurchase>
+          <PayPalButton
+            disabled={isPayButtonDisabled(cartInformation)}
+            buttonText={buttonText}
+            fullWidth={fullWidth}
+            flow={flow}
+          />
+        </RenderPurchase>
+      </NotificationsProvider>
+    </PaymentProvider>
+  );
 };

@@ -1,1 +1,0 @@
-export { PayPalCheckout } from "./PayPalCheckout";

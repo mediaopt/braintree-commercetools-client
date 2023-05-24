@@ -1,13 +1,27 @@
 import React from "react";
 
+import {
+  ThreeDSecureAdditionalInformation,
+  ThreeDSecureBillingAddress,
+} from "braintree-web/modules/three-d-secure";
+
 import { PaymentProvider } from "../../app/usePayment";
 import { NotificationsProvider } from "../../app/useNotifications";
 import { RenderPurchase } from "../RenderPurchase";
 
 import { GeneralComponentsProps } from "../../types";
 import { CreditCardButton } from "./CreditCardButton";
+import { isPayButtonDisabled } from "../PayButton";
 
-export const CreditCard: React.FC<GeneralComponentsProps> = ({
+type CreditCardProps = GeneralComponentsProps & {
+  showPostalCode?: boolean;
+  showCardHoldersName?: boolean;
+  threeDSBillingAddress?: ThreeDSecureBillingAddress;
+  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+  email?: string;
+};
+
+export const CreditCard: React.FC<CreditCardProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -22,7 +36,7 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
   email,
   threeDSBillingAddress,
   threeDSAdditionalInformation,
-}: GeneralComponentsProps) => {
+}: CreditCardProps) => {
   return (
     <PaymentProvider
       getClientTokenUrl={getClientTokenUrl}
@@ -36,18 +50,15 @@ export const CreditCard: React.FC<GeneralComponentsProps> = ({
       <NotificationsProvider>
         <RenderPurchase>
           <CreditCardButton
-            disabled={
-              !cartInformation.account ||
-              !cartInformation.billing ||
-              !cartInformation.shipping
-            }
+            disabled={isPayButtonDisabled(cartInformation)}
             buttonText={buttonText}
             fullWidth={fullWidth}
             showPostalCode={showPostalCode}
-          showCardHoldersName={showCardHoldersName}
-          email={email}
-          threeDSBillingAddress={threeDSBillingAddress}
-          threeDSAdditionalInformation={threeDSAdditionalInformation}/>
+            showCardHoldersName={showCardHoldersName}
+            email={email}
+            threeDSBillingAddress={threeDSBillingAddress}
+            threeDSAdditionalInformation={threeDSAdditionalInformation}
+          />
         </RenderPurchase>
       </NotificationsProvider>
     </PaymentProvider>

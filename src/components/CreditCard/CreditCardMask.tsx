@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { hostedFields } from "braintree-web";
-import { usePayment } from "../../app/usePayment";
-import { useBraintreeClient } from "../../app/useBraintreeClient";
 import {
   ThreeDSecureVerifyOptions,
   ThreeDSecureAdditionalInformation,
   ThreeDSecureBillingAddress,
 } from "braintree-web/modules/three-d-secure";
+
+import { useBraintreeClient } from "../../app/useBraintreeClient";
+import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
@@ -123,7 +124,7 @@ export const CreditCardMask: React.FC<
             }
 
             let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-              amount: paymentInfo.amount / 100,
+              amount: paymentInfo.amount,
               nonce: payload.nonce,
               bin: payload.details.bin,
               email: email,
