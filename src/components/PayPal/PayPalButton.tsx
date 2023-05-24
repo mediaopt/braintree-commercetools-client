@@ -9,10 +9,13 @@ import {
 
 import { PayPalMask } from "./PayPalMask";
 
-export const PayPalButton: React.FC<PayButtonProps> = ({
+type PayPalButtonProps = { flow: string } & PayButtonProps;
+
+export const PayPalButton: React.FC<PayPalButtonProps> = ({
   disabled,
   fullWidth = true,
   buttonText,
+  flow,
 }) => {
   const { clientToken } = usePayment();
 
@@ -20,6 +23,7 @@ export const PayPalButton: React.FC<PayButtonProps> = ({
     <PayPalMask
       fullWidth={fullWidth}
       buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
+      flow={flow}
     />
   ) : (
     <PayButton

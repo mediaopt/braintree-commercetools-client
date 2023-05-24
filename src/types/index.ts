@@ -36,6 +36,10 @@ export type PaymentInfo = {
   id: string;
   version: number;
   amount: number;
+  currency: string;
+  lineItems: Array<any>;
+  shippingMethod: {};
+  cartInformation: CartInformation;
 };
 
 export type CartInformation = {
@@ -60,4 +64,28 @@ export type CartInformation = {
     country: string;
     postalCode: string;
   };
+};
+
+export const CartInformationInitial: CartInformation = {
+  account: {
+    email: "",
+  },
+  billing: {
+    firstName: "",
+    lastName: "",
+    streetName: "",
+    streetNumber: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  },
+  shipping: {
+    firstName: "",
+    lastName: "",
+    streetName: "",
+    streetNumber: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  },
 };

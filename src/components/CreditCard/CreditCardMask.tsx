@@ -119,7 +119,7 @@ export const CreditCardMask: React.FC<
             }
 
             let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-              amount: paymentInfo.amount / 100,
+              amount: paymentInfo.amount,
               nonce: payload.nonce,
               bin: payload.details.bin,
               email: email,

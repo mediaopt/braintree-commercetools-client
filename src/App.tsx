@@ -37,8 +37,8 @@ function App() {
         getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiM2UwMjIwN2YtNWJmZS00YjdkLThlMGItZTg1OWU2ODMwZTNiIiwiY2FydElkIjoiOGM3Mjk0MmUtZTAyYS00NDBhLTkxMzAtNDhkMTU3ZWIxOThhIn0.w46GfB80VXcxwNrBAkfCBMCmBi882ECgyubNLE60-8Q"
-        purchaseCallback={() => {
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJmMDBjZGIwNS0wZTZmLTQ5YTYtOTQzMS0xMDU5ODViYzdkMzgiLCJ3aXNobGlzdElkIjoiYWMzNjBhYjgtODg0NS00YTc1LWJlNjctMzg1Njg1NmY3ODkyIn0.fyp-3rbe66woogyOwCO1wPeU729_T1yw4RXeiLLnGmQ"
+        purchaseCallback={(result) => {
           console.log("Do something");
         }}
         fullWidth={true}

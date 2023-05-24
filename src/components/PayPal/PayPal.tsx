@@ -13,6 +13,7 @@ type PayPalProps = {
 } & GeneralComponentsProps;
 
 export const PayPal: React.FC<PayPalProps> = ({
+  flow,
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -22,7 +23,7 @@ export const PayPal: React.FC<PayPalProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
-}: GeneralComponentsProps) => {
+}: PayPalProps) => {
   return (
     <PaymentProvider
       getClientTokenUrl={getClientTokenUrl}
@@ -38,6 +39,7 @@ export const PayPal: React.FC<PayPalProps> = ({
           disabled={isPayButtonDisabled(cartInformation)}
           buttonText={buttonText}
           fullWidth={fullWidth}
+          flow={flow}
         />
       </RenderPurchase>
     </PaymentProvider>
