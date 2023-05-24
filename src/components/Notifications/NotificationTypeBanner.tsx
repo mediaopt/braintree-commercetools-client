@@ -31,7 +31,7 @@ export const NotificationTypeBanner: FC<
                   <NotificationTypeIcon type={type} />
                 </span>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium">
+                  <h3 className="text-sm font-medium text-left">
                     {getNotificationTypeTitle(type)}
                   </h3>
                   <div className="mt-0.5 text-sm">
