@@ -42,8 +42,6 @@ export const PayPalMask: React.FC<
               },
               function () {
                 const paypal = global.paypal;
-                const shippingInformation =
-                  paymentInfo.cartInformation.shipping;
 
                 paypal
                   .Buttons({
@@ -60,16 +58,6 @@ export const PayPalMask: React.FC<
 
                         enableShippingAddress: true,
                         shippingAddressEditable: false,
-                        shippingAddressOverride: {
-                          recipientName: `${shippingInformation.firstName} ${shippingInformation.lastName}`,
-                          line1: `${shippingInformation.streetName} ${shippingInformation.streetNumber}`,
-                          line2: "",
-                          city: shippingInformation.city,
-                          countryCode: shippingInformation.country,
-                          postalCode: shippingInformation.postalCode,
-                          state: "",
-                          phone: "",
-                        },
                       });
                     },
 
