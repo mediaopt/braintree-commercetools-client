@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { hostedFields } from "braintree-web";
-import { usePayment } from "../../app/usePayment";
-import { useBraintreeClient } from "../../app/useBraintreeClient";
 import {
   ThreeDSecureVerifyOptions,
   ThreeDSecureAdditionalInformation,
   ThreeDSecureBillingAddress,
 } from "braintree-web/modules/three-d-secure";
+
+import { useBraintreeClient } from "../../app/useBraintreeClient";
+import { usePayment } from "../../app/usePayment";
+import { useNotifications } from "../../app/useNotifications";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -33,6 +35,7 @@ export const CreditCardMask: React.FC<
   showCardHoldersName,
 }) => {
   const { handlePurchase, paymentInfo } = usePayment();
+  const { notify } = useNotifications();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
   const { client, threeDS } = useBraintreeClient();
@@ -99,12 +102,13 @@ export const CreditCardMask: React.FC<
       },
       function (err, hostedFieldsInstance) {
         if (err) {
+          notify("Error", "Something went wrong.");
           console.error(err);
           return;
         }
 
         if (!hostedFieldsInstance || !form) {
-          console.error("no hosted fields or form available");
+          notify("Error", "Credit card fields are not available.");
           return;
         }
         var tokenize = function (event: any) {
@@ -112,7 +116,8 @@ export const CreditCardMask: React.FC<
 
           hostedFieldsInstance.tokenize(function (err, payload) {
             if (err || !payload) {
-              alert(
+              notify(
+                "Error",
                 "Something went wrong. Check your card details and try again."
               );
               return;
@@ -143,16 +148,22 @@ export const CreditCardMask: React.FC<
                     error.code ===
                     "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
                   ) {
-                    // @todo notify error - nonce does not exist / was already consumed
+                    notify(
+                      "Error",
+                      "Payment nonce does not exist or was already used"
+                    );
                   } else if (
                     error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
                   ) {
-                    // @todo notify validation error - try again / or different payment
+                    notify(
+                      "Error",
+                      "Validation error - check your input or try a different payment"
+                    );
                   } else {
-                    // @todo notify - unknown error
+                    notify("Error", "Something went wrong - try again");
                   }
                 } else {
-                  // @todo notify - generic error
+                  notify("Error", "Something went wrong - try again");
                 }
               });
           });

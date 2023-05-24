@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="App">
       <PayPal
-        flow="capture"
+        flow="checkout"
         createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
         getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"

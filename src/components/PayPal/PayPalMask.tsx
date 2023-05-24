@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { usePayment } from "../../app/usePayment";
 import { client as braintreeClient, paypalCheckout } from "braintree-web";
+
+import { usePayment } from "../../app/usePayment";
+import { useNotifications } from "../../app/useNotifications";
 
 export const PayPalMask: React.FC<
   React.PropsWithChildren<{
@@ -10,6 +12,7 @@ export const PayPalMask: React.FC<
   }>
 > = ({ flow }) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
+  const { notify } = useNotifications();
 
   useEffect(() => {
     braintreeClient.create(
@@ -18,7 +21,7 @@ export const PayPalMask: React.FC<
       },
       function (clientErr, clientInstance) {
         if (clientErr) {
-          // @todo notify error - Error creating client: - clientErr
+          notify("Error", "Error creating client.");
           return;
         }
 
@@ -28,7 +31,7 @@ export const PayPalMask: React.FC<
           },
           function (paypalCheckoutErr, paypalCheckoutInstance) {
             if (paypalCheckoutErr) {
-              // @todo notify error - "error"
+              notify("Error", "Error in paypal checkout.");
               return;
             }
 
@@ -48,7 +51,7 @@ export const PayPalMask: React.FC<
 
                     createOrder: function () {
                       return paypalCheckoutInstance.createPayment({
-                        flow: "checkout",
+                        flow: flow,
 
                         amount: paymentInfo.amount,
                         currency: paymentInfo.currency,
@@ -80,11 +83,11 @@ export const PayPalMask: React.FC<
                     },
 
                     onCancel: function (data) {
-                      // @todo notify error - "PayPal payment cancelled" - JSON.stringify(data)
+                      notify("Info", "PayPal payment cancelled.");
                     },
 
                     onError: function (err) {
-                      // @todo notify error - "PayPal payment cancelled" - JSON.stringify(err)
+                      notify("Info", "PayPal payment cancelled.");
                     },
                   })
                   .render("#paypal-button");

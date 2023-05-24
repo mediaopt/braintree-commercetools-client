@@ -1,5 +1,6 @@
 import React from "react";
 
+import { NotificationsProvider } from "../../app/useNotifications";
 import { PaymentProvider } from "../../app/usePayment";
 import { RenderPurchase } from "../../components/RenderPurchase";
 
@@ -9,7 +10,7 @@ import { isPayButtonDisabled } from "../PayButton";
 import { GeneralComponentsProps } from "../../types";
 
 type PayPalProps = {
-  flow: "vault" | "capture";
+  flow: "vault" | "checkout";
 } & GeneralComponentsProps;
 
 export const PayPal: React.FC<PayPalProps> = ({
@@ -34,14 +35,16 @@ export const PayPal: React.FC<PayPalProps> = ({
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
     >
-      <RenderPurchase>
-        <PayPalButton
-          disabled={isPayButtonDisabled(cartInformation)}
-          buttonText={buttonText}
-          fullWidth={fullWidth}
-          flow={flow}
-        />
-      </RenderPurchase>
+      <NotificationsProvider>
+        <RenderPurchase>
+          <PayPalButton
+            disabled={isPayButtonDisabled(cartInformation)}
+            buttonText={buttonText}
+            fullWidth={fullWidth}
+            flow={flow}
+          />
+        </RenderPurchase>
+      </NotificationsProvider>
     </PaymentProvider>
   );
 };

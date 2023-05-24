@@ -6,6 +6,7 @@ import {
 } from "braintree-web/modules/three-d-secure";
 
 import { PaymentProvider } from "../../app/usePayment";
+import { NotificationsProvider } from "../../app/useNotifications";
 import { RenderPurchase } from "../RenderPurchase";
 
 import { GeneralComponentsProps } from "../../types";
@@ -46,18 +47,20 @@ export const CreditCard: React.FC<CreditCardProps> = ({
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
     >
-      <RenderPurchase>
-        <CreditCardButton
-          disabled={isPayButtonDisabled(cartInformation)}
-          buttonText={buttonText}
-          fullWidth={fullWidth}
-          showPostalCode={showPostalCode}
-          showCardHoldersName={showCardHoldersName}
-          email={email}
-          threeDSBillingAddress={threeDSBillingAddress}
-          threeDSAdditionalInformation={threeDSAdditionalInformation}
-        />
-      </RenderPurchase>
+      <NotificationsProvider>
+        <RenderPurchase>
+          <CreditCardButton
+            disabled={isPayButtonDisabled(cartInformation)}
+            buttonText={buttonText}
+            fullWidth={fullWidth}
+            showPostalCode={showPostalCode}
+            showCardHoldersName={showCardHoldersName}
+            email={email}
+            threeDSBillingAddress={threeDSBillingAddress}
+            threeDSAdditionalInformation={threeDSAdditionalInformation}
+          />
+        </RenderPurchase>
+      </NotificationsProvider>
     </PaymentProvider>
   );
 };
