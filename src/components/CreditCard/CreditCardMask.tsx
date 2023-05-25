@@ -10,6 +10,7 @@ import {
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
+import "./styles.css";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -37,6 +38,8 @@ export const CreditCardMask: React.FC<
   const { handlePurchase, paymentInfo } = usePayment();
   const { notify } = useNotifications();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
+  const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
+  const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -95,6 +98,9 @@ export const CreditCardMask: React.FC<
           ".valid": {
             color: "#8bdda8",
           },
+          ".invalid": {
+            color: "#DE7976",
+          },
         },
         fields: {
           ...hostedFieldsInputs,
@@ -111,6 +117,29 @@ export const CreditCardMask: React.FC<
           notify("Error", "Credit card fields are not available.");
           return;
         }
+        hostedFieldsInstance.on("notEmpty", function (event) {
+          let isEmpty = false;
+          for (let fieldsKey in event.fields) {
+            // @ts-ignore
+            isEmpty = isEmpty || event.fields[fieldsKey].isEmpty;
+          }
+          setEmptyInputs(isEmpty);
+        });
+        hostedFieldsInstance.on("empty", function (event) {
+          setEmptyInputs(true);
+        });
+        hostedFieldsInstance.on("validityChange", function (event) {
+          let isValid = true;
+          for (let fieldsKey in event.fields) {
+            let validField =
+              //@ts-ignore
+              event.fields[fieldsKey].isValid ||
+              //@ts-ignore
+              event.fields[fieldsKey].isPotentiallyValid;
+            isValid = isValid && validField;
+          }
+          setInvalidInput(!isValid);
+        });
         var tokenize = function (event: any) {
           event.preventDefault();
 
@@ -224,11 +253,15 @@ export const CreditCardMask: React.FC<
 
           <div className="block text-center">
             <input
+              disabled={emptyInputs && invalidInput}
               type="submit"
               className={classNames({
-                "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-blue-500 hover:bg-blue-600  shadow-sm":
+                "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none text-white shadow-sm":
                   true,
                 "w-full": fullWidth,
+                "focus:ring-2 focus:ring-blue-500 bg-blue-500 hover:bg-blue-600 ":
+                  !(emptyInputs && invalidInput),
+                "bg-gray-500": emptyInputs || invalidInput,
               })}
               value={buttonText}
               id="submit"
