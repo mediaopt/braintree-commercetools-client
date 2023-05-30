@@ -26,16 +26,16 @@ export const PayPal: React.FC<PayPalProps> = ({
   buttonText,
 }: PayPalProps) => {
   return (
-    <PaymentProvider
-      getClientTokenUrl={getClientTokenUrl}
-      createPaymentUrl={createPaymentUrl}
-      purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
-      purchaseCallback={purchaseCallback}
-      cartInformation={cartInformation}
-    >
-      <NotificationsProvider>
+    <NotificationsProvider>
+      <PaymentProvider
+        getClientTokenUrl={getClientTokenUrl}
+        createPaymentUrl={createPaymentUrl}
+        purchaseUrl={purchaseUrl}
+        sessionKey={sessionKey}
+        sessionValue={sessionValue}
+        purchaseCallback={purchaseCallback}
+        cartInformation={cartInformation}
+      >
         <RenderPurchase>
           <PayPalButton
             disabled={isPayButtonDisabled(cartInformation)}
@@ -44,7 +44,7 @@ export const PayPal: React.FC<PayPalProps> = ({
             flow={flow}
           />
         </RenderPurchase>
-      </NotificationsProvider>
-    </PaymentProvider>
+      </PaymentProvider>
+    </NotificationsProvider>
   );
 };
