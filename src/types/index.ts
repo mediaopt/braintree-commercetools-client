@@ -89,3 +89,11 @@ export const CartInformationInitial: CartInformation = {
     postalCode: "",
   },
 };
+
+export type VenmoTypes = {
+  mobileWebFallBack: boolean;
+  desktopFlow: "desktopWebLogin" | "desktopQRCode";
+  paymentMethodUsage: "multi_use" | "single_use";
+  allowNewBrowserTab?: boolean;
+  profile_id?: string;
+};
