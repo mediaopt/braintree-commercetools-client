@@ -3,6 +3,7 @@ import "./App.css";
 
 import { PayPal } from "./components/PayPal";
 import { CreditCard } from "./components/CreditCard";
+import { GooglePay } from "./components/GooglePay";
 
 function App() {
   const cartInformation = {
@@ -31,8 +32,7 @@ function App() {
 
   return (
     <div className="App">
-      <PayPal
-        flow="checkout"
+      <GooglePay
         createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
         getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
