@@ -8,20 +8,35 @@ import {
 } from "../PayButton";
 
 import { GooglePayMask } from "./GooglePayMask";
+import { GooglePayTypes } from "../../types";
 
-// type PayPalButtonProps = { flow: string } & PayButtonProps;
+type GooglePayButtonProps = GooglePayTypes & PayButtonProps;
 
-export const GooglePayButton: React.FC<PayButtonProps> = ({
+export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
   disabled,
   fullWidth = true,
   buttonText,
-}) => {
+  googleMerchantId,
+  environment,
+  totalPriceStatus,
+  buttonType,
+  buttonTheme,
+  billingAddressFormat,
+  billingAddressRequired,
+  phoneNumberRequired,
+}: GooglePayButtonProps) => {
   const { clientToken } = usePayment();
 
   return clientToken ? (
     <GooglePayMask
-      fullWidth={fullWidth}
-      buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
+      environment={environment}
+      totalPriceStatus={totalPriceStatus}
+      googleMerchantId={googleMerchantId}
+      buttonTheme={buttonTheme}
+      buttonType={buttonType}
+      billingAddressRequired={billingAddressRequired}
+      billingAddressFormat={billingAddressFormat}
+      phoneNumberRequired={phoneNumberRequired}
     />
   ) : (
     <PayButton

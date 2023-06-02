@@ -7,9 +7,11 @@ import { GooglePayButton } from "./GooglePayButton";
 
 import { isPayButtonDisabled } from "../PayButton";
 
-import { GeneralComponentsProps } from "../../types";
+import { GeneralComponentsProps, GooglePayTypes } from "../../types";
 
-export const GooglePay: React.FC<GeneralComponentsProps> = ({
+type GooglePayComponentProps = GeneralComponentsProps & GooglePayTypes;
+
+export const GooglePay: React.FC<GooglePayComponentProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -19,7 +21,15 @@ export const GooglePay: React.FC<GeneralComponentsProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
-}: GeneralComponentsProps) => {
+  environment,
+  googleMerchantId,
+  totalPriceStatus,
+  buttonTheme,
+  buttonType,
+  billingAddressFormat,
+  billingAddressRequired,
+  phoneNumberRequired,
+}: GooglePayComponentProps) => {
   return (
     <PaymentProvider
       getClientTokenUrl={getClientTokenUrl}
@@ -36,6 +46,14 @@ export const GooglePay: React.FC<GeneralComponentsProps> = ({
             disabled={isPayButtonDisabled(cartInformation)}
             buttonText={buttonText}
             fullWidth={fullWidth}
+            googleMerchantId={googleMerchantId}
+            totalPriceStatus={totalPriceStatus}
+            environment={environment}
+            buttonType={buttonType}
+            buttonTheme={buttonTheme}
+            billingAddressFormat={billingAddressFormat}
+            billingAddressRequired={billingAddressRequired}
+            phoneNumberRequired={phoneNumberRequired}
           />
         </RenderPurchase>
       </NotificationsProvider>

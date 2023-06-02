@@ -89,3 +89,22 @@ export const CartInformationInitial: CartInformation = {
     postalCode: "",
   },
 };
+
+export type GooglePayTypes = {
+  environment: "TEST" | "PRODUCTION";
+  totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
+  googleMerchantId?: string;
+  buttonTheme?: "DARK" | "LIGHT";
+  buttonType?:
+    | "BOOK"
+    | "BUY"
+    | "CHECKOUT"
+    | "DONATE"
+    | "ORDER"
+    | "PAY"
+    | "PLAIN"
+    | "SUBSCRIBE";
+  phoneNumberRequired?: boolean;
+  billingAddressFormat?: "FULL" | "MIN";
+  billingAddressRequired?: boolean;
+};

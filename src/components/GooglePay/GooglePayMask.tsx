@@ -4,35 +4,36 @@ import { client as braintreeClient, googlePayment } from "braintree-web";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import useScript from "../../app/useScript";
+import { GooglePayTypes } from "../../types";
 
 export const GooglePayMask: React.FC<
-  React.PropsWithChildren<{
-    fullWidth?: boolean;
-    buttonText: string;
-  }>
-> = ({}) => {
+  React.PropsWithChildren<GooglePayTypes>
+> = ({
+  environment,
+  totalPriceStatus,
+  googleMerchantId,
+  buttonTheme = "DARK",
+  buttonType = "BUY",
+  phoneNumberRequired = false,
+  billingAddressFormat = "MIN",
+  billingAddressRequired = false,
+}: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
   const [googlePayLoaded, setGooglePayLoaded] = useState(false);
 
-  const gPayButton = React.useRef<HTMLDivElement>(null);
+  const gPayButtonContainer = React.useRef<HTMLDivElement>(null);
 
   useScript("https://pay.google.com/gp/p/js/pay.js", () =>
     setGooglePayLoaded(true)
   );
   useEffect(() => {
     if (!googlePayLoaded) {
-      console.log("not loaded");
       return;
     }
-    console.log("loaded");
-    // Make sure to have https://pay.google.com/gp/p/js/pay.js loaded on your page
 
-    // You will need a button element on your page styled according to Google's brand guidelines
-    // https://developers.google.com/pay/api/web/guides/brand-guidelines
-    var button = document.querySelector("#google-pay-button");
-    var paymentsClient = new google.payments.api.PaymentsClient({
-      environment: "TEST", // Or 'PRODUCTION'
+    let paymentsClient = new google.payments.api.PaymentsClient({
+      environment: environment,
     });
 
     braintreeClient.create(
@@ -40,16 +41,20 @@ export const GooglePayMask: React.FC<
         authorization: clientToken,
       },
       function (clientErr, clientInstance) {
+        let gPayCreateOptions = googleMerchantId
+          ? {
+              googleMerchantId: googleMerchantId,
+            }
+          : {};
         googlePayment.create(
           {
             client: clientInstance,
             googlePayVersion: 2,
-            googleMerchantId: "merchant-id-from-google", // Optional in sandbox; if set in sandbox, this value must be a valid production Google Merchant ID
+            ...gPayCreateOptions,
           },
           function (googlePaymentErr, googlePaymentInstance) {
             paymentsClient
               .isReadyToPay({
-                // see https://developers.google.com/pay/api/web/reference/object#IsReadyToPayRequest
                 apiVersion: 2,
                 apiVersionMinor: 0,
                 allowedPaymentMethods:
@@ -59,32 +64,27 @@ export const GooglePayMask: React.FC<
               })
               .then(function (response) {
                 if (response.result) {
-                  if (!gPayButton.current) return;
-                  gPayButton.current.addEventListener(
-                    "click",
-                    function (event) {
-                      event.preventDefault();
+                  const gPayButton = paymentsClient.createButton({
+                    onClick: (e) => {
+                      e.preventDefault();
 
-                      var paymentDataRequest =
+                      let paymentDataRequest =
                         googlePaymentInstance.createPaymentDataRequest({
                           transactionInfo: {
-                            currencyCode: "USD",
-                            totalPriceStatus: "FINAL",
-                            totalPrice: "100.00", // Your amount
+                            currencyCode: paymentInfo.currency,
+                            totalPriceStatus: totalPriceStatus,
+                            totalPrice: paymentInfo.amount.toString(),
+                            countryCode: "DE", //@todo get country code from customer
                           },
                         });
 
-                      // We recommend collecting billing address information, at minimum
-                      // billing postal code, and passing that billing postal code with all
-                      // Google Pay card transactions as a best practice.
-                      // See all available options at https://developers.google.com/pay/api/web/reference/object
-                      var cardPaymentMethod =
+                      let cardPaymentMethod =
                         paymentDataRequest.allowedPaymentMethods[0];
                       cardPaymentMethod.parameters.billingAddressRequired =
-                        true;
+                        billingAddressRequired;
                       cardPaymentMethod.parameters.billingAddressParameters = {
-                        format: "FULL",
-                        phoneNumberRequired: true,
+                        format: billingAddressFormat,
+                        phoneNumberRequired: phoneNumberRequired,
                       };
 
                       paymentsClient
@@ -94,32 +94,40 @@ export const GooglePayMask: React.FC<
                             paymentData,
                             function (err: any, result: any) {
                               if (err) {
-                                // Handle parsing error
+                                notify("Error", err.message);
+                                return;
                               }
-
-                              // Send result.nonce to your server
-                              // result.type may be either "AndroidPayCard" or "PayPalAccount", and
-                              // paymentData will contain the billingAddress for card payments
+                              handlePurchase(result.nonce);
                             }
                           );
                         })
                         .catch(function (err) {
-                          // Handle errors
+                          notify("Error", err.message);
                         });
-                    }
-                  );
+                    },
+                    // @ts-ignore
+                    buttonColor: buttonTheme,
+                    buttonTyp: buttonType,
+                  });
+                  if (gPayButtonContainer.current) {
+                    gPayButtonContainer.current.after(gPayButton);
+                  }
+                } else {
+                  notify("Error", "Failed payment call. Retry");
                 }
               })
               .catch(function (err) {
-                // Handle errors
+                notify("Error", err.message);
               });
           }
         );
-
-        // Set up other Braintree components
       }
     );
   }, [paymentInfo, clientToken, googlePayLoaded]);
 
-  return <div ref={gPayButton} id="gPay-button"></div>;
+  return (
+    <>
+      <div ref={gPayButtonContainer} />
+    </>
+  );
 };

@@ -33,17 +33,20 @@ function App() {
   return (
     <div className="App">
       <GooglePay
-        createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
-        getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
-        purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
+        createPaymentUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
+        getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
+        purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJmMDBjZGIwNS0wZTZmLTQ5YTYtOTQzMS0xMDU5ODViYzdkMzgiLCJ3aXNobGlzdElkIjoiYWMzNjBhYjgtODg0NS00YTc1LWJlNjctMzg1Njg1NmY3ODkyIn0.fyp-3rbe66woogyOwCO1wPeU729_T1yw4RXeiLLnGmQ"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJkZGRlZWNmNi02Zjk1LTRkMmQtYjk3NS0xMjk4YTllNTcyZTgifQ.QDn_sB7qcBYGxRve549qIPWYXcYo_6UciLF9zYGNz8Y"
         purchaseCallback={(result) => {
           console.log("Do something");
         }}
         fullWidth={true}
         buttonText={"Pay €X"}
         cartInformation={cartInformation}
+        environment={"TEST"}
+        totalPriceStatus={"FINAL"}
+        googleMerchantId={"merchant-id-from-google"}
       />
     </div>
   );
