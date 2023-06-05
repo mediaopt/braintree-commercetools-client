@@ -29,6 +29,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   billingAddressFormat,
   billingAddressRequired,
   phoneNumberRequired,
+  acquirerCountryCode,
 }: GooglePayComponentProps) => {
   return (
     <PaymentProvider
@@ -54,6 +55,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
             billingAddressFormat={billingAddressFormat}
             billingAddressRequired={billingAddressRequired}
             phoneNumberRequired={phoneNumberRequired}
+            acquirerCountryCode={acquirerCountryCode}
           />
         </RenderPurchase>
       </NotificationsProvider>

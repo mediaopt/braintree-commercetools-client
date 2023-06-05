@@ -17,6 +17,7 @@ export const GooglePayMask: React.FC<
   phoneNumberRequired = false,
   billingAddressFormat = "MIN",
   billingAddressRequired = false,
+  acquirerCountryCode,
 }: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -74,7 +75,7 @@ export const GooglePayMask: React.FC<
                             currencyCode: paymentInfo.currency,
                             totalPriceStatus: totalPriceStatus,
                             totalPrice: paymentInfo.amount.toString(),
-                            countryCode: "DE", //@todo get country code from customer
+                            countryCode: acquirerCountryCode,
                           },
                         });
 

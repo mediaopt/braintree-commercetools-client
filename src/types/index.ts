@@ -107,4 +107,5 @@ export type GooglePayTypes = {
   phoneNumberRequired?: boolean;
   billingAddressFormat?: "FULL" | "MIN";
   billingAddressRequired?: boolean;
+  acquirerCountryCode: string;
 };
