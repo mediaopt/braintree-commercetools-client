@@ -47,6 +47,7 @@ function App() {
         environment={"TEST"}
         totalPriceStatus={"FINAL"}
         googleMerchantId={"merchant-id-from-google"}
+        acquirerCountryCode={"DE"}
       />
     </div>
   );
