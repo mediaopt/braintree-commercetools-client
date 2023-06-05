@@ -1,12 +1,14 @@
 import { Client, client, ThreeDSecure, threeDSecure } from "braintree-web";
 import { useEffect, useState } from "react";
 import { usePayment } from "./usePayment";
+import { useNotifications } from "./useNotifications";
 
 export const useBraintreeClient = () => {
   const { clientToken } = usePayment();
   const [clientInstance, setClientInstance] = useState<Client>();
   const [threeDSecureInstance, setThreeDSecureInstance] =
     useState<ThreeDSecure>();
+  const { notify } = useNotifications();
 
   useEffect(() => {
     client
@@ -29,7 +31,7 @@ export const useBraintreeClient = () => {
         setThreeDSecureInstance(threeDSecureInstance);
       })
       .catch(function (err) {
-        console.error(err);
+        notify("Error", err.message);
       });
   }, [clientToken]);
 
