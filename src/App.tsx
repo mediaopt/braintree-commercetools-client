@@ -37,7 +37,7 @@ function App() {
         getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJmMDBjZGIwNS0wZTZmLTQ5YTYtOTQzMS0xMDU5ODViYzdkMzgiLCJ3aXNobGlzdElkIjoiYWMzNjBhYjgtODg0NS00YTc1LWJlNjctMzg1Njg1NmY3ODkyIn0.fyp-3rbe66woogyOwCO1wPeU729_T1yw4RXeiLLnGmQ"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIzNGI1YmIwZC0wMDM2LTQzZjktYjRjOS0xZWRjM2M2MjkyMWYifQ.cc1lMi7JtjzseFl6TykkbmKFXYDGl9C66Mykj_hVaDc"
         purchaseCallback={(result) => {
           console.log("Do something");
         }}

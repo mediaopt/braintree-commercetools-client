@@ -38,7 +38,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
     } else if (err.code === "VENMO_APP_CANCELED") {
       notify("Error", "User canceled payment flow");
     } else {
-      console.error("An error occurred:", err.message);
+      notify("Error", err.message);
     }
   };
 
@@ -72,7 +72,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
       },
       function (clientErr, clientInstance) {
         if (clientErr) {
-          console.error("Error creating client:", clientErr);
+          notify("Error", "Error creating client" + clientErr.message);
           return;
         }
 
@@ -118,12 +118,12 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
           },
           function (venmoErr, venmoInstance) {
             if (venmoErr) {
-              console.error("Error creating Venmo:", venmoErr);
+              notify("Error", "Error creating Venmo:" + venmoErr.message);
               return;
             }
             if (!venmoInstance.isBrowserSupported()) {
-              console.log("Browser does not support Venmo");
-              return;
+              notify("Error", "Browser does not support Venmo");
+              // return;
             }
 
             setDisplayButton(true);
@@ -166,7 +166,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
         })}
         id="submit"
       >
-        {buttonText}
+        venmo: {buttonText}
       </button>
     </form>
   );
