@@ -47,6 +47,7 @@ function App() {
         desktopFlow={"desktopWebLogin"}
         mobileWebFallBack={true}
         paymentMethodUsage={"multi_use"}
+        useTestNonce={true}
       />
     </div>
   );

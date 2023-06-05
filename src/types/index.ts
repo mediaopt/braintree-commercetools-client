@@ -96,4 +96,5 @@ export type VenmoTypes = {
   paymentMethodUsage: "multi_use" | "single_use";
   allowNewBrowserTab?: boolean;
   profile_id?: string;
+  useTestNonce?: boolean;
 };

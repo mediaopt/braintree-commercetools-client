@@ -20,7 +20,8 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   mobileWebFallBack,
   allowNewBrowserTab,
   profile_id,
-}) => {
+  useTestNonce,
+}: VenmoButton) => {
   const { clientToken } = usePayment();
 
   return clientToken ? (
@@ -32,6 +33,7 @@ export const VenmoButton: React.FC<VenmoButton> = ({
       paymentMethodUsage={paymentMethodUsage}
       allowNewBrowserTab={allowNewBrowserTab}
       profile_id={profile_id}
+      useTestNonce={useTestNonce}
     />
   ) : (
     <PayButton

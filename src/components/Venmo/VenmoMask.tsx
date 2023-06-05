@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   client as braintreeClient,
   venmo,
@@ -22,7 +22,8 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   profile_id,
   fullWidth = true,
   buttonText,
-}) => {
+  useTestNonce,
+}: VenmoMaskType) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
   const [displayButton, setDisplayButton] = useState(false);
@@ -31,6 +32,11 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   const [deviceData, setDeviceData] = useState("");
 
   const venmoForm = React.useRef<HTMLFormElement>(null);
+
+  const testPayload = {
+    nonce: "fake-venmo-account-nonce",
+    detail: { username: "VenmoJoe" },
+  };
 
   const handleVenmoError = (err: any) => {
     if (err.code === "VENMO_CANCELED") {
@@ -43,9 +49,9 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   };
 
   const handleVenmoSuccess = (payload: any) => {
-    // Send payload.nonce to your server.
-    console.log("Got a payment method nonce:", payload.nonce);
+    handlePurchase(payload.nonce);
     // Display the Venmo username in your checkout UI.
+    // @todo implement the comment
     console.log("Venmo user:", payload.details.username);
   };
 
@@ -56,6 +62,11 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
     // @ts-ignore
     currentVenmoInstance.tokenize(function (tokenizeErr: any, payload: any) {
       setVenmoDisabled(false);
+
+      if (useTestNonce) {
+        handleVenmoSuccess(testPayload);
+        return;
+      }
 
       if (tokenizeErr) {
         handleVenmoError(tokenizeErr);
@@ -88,6 +99,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
             // At this point, you should access the deviceData value and provide it
             // to your server, e.g. by injecting it into your form as a hidden input.
+            // @todo implement comment
             console.log("Got device data:", dataCollectorInstance.deviceData);
             setDeviceData(dataCollectorInstance.deviceData);
           }
@@ -107,7 +119,6 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
           venmoFlowOption = { ...venmoFlowOption, profile_id: profile_id };
         }
 
-        // Create a Venmo component.
         venmo.create(
           {
             client: clientInstance,
@@ -123,7 +134,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
             }
             if (!venmoInstance.isBrowserSupported()) {
               notify("Error", "Browser does not support Venmo");
-              // return;
+              // return; @todo enable the return again
             }
 
             setDisplayButton(true);
@@ -134,6 +145,10 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
             if (venmoInstance.hasTokenizationResult()) {
               venmoInstance.tokenize(function (tokenizeErr: any, payload: any) {
+                if (useTestNonce) {
+                  handleVenmoSuccess(testPayload);
+                  return;
+                }
                 if (tokenizeErr) {
                   handleVenmoError(tokenizeErr);
                 } else {
