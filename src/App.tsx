@@ -1,8 +1,6 @@
 import React from "react";
 import "./App.css";
 
-import { PayPal } from "./components/PayPal";
-import { CreditCard } from "./components/CreditCard";
 import { GooglePay } from "./components/GooglePay";
 
 function App() {

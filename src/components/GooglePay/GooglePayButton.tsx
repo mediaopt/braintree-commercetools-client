@@ -44,7 +44,7 @@ export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
     <PayButton
       fullWidth={fullWidth}
       disabled={disabled}
-      buttonText={buttonText}
+      buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
     />
   );
 };

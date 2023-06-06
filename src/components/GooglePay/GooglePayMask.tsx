@@ -122,7 +122,20 @@ export const GooglePayMask: React.FC<
         );
       }
     );
-  }, [paymentInfo, clientToken, googlePayLoaded]);
+  }, [
+    paymentInfo,
+    clientToken,
+    googlePayLoaded,
+    acquirerCountryCode,
+    billingAddressFormat,
+    billingAddressRequired,
+    buttonTheme,
+    buttonType,
+    environment,
+    googleMerchantId,
+    phoneNumberRequired,
+    totalPriceStatus,
+  ]);
 
   return (
     <>
