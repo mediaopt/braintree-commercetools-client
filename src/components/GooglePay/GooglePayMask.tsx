@@ -61,7 +61,6 @@ export const GooglePayMask: React.FC<
                 allowedPaymentMethods:
                   googlePaymentInstance.createPaymentDataRequest()
                     .allowedPaymentMethods,
-                existingPaymentMethodRequired: true, // Optional
               })
               .then(function (response) {
                 if (response.result) {
