@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { client as braintreeClient, googlePayment } from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
-import useScript from "../../app/useScript";
+import loadScript from "../../app/useScript";
 import { GooglePayTypes } from "../../types";
 
 export const GooglePayMask: React.FC<
@@ -21,18 +21,10 @@ export const GooglePayMask: React.FC<
 }: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
-  const [googlePayLoaded, setGooglePayLoaded] = useState(false);
 
   const googlePayButtonContainer = React.useRef<HTMLDivElement>(null);
 
-  useScript("https://pay.google.com/gp/p/js/pay.js", () =>
-    setGooglePayLoaded(true)
-  );
-  useEffect(() => {
-    if (!googlePayLoaded) {
-      return;
-    }
-
+  const createGooglePay = () => {
     let paymentsClient = new google.payments.api.PaymentsClient({
       environment: environment,
     });
@@ -122,20 +114,13 @@ export const GooglePayMask: React.FC<
         );
       }
     );
-  }, [
-    paymentInfo,
-    clientToken,
-    googlePayLoaded,
-    acquirerCountryCode,
-    billingAddressFormat,
-    billingAddressRequired,
-    buttonTheme,
-    buttonType,
-    environment,
-    googleMerchantId,
-    phoneNumberRequired,
-    totalPriceStatus,
-  ]);
+  };
+
+  useEffect(() => {
+    loadScript("https://pay.google.com/gp/p/js/pay.js").then(() =>
+      createGooglePay()
+    );
+  }, []);
 
   return (
     <>

@@ -91,11 +91,11 @@ export const CartInformationInitial: CartInformation = {
 };
 
 export type GooglePayTypes = {
-  environment: "TEST" | "PRODUCTION";
+  environment: google.payments.api.Environment;
   totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
   googleMerchantId?: string;
   buttonTheme?: google.payments.api.ButtonColor;
-  buttonType?:  google.payments.api.ButtonType;
+  buttonType?: google.payments.api.ButtonType;
   phoneNumberRequired?: boolean;
   billingAddressFormat?: "FULL" | "MIN";
   billingAddressRequired?: boolean;

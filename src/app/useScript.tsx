@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 
-const useScript = (url: string, callback: () => void) => {
-  useEffect(() => {
+const loadScript = (url: string): Promise<boolean> => {
+  return new Promise((resolve) => {
     const script = document.createElement("script");
     script.src = url;
     script.async = true;
-    script.onload = callback;
+    script.onload = () => resolve(true);
     document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, [url, callback]);
+  });
 };
 
-export default useScript;
+export default loadScript;
