@@ -94,16 +94,8 @@ export type GooglePayTypes = {
   environment: "TEST" | "PRODUCTION";
   totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
   googleMerchantId?: string;
-  buttonTheme?: "DARK" | "LIGHT";
-  buttonType?:
-    | "BOOK"
-    | "BUY"
-    | "CHECKOUT"
-    | "DONATE"
-    | "ORDER"
-    | "PAY"
-    | "PLAIN"
-    | "SUBSCRIBE";
+  buttonTheme?: google.payments.api.ButtonColor;
+  buttonType?:  google.payments.api.ButtonType;
   phoneNumberRequired?: boolean;
   billingAddressFormat?: "FULL" | "MIN";
   billingAddressRequired?: boolean;

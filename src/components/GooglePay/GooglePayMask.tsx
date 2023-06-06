@@ -12,8 +12,8 @@ export const GooglePayMask: React.FC<
   environment,
   totalPriceStatus,
   googleMerchantId,
-  buttonTheme = "DARK",
-  buttonType = "BUY",
+  buttonTheme,
+  buttonType,
   phoneNumberRequired = false,
   billingAddressFormat = "MIN",
   billingAddressRequired = false,
@@ -105,9 +105,8 @@ export const GooglePayMask: React.FC<
                           notify("Error", err.message);
                         });
                     },
-                    // @ts-ignore
                     buttonColor: buttonTheme,
-                    buttonTyp: buttonType,
+                    buttonType: buttonType,
                   });
                   if (googlePayButtonContainer.current) {
                     googlePayButtonContainer.current.after(googlePayButton);
