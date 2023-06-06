@@ -10,7 +10,7 @@ const useScript = (url: string, callback: () => void) => {
     return () => {
       document.body.removeChild(script);
     };
-  }, [url]);
+  }, [url, callback]);
 };
 
 export default useScript;
