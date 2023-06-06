@@ -23,7 +23,7 @@ export const GooglePayMask: React.FC<
   const { notify } = useNotifications();
   const [googlePayLoaded, setGooglePayLoaded] = useState(false);
 
-  const gPayButtonContainer = React.useRef<HTMLDivElement>(null);
+  const googlePayButtonContainer = React.useRef<HTMLDivElement>(null);
 
   useScript("https://pay.google.com/gp/p/js/pay.js", () =>
     setGooglePayLoaded(true)
@@ -42,7 +42,7 @@ export const GooglePayMask: React.FC<
         authorization: clientToken,
       },
       function (clientErr, clientInstance) {
-        let gPayCreateOptions = googleMerchantId
+        let googlePayCreateOptions = googleMerchantId
           ? {
               googleMerchantId: googleMerchantId,
             }
@@ -51,7 +51,7 @@ export const GooglePayMask: React.FC<
           {
             client: clientInstance,
             googlePayVersion: 2,
-            ...gPayCreateOptions,
+            ...googlePayCreateOptions,
           },
           function (googlePaymentErr, googlePaymentInstance) {
             paymentsClient
@@ -65,7 +65,7 @@ export const GooglePayMask: React.FC<
               })
               .then(function (response) {
                 if (response.result) {
-                  const gPayButton = paymentsClient.createButton({
+                  const googlePayButton = paymentsClient.createButton({
                     onClick: (e) => {
                       e.preventDefault();
 
@@ -110,8 +110,8 @@ export const GooglePayMask: React.FC<
                     buttonColor: buttonTheme,
                     buttonTyp: buttonType,
                   });
-                  if (gPayButtonContainer.current) {
-                    gPayButtonContainer.current.after(gPayButton);
+                  if (googlePayButtonContainer.current) {
+                    googlePayButtonContainer.current.after(googlePayButton);
                   }
                 } else {
                   notify("Error", "Failed payment call. Retry");
@@ -128,7 +128,7 @@ export const GooglePayMask: React.FC<
 
   return (
     <>
-      <div ref={gPayButtonContainer} />
+      <div ref={googlePayButtonContainer} />
     </>
   );
 };
