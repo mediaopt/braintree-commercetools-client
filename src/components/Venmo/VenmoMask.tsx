@@ -59,8 +59,8 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
     e.preventDefault();
     setVenmoDisabled(true);
     if (!currentVenmoInstance) return;
-    // @ts-ignore
-    currentVenmoInstance.tokenize(function (tokenizeErr: any, payload: any) {
+
+    currentVenmoInstance.tokenize({}, (tokenizeErr: any, payload: any) => {
       setVenmoDisabled(false);
 
       if (useTestNonce) {
@@ -105,24 +105,21 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
           }
         );
 
-        let venmoFlowOption =
+        let venmoFlowOption: any =
           desktopFlow === "desktopWebLogin"
             ? { allowDesktopWebLogin: true }
             : { allowDesktop: true };
 
         if (!allowNewBrowserTab) {
-          // @ts-ignore
           venmoFlowOption = { ...venmoFlowOption, allowNewBrowserTab: false };
         }
         if (profile_id) {
-          // @ts-ignore
           venmoFlowOption = { ...venmoFlowOption, profile_id: profile_id };
         }
 
         venmo.create(
           {
             client: clientInstance,
-            // @ts-ignore
             mobileWebFallBack: mobileWebFallBack,
             paymentMethodUsage: paymentMethodUsage,
             ...venmoFlowOption,
