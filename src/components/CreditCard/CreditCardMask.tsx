@@ -10,7 +10,7 @@ import {
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
-import "./styles.css";
+import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -44,6 +44,24 @@ export const CreditCardMask: React.FC<
   const { client, threeDS } = useBraintreeClient();
 
   const ccFormRef = React.useRef<HTMLFormElement>(null);
+  const ccNumberRef = React.useRef<HTMLDivElement>(null);
+  const ccNameRef = React.useRef<HTMLDivElement>(null);
+  const ccCvvRef = React.useRef<HTMLDivElement>(null);
+  const ccPostalRef = React.useRef<HTMLDivElement>(null);
+  const ccExpireRef = React.useRef<HTMLDivElement>(null);
+
+  const borderClassToggle: Array<string> = ["border-2", "border-rose-600"];
+
+  const FieldKeyMap: {
+    [index: string]: React.RefObject<HTMLDivElement>;
+  } = {
+    number: ccNumberRef,
+    cvv: ccCvvRef,
+    expirationDate: ccExpireRef,
+    cardholderName: ccNameRef,
+    postalCode: ccPostalRef,
+  };
+
   useEffect(() => {
     if (!client || !threeDS) return;
     const form = ccFormRef.current;
@@ -119,8 +137,8 @@ export const CreditCardMask: React.FC<
         }
         hostedFieldsInstance.on("notEmpty", function (event) {
           let isEmpty = false;
-          for (let fieldsKey in event.fields) {
-            // @ts-ignore
+          let fieldsKey: HostedFieldsHostedFieldsFieldName;
+          for (fieldsKey in event.fields) {
             isEmpty = isEmpty || event.fields[fieldsKey].isEmpty;
           }
           setEmptyInputs(isEmpty);
@@ -130,13 +148,21 @@ export const CreditCardMask: React.FC<
         });
         hostedFieldsInstance.on("validityChange", function (event) {
           let isValid = true;
-          for (let fieldsKey in event.fields) {
+          let fieldsKey: HostedFieldsHostedFieldsFieldName;
+          for (fieldsKey in event.fields) {
             let validField =
-              //@ts-ignore
               event.fields[fieldsKey].isValid ||
-              //@ts-ignore
               event.fields[fieldsKey].isPotentiallyValid;
             isValid = isValid && validField;
+            if (FieldKeyMap[fieldsKey].current) {
+              borderClassToggle.map((classToggle) =>
+                FieldKeyMap[fieldsKey].current?.classList.toggle(
+                  // @todo why does linter complain? I do a check above
+                  classToggle,
+                  !validField
+                )
+              );
+            }
           }
           setInvalidInput(!isValid);
         });
@@ -221,35 +247,51 @@ export const CreditCardMask: React.FC<
           <label className={HOSTED_FIELDS_LABEL} htmlFor="card-number">
             Card Number
           </label>
-          <div id="card-number" className={`${HOSTED_FIELDS} px-3`}></div>
+          <div
+            ref={ccNumberRef}
+            id="card-number"
+            className={`${HOSTED_FIELDS} px-3`}
+          ></div>
 
           {showCardHoldersName && (
             <>
               <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
                 Name
               </label>
-              <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
+              <div
+                ref={ccNameRef}
+                id="cc-name"
+                className={`${HOSTED_FIELDS} p-3`}
+              ></div>
             </>
           )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="expiration-date">
             Expiration Date
           </label>
-          <div id="expiration-date" className={`${HOSTED_FIELDS} p-3`}></div>
+          <div
+            ref={ccExpireRef}
+            id="expiration-date"
+            className={`${HOSTED_FIELDS} p-3`}
+          ></div>
 
           {showPostalCode && (
             <>
               <label className={HOSTED_FIELDS_LABEL} htmlFor="postal-code">
                 Postal code
               </label>
-              <div id="postal-code" className={`${HOSTED_FIELDS} p-3`}></div>
+              <div
+                ref={ccPostalRef}
+                id="postal-code"
+                className={`${HOSTED_FIELDS} p-3`}
+              ></div>
             </>
           )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="cvv">
             CVV
           </label>
-          <div id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
+          <div ref={ccCvvRef} id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
 
           <div className="block text-center">
             <input
