@@ -154,15 +154,12 @@ export const CreditCardMask: React.FC<
               event.fields[fieldsKey].isValid ||
               event.fields[fieldsKey].isPotentiallyValid;
             isValid = isValid && validField;
-            if (FieldKeyMap[fieldsKey].current) {
-              borderClassToggle.map((classToggle) =>
-                FieldKeyMap[fieldsKey].current?.classList.toggle(
-                  // @todo why does linter complain? I do a check above
-                  classToggle,
-                  !validField
-                )
-              );
-            }
+            borderClassToggle.map((classToggle) =>
+              FieldKeyMap[fieldsKey].current?.classList.toggle(
+                classToggle,
+                !validField
+              )
+            );
           }
           setInvalidInput(!isValid);
         });
