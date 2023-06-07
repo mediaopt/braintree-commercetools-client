@@ -10,6 +10,7 @@ import {
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
+import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -37,10 +38,30 @@ export const CreditCardMask: React.FC<
   const { handlePurchase, paymentInfo } = usePayment();
   const { notify } = useNotifications();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
+  const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
+  const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
   const { client, threeDS } = useBraintreeClient();
 
   const ccFormRef = React.useRef<HTMLFormElement>(null);
+  const ccNumberRef = React.useRef<HTMLDivElement>(null);
+  const ccNameRef = React.useRef<HTMLDivElement>(null);
+  const ccCvvRef = React.useRef<HTMLDivElement>(null);
+  const ccPostalRef = React.useRef<HTMLDivElement>(null);
+  const ccExpireRef = React.useRef<HTMLDivElement>(null);
+
+  const borderClassToggle: Array<string> = ["border-2", "border-rose-600"];
+
+  const FieldKeyMap: {
+    [index: string]: React.RefObject<HTMLDivElement>;
+  } = {
+    number: ccNumberRef,
+    cvv: ccCvvRef,
+    expirationDate: ccExpireRef,
+    cardholderName: ccNameRef,
+    postalCode: ccPostalRef,
+  };
+
   useEffect(() => {
     if (!client || !threeDS) return;
     const form = ccFormRef.current;
@@ -95,6 +116,9 @@ export const CreditCardMask: React.FC<
           ".valid": {
             color: "#8bdda8",
           },
+          ".invalid": {
+            color: "#DE7976",
+          },
         },
         fields: {
           ...hostedFieldsInputs,
@@ -111,6 +135,34 @@ export const CreditCardMask: React.FC<
           notify("Error", "Credit card fields are not available.");
           return;
         }
+        hostedFieldsInstance.on("notEmpty", function (event) {
+          let isEmpty = false;
+          let fieldsKey: HostedFieldsHostedFieldsFieldName;
+          for (fieldsKey in event.fields) {
+            isEmpty = isEmpty || event.fields[fieldsKey].isEmpty;
+          }
+          setEmptyInputs(isEmpty);
+        });
+        hostedFieldsInstance.on("empty", function (event) {
+          setEmptyInputs(true);
+        });
+        hostedFieldsInstance.on("validityChange", function (event) {
+          let isValid = true;
+          let fieldsKey: HostedFieldsHostedFieldsFieldName;
+          for (fieldsKey in event.fields) {
+            let validField =
+              event.fields[fieldsKey].isValid ||
+              event.fields[fieldsKey].isPotentiallyValid;
+            isValid = isValid && validField;
+            borderClassToggle.map((classToggle) =>
+              FieldKeyMap[fieldsKey].current?.classList.toggle(
+                classToggle,
+                !validField
+              )
+            );
+          }
+          setInvalidInput(!isValid);
+        });
         var tokenize = function (event: any) {
           event.preventDefault();
 
@@ -192,43 +244,63 @@ export const CreditCardMask: React.FC<
           <label className={HOSTED_FIELDS_LABEL} htmlFor="card-number">
             Card Number
           </label>
-          <div id="card-number" className={`${HOSTED_FIELDS} px-3`}></div>
+          <div
+            ref={ccNumberRef}
+            id="card-number"
+            className={`${HOSTED_FIELDS} px-3`}
+          ></div>
 
           {showCardHoldersName && (
             <>
               <label className={HOSTED_FIELDS_LABEL} htmlFor="cc-name">
                 Name
               </label>
-              <div id="cc-name" className={`${HOSTED_FIELDS} p-3`}></div>
+              <div
+                ref={ccNameRef}
+                id="cc-name"
+                className={`${HOSTED_FIELDS} p-3`}
+              ></div>
             </>
           )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="expiration-date">
             Expiration Date
           </label>
-          <div id="expiration-date" className={`${HOSTED_FIELDS} p-3`}></div>
+          <div
+            ref={ccExpireRef}
+            id="expiration-date"
+            className={`${HOSTED_FIELDS} p-3`}
+          ></div>
 
           {showPostalCode && (
             <>
               <label className={HOSTED_FIELDS_LABEL} htmlFor="postal-code">
                 Postal code
               </label>
-              <div id="postal-code" className={`${HOSTED_FIELDS} p-3`}></div>
+              <div
+                ref={ccPostalRef}
+                id="postal-code"
+                className={`${HOSTED_FIELDS} p-3`}
+              ></div>
             </>
           )}
 
           <label className={HOSTED_FIELDS_LABEL} htmlFor="cvv">
             CVV
           </label>
-          <div id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
+          <div ref={ccCvvRef} id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
 
           <div className="block text-center">
             <input
+              disabled={emptyInputs && invalidInput}
               type="submit"
               className={classNames({
-                "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-blue-500 hover:bg-blue-600  shadow-sm":
+                "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none text-white shadow-sm":
                   true,
                 "w-full": fullWidth,
+                "focus:ring-2 focus:ring-blue-500 bg-blue-500 hover:bg-blue-600 ":
+                  !(emptyInputs && invalidInput),
+                "bg-gray-500": emptyInputs || invalidInput,
               })}
               value={buttonText}
               id="submit"
