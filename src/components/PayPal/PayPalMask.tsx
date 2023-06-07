@@ -3,6 +3,7 @@ import { client as braintreeClient, paypalCheckout } from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
+import { useLoader } from "../../app/useLoader";
 
 export const PayPalMask: React.FC<
   React.PropsWithChildren<{
@@ -13,14 +14,17 @@ export const PayPalMask: React.FC<
 > = ({ flow }) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
+  const { isLoading } = useLoader();
 
   useEffect(() => {
+    isLoading(true);
     braintreeClient.create(
       {
         authorization: clientToken,
       },
       function (clientErr, clientInstance) {
         if (clientErr) {
+          isLoading(false);
           notify("Error", "Error creating client.");
           return;
         }
@@ -31,6 +35,7 @@ export const PayPalMask: React.FC<
           },
           function (paypalCheckoutErr, paypalCheckoutInstance) {
             if (paypalCheckoutErr) {
+              isLoading(false);
               notify("Error", "Error in paypal checkout.");
               return;
             }
@@ -79,6 +84,7 @@ export const PayPalMask: React.FC<
                     },
                   })
                   .render("#paypal-button");
+                isLoading(false);
               }
             );
           }

@@ -2,7 +2,8 @@ import React from "react";
 
 import { NotificationsProvider } from "../../app/useNotifications";
 import { PaymentProvider } from "../../app/usePayment";
-import { RenderPurchase } from "../../components/RenderPurchase";
+import { RenderPurchase } from "../RenderPurchase";
+import { LoaderProvider } from "../../app/useLoader";
 
 import { PayPalButton } from "./PayPalButton";
 import { isPayButtonDisabled } from "../PayButton";
@@ -27,24 +28,26 @@ export const PayPal: React.FC<PayPalProps> = ({
 }: PayPalProps) => {
   return (
     <NotificationsProvider>
-      <PaymentProvider
-        getClientTokenUrl={getClientTokenUrl}
-        createPaymentUrl={createPaymentUrl}
-        purchaseUrl={purchaseUrl}
-        sessionKey={sessionKey}
-        sessionValue={sessionValue}
-        purchaseCallback={purchaseCallback}
-        cartInformation={cartInformation}
-      >
-        <RenderPurchase>
-          <PayPalButton
-            disabled={isPayButtonDisabled(cartInformation)}
-            buttonText={buttonText}
-            fullWidth={fullWidth}
-            flow={flow}
-          />
-        </RenderPurchase>
-      </PaymentProvider>
+      <LoaderProvider>
+        <PaymentProvider
+          getClientTokenUrl={getClientTokenUrl}
+          createPaymentUrl={createPaymentUrl}
+          purchaseUrl={purchaseUrl}
+          sessionKey={sessionKey}
+          sessionValue={sessionValue}
+          purchaseCallback={purchaseCallback}
+          cartInformation={cartInformation}
+        >
+          <RenderPurchase>
+            <PayPalButton
+              disabled={isPayButtonDisabled(cartInformation)}
+              buttonText={buttonText}
+              fullWidth={fullWidth}
+              flow={flow}
+            />
+          </RenderPurchase>
+        </PaymentProvider>
+      </LoaderProvider>
     </NotificationsProvider>
   );
 };

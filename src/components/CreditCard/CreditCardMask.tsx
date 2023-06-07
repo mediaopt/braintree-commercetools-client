@@ -10,6 +10,7 @@ import {
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
+import { useLoader } from "../../app/useLoader";
 
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
@@ -36,6 +37,7 @@ export const CreditCardMask: React.FC<
 }) => {
   const { handlePurchase, paymentInfo } = usePayment();
   const { notify } = useNotifications();
+  const { isLoading } = useLoader();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
 
   const { client, threeDS } = useBraintreeClient();
@@ -43,6 +45,7 @@ export const CreditCardMask: React.FC<
   const ccFormRef = React.useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (!client || !threeDS) return;
+    isLoading(true);
     const form = ccFormRef.current;
 
     let hostedFieldsInputs: object = {
@@ -102,20 +105,24 @@ export const CreditCardMask: React.FC<
       },
       function (err, hostedFieldsInstance) {
         if (err) {
+          isLoading(false);
           notify("Error", "Something went wrong.");
           console.error(err);
           return;
         }
 
         if (!hostedFieldsInstance || !form) {
+          isLoading(false);
           notify("Error", "Credit card fields are not available.");
           return;
         }
         var tokenize = function (event: any) {
           event.preventDefault();
+          isLoading(true);
 
           hostedFieldsInstance.tokenize(function (err, payload) {
             if (err || !payload) {
+              isLoading(false);
               notify(
                 "Error",
                 "Something went wrong. Check your card details and try again."
@@ -143,6 +150,7 @@ export const CreditCardMask: React.FC<
                 }
               })
               .catch(function (error) {
+                isLoading(false);
                 if (error.code.indexOf("THREEDS_LOOKUP") === 0) {
                   if (
                     error.code ===
@@ -169,6 +177,7 @@ export const CreditCardMask: React.FC<
           });
         };
         form.addEventListener("submit", tokenize, false);
+        isLoading(false);
         setHostedFieldsCreated(true);
       }
     );

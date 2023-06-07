@@ -12,6 +12,7 @@ import { RenderPurchase } from "../RenderPurchase";
 import { GeneralComponentsProps } from "../../types";
 import { CreditCardButton } from "./CreditCardButton";
 import { isPayButtonDisabled } from "../PayButton";
+import { LoaderProvider } from "../../app/useLoader";
 
 type CreditCardProps = GeneralComponentsProps & {
   showPostalCode?: boolean;
@@ -39,28 +40,30 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 }: CreditCardProps) => {
   return (
     <NotificationsProvider>
-      <PaymentProvider
-        getClientTokenUrl={getClientTokenUrl}
-        createPaymentUrl={createPaymentUrl}
-        purchaseUrl={purchaseUrl}
-        sessionKey={sessionKey}
-        sessionValue={sessionValue}
-        purchaseCallback={purchaseCallback}
-        cartInformation={cartInformation}
-      >
-        <RenderPurchase>
-          <CreditCardButton
-            disabled={isPayButtonDisabled(cartInformation)}
-            buttonText={buttonText}
-            fullWidth={fullWidth}
-            showPostalCode={showPostalCode}
-            showCardHoldersName={showCardHoldersName}
-            email={email}
-            threeDSBillingAddress={threeDSBillingAddress}
-            threeDSAdditionalInformation={threeDSAdditionalInformation}
-          />
-        </RenderPurchase>
-      </PaymentProvider>
+      <LoaderProvider>
+        <PaymentProvider
+          getClientTokenUrl={getClientTokenUrl}
+          createPaymentUrl={createPaymentUrl}
+          purchaseUrl={purchaseUrl}
+          sessionKey={sessionKey}
+          sessionValue={sessionValue}
+          purchaseCallback={purchaseCallback}
+          cartInformation={cartInformation}
+        >
+          <RenderPurchase>
+            <CreditCardButton
+              disabled={isPayButtonDisabled(cartInformation)}
+              buttonText={buttonText}
+              fullWidth={fullWidth}
+              showPostalCode={showPostalCode}
+              showCardHoldersName={showCardHoldersName}
+              email={email}
+              threeDSBillingAddress={threeDSBillingAddress}
+              threeDSAdditionalInformation={threeDSAdditionalInformation}
+            />
+          </RenderPurchase>
+        </PaymentProvider>
+      </LoaderProvider>
     </NotificationsProvider>
   );
 };
