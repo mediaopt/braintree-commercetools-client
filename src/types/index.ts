@@ -97,4 +97,5 @@ export type VenmoTypes = {
   allowNewBrowserTab?: boolean;
   profile_id?: string;
   useTestNonce?: boolean;
+  setVenmoUserName: (venmoName: string) => any;
 };

@@ -27,6 +27,7 @@ export const Venmo: React.FC<VenmoProps> = ({
   allowNewBrowserTab,
   profile_id,
   useTestNonce,
+  setVenmoUserName,
 }: VenmoProps) => {
   return (
     <PaymentProvider
@@ -50,6 +51,7 @@ export const Venmo: React.FC<VenmoProps> = ({
             allowNewBrowserTab={allowNewBrowserTab}
             profile_id={profile_id}
             useTestNonce={useTestNonce}
+            setVenmoUserName={setVenmoUserName}
           />
         </RenderPurchase>
       </NotificationsProvider>

@@ -48,6 +48,7 @@ function App() {
         mobileWebFallBack={true}
         paymentMethodUsage={"multi_use"}
         useTestNonce={true}
+        setVenmoUserName={(venmoName) => console.log(venmoName)}
       />
     </div>
   );

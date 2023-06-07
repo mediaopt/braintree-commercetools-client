@@ -21,6 +21,7 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   allowNewBrowserTab,
   profile_id,
   useTestNonce,
+  setVenmoUserName,
 }: VenmoButton) => {
   const { clientToken } = usePayment();
 
@@ -34,6 +35,7 @@ export const VenmoButton: React.FC<VenmoButton> = ({
       allowNewBrowserTab={allowNewBrowserTab}
       profile_id={profile_id}
       useTestNonce={useTestNonce}
+      setVenmoUserName={setVenmoUserName}
     />
   ) : (
     <PayButton

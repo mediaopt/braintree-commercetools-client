@@ -23,6 +23,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   fullWidth = true,
   buttonText,
   useTestNonce,
+  setVenmoUserName,
 }: VenmoMaskType) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -50,9 +51,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
   const handleVenmoSuccess = (payload: any) => {
     handlePurchase(payload.nonce);
-    // Display the Venmo username in your checkout UI.
-    // @todo implement the comment
-    console.log("Venmo user:", payload.details.username);
+    setVenmoUserName(payload.details.username);
   };
 
   const clickVenmoButton = (e: any) => {
