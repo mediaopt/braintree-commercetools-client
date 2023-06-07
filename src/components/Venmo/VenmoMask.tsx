@@ -51,7 +51,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   };
 
   const handleVenmoSuccess = (payload: any) => {
-    handlePurchase(payload.nonce, { venmoDeviceData: deviceData });
+    handlePurchase(payload.nonce, { deviceData: deviceData });
     setVenmoUserName(payload.details.username);
   };
 
