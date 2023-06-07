@@ -50,7 +50,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   };
 
   const handleVenmoSuccess = (payload: any) => {
-    handlePurchase(payload.nonce);
+    handlePurchase(payload.nonce, { venmoDeviceData: deviceData });
     setVenmoUserName(payload.details.username);
   };
 
@@ -95,11 +95,6 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
             if (dataCollectorErr || !dataCollectorInstance) {
               return;
             }
-
-            // At this point, you should access the deviceData value and provide it
-            // to your server, e.g. by injecting it into your form as a hidden input.
-            // @todo implement comment
-            console.log("Got device data:", dataCollectorInstance.deviceData);
             setDeviceData(dataCollectorInstance.deviceData);
           }
         );

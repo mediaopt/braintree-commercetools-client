@@ -18,7 +18,10 @@ type PaymentContextT = {
   clientToken: string;
   errorMessage: string;
   handleGetClientToken: () => void;
-  handlePurchase: (paymentNonce: string) => void;
+  handlePurchase: (
+    paymentNonce: string,
+    options?: { [index: string]: any }
+  ) => void;
   paymentInfo: PaymentInfo;
 };
 
@@ -37,7 +40,10 @@ const PaymentContext = createContext<PaymentContextT>({
   clientToken: "",
   errorMessage: "",
   handleGetClientToken: () => {},
-  handlePurchase: (paymentNonce: string) => {},
+  handlePurchase: (
+    paymentNonce: string,
+    options?: { [index: string]: any }
+  ) => {},
   paymentInfo: PaymentInfoInitialObject,
 });
 
@@ -114,11 +120,16 @@ export const PaymentProvider: FC<
       setGettingClientToken(false);
     };
 
-    const handlePurchase = async (paymentNonce: string) => {
+    const handlePurchase = async (
+      paymentNonce: string,
+      options?: { [index: string]: any }
+    ) => {
+      const additional = options ?? {};
       const requestBody = {
         paymentVersion: paymentInfo.version,
         paymentId: paymentInfo.id,
         paymentMethodNonce: paymentNonce,
+        ...additional,
       };
 
       const response = await makeTransactionSaleRequest(
