@@ -3,7 +3,7 @@ import { client as braintreeClient, googlePayment } from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
-import loadScript from "../../app/useScript";
+import loadScript from "../../app/loadScript";
 import { GooglePayTypes } from "../../types";
 
 export const GooglePayMask: React.FC<
@@ -21,6 +21,9 @@ export const GooglePayMask: React.FC<
 }: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
+  const GoogleApiVersion: number = 2;
+  const GoogleApiMinorVersion: number = 0;
+  const GooglePayVersion: number = 2;
 
   const googlePayButtonContainer = React.useRef<HTMLDivElement>(null);
 
@@ -42,14 +45,14 @@ export const GooglePayMask: React.FC<
         googlePayment.create(
           {
             client: clientInstance,
-            googlePayVersion: 2,
+            googlePayVersion: GooglePayVersion,
             ...googlePayCreateOptions,
           },
           function (googlePaymentErr, googlePaymentInstance) {
             paymentsClient
               .isReadyToPay({
-                apiVersion: 2,
-                apiVersionMinor: 0,
+                apiVersion: GoogleApiVersion,
+                apiVersionMinor: GoogleApiMinorVersion,
                 allowedPaymentMethods:
                   googlePaymentInstance.createPaymentDataRequest()
                     .allowedPaymentMethods,
@@ -81,7 +84,7 @@ export const GooglePayMask: React.FC<
 
                       paymentsClient
                         .loadPaymentData(paymentDataRequest)
-                        .then(function (paymentData) {
+                        .then((paymentData) => {
                           googlePaymentInstance.parseResponse(
                             paymentData,
                             function (err: any, result: any) {

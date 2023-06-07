@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 const loadScript = (url: string): Promise<boolean> => {
   return new Promise((resolve) => {
     const script = document.createElement("script");
