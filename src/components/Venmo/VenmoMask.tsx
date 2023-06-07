@@ -37,7 +37,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
   const testPayload = {
     nonce: "fake-venmo-account-nonce",
-    detail: { username: "VenmoJoe" },
+    details: { username: "VenmoJoe" },
   };
 
   const handleVenmoError = (err: any) => {
