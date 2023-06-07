@@ -49,6 +49,7 @@ function App() {
         paymentMethodUsage={"multi_use"}
         useTestNonce={true}
         setVenmoUserName={(venmoName) => console.log(venmoName)}
+        ignoreBowserSupport={true}
       />
     </div>
   );

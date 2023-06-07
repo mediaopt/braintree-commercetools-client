@@ -22,6 +22,7 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   profile_id,
   useTestNonce,
   setVenmoUserName,
+  ignoreBowserSupport,
 }: VenmoButton) => {
   const { clientToken } = usePayment();
 
@@ -36,12 +37,13 @@ export const VenmoButton: React.FC<VenmoButton> = ({
       profile_id={profile_id}
       useTestNonce={useTestNonce}
       setVenmoUserName={setVenmoUserName}
+      ignoreBowserSupport={ignoreBowserSupport}
     />
   ) : (
     <PayButton
       fullWidth={fullWidth}
       disabled={disabled}
-      buttonText={buttonText}
+      buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
     />
   );
 };

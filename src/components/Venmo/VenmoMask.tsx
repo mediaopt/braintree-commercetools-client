@@ -24,6 +24,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   buttonText,
   useTestNonce,
   setVenmoUserName,
+  ignoreBowserSupport,
 }: VenmoMaskType) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -124,8 +125,14 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
               return;
             }
             if (!venmoInstance.isBrowserSupported()) {
-              notify("Error", "Browser does not support Venmo");
-              // return; @todo enable the return again
+              if (!ignoreBowserSupport) {
+                notify("Error", "Browser does not support Venmo");
+                return;
+              }
+              notify(
+                "Warning",
+                "Browser does not support Venmo - will be ignored due to settings"
+              );
             }
 
             setDisplayButton(true);

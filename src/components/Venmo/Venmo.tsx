@@ -28,18 +28,19 @@ export const Venmo: React.FC<VenmoProps> = ({
   profile_id,
   useTestNonce,
   setVenmoUserName,
+  ignoreBowserSupport,
 }: VenmoProps) => {
   return (
-    <PaymentProvider
-      getClientTokenUrl={getClientTokenUrl}
-      createPaymentUrl={createPaymentUrl}
-      purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
-      purchaseCallback={purchaseCallback}
-      cartInformation={cartInformation}
-    >
-      <NotificationsProvider>
+    <NotificationsProvider>
+      <PaymentProvider
+        getClientTokenUrl={getClientTokenUrl}
+        createPaymentUrl={createPaymentUrl}
+        purchaseUrl={purchaseUrl}
+        sessionKey={sessionKey}
+        sessionValue={sessionValue}
+        purchaseCallback={purchaseCallback}
+        cartInformation={cartInformation}
+      >
         <RenderPurchase>
           <VenmoButton
             disabled={isPayButtonDisabled(cartInformation)}
@@ -52,9 +53,10 @@ export const Venmo: React.FC<VenmoProps> = ({
             profile_id={profile_id}
             useTestNonce={useTestNonce}
             setVenmoUserName={setVenmoUserName}
+            ignoreBowserSupport={ignoreBowserSupport}
           />
         </RenderPurchase>
-      </NotificationsProvider>
-    </PaymentProvider>
+      </PaymentProvider>
+    </NotificationsProvider>
   );
 };

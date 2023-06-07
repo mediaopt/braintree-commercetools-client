@@ -98,4 +98,5 @@ export type VenmoTypes = {
   profile_id?: string;
   useTestNonce?: boolean;
   setVenmoUserName: (venmoName: string) => any;
+  ignoreBowserSupport?: boolean;
 };
