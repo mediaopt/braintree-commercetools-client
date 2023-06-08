@@ -4,6 +4,8 @@ import {
   venmo,
   Venmo,
   dataCollector,
+  BraintreeError,
+  VenmoTokenizePayload,
 } from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
@@ -13,6 +15,19 @@ import { VenmoTypes } from "../../types";
 import classNames from "classnames";
 
 type VenmoMaskType = VenmoTypes & { fullWidth?: boolean; buttonText: string };
+
+type VenmoFlowOptionType = {
+  allowDesktopWebLogin?: boolean;
+  allowDesktop?: boolean;
+  allowNewBrowserTab?: boolean;
+  profileId?: string;
+};
+
+const TestPayload: VenmoTokenizePayload = {
+  nonce: "fake-venmo-account-nonce",
+  details: { username: "VenmoJoe" },
+  type: "",
+};
 
 export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   paymentMethodUsage,
@@ -35,12 +50,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
   const venmoForm = React.useRef<HTMLFormElement>(null);
 
-  const testPayload = {
-    nonce: "fake-venmo-account-nonce",
-    details: { username: "VenmoJoe" },
-  };
-
-  const handleVenmoError = (err: any) => {
+  const handleVenmoError = (err: BraintreeError) => {
     if (err.code === "VENMO_CANCELED") {
       notify("Error", "App is not available or user aborted payment flow");
     } else if (err.code === "VENMO_APP_CANCELED") {
@@ -50,28 +60,28 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
     }
   };
 
-  const handleVenmoSuccess = (payload: any) => {
+  const handleVenmoSuccess = (payload: VenmoTokenizePayload) => {
     handlePurchase(payload.nonce, { deviceData: deviceData });
     setVenmoUserName(payload.details.username);
   };
 
-  const clickVenmoButton = (e: any) => {
+  const clickVenmoButton = (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentVenmoInstance) return;
     setVenmoDisabled(true);
 
-    currentVenmoInstance.tokenize({}, (tokenizeErr: any, payload: any) => {
+    currentVenmoInstance.tokenize({}, (tokenizeErr, payload) => {
       setVenmoDisabled(false);
 
       if (useTestNonce) {
-        handleVenmoSuccess(testPayload);
+        handleVenmoSuccess(TestPayload);
         return;
-      }
-
-      if (tokenizeErr) {
+      } else if (tokenizeErr) {
         handleVenmoError(tokenizeErr);
-      } else {
+      } else if (payload) {
         handleVenmoSuccess(payload);
+      } else {
+        notify("Error", "Couldn't create payment");
       }
     });
   };
@@ -109,7 +119,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
           venmoFlowOption = { ...venmoFlowOption, allowNewBrowserTab: false };
         }
         if (profile_id) {
-          venmoFlowOption = { ...venmoFlowOption, profile_id: profile_id };
+          venmoFlowOption = { ...venmoFlowOption, profileId: profile_id };
         }
 
         venmo.create(
@@ -144,7 +154,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
             if (venmoInstance.hasTokenizationResult()) {
               venmoInstance.tokenize(function (tokenizeErr: any, payload: any) {
                 if (useTestNonce) {
-                  handleVenmoSuccess(testPayload);
+                  handleVenmoSuccess(TestPayload);
                   return;
                 }
                 if (tokenizeErr) {

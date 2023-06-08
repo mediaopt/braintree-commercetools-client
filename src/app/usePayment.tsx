@@ -13,15 +13,17 @@ import {
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
 
+type HandlePurchaseType = (
+  paymentNonce: string,
+  options?: { [index: string]: string }
+) => void;
+
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
   errorMessage: string;
   handleGetClientToken: () => void;
-  handlePurchase: (
-    paymentNonce: string,
-    options?: { [index: string]: any }
-  ) => void;
+  handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
 };
 
@@ -40,10 +42,7 @@ const PaymentContext = createContext<PaymentContextT>({
   clientToken: "",
   errorMessage: "",
   handleGetClientToken: () => {},
-  handlePurchase: (
-    paymentNonce: string,
-    options?: { [index: string]: any }
-  ) => {},
+  handlePurchase: (paymentNonce, options) => {},
   paymentInfo: PaymentInfoInitialObject,
 });
 
@@ -120,9 +119,9 @@ export const PaymentProvider: FC<
       setGettingClientToken(false);
     };
 
-    const handlePurchase = async (
-      paymentNonce: string,
-      options?: { [index: string]: any }
+    const handlePurchase: HandlePurchaseType = async (
+      paymentNonce,
+      options?
     ) => {
       const additional = options ?? {};
       const requestBody = {

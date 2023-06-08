@@ -100,3 +100,8 @@ export type VenmoTypes = {
   setVenmoUserName: (venmoName: string) => any;
   ignoreBowserSupport?: boolean;
 };
+
+export type GenericError = {
+  code: string;
+  message: string;
+};
