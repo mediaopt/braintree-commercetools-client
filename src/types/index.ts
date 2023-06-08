@@ -89,3 +89,15 @@ export const CartInformationInitial: CartInformation = {
     postalCode: "",
   },
 };
+
+export type GooglePayTypes = {
+  environment: google.payments.api.Environment;
+  totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
+  googleMerchantId?: string;
+  buttonTheme?: google.payments.api.ButtonColor;
+  buttonType?: google.payments.api.ButtonType;
+  phoneNumberRequired?: boolean;
+  billingAddressFormat?: "FULL" | "MIN";
+  billingAddressRequired?: boolean;
+  acquirerCountryCode: string;
+};
