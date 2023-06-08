@@ -1,3 +1,9 @@
+import {
+  ButtonColorOption,
+  ButtonLabelOption,
+  FlowType,
+} from "paypal-checkout-components";
+
 export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
@@ -66,6 +72,12 @@ export type CartInformation = {
   };
 };
 
+export type PayPalProps = {
+  flow: FlowType;
+  buttonColor: ButtonColorOption;
+  buttonLabel: ButtonLabelOption;
+};
+
 export const CartInformationInitial: CartInformation = {
   account: {
     email: "",
@@ -88,4 +100,16 @@ export const CartInformationInitial: CartInformation = {
     country: "",
     postalCode: "",
   },
+};
+
+export type GooglePayTypes = {
+  environment: google.payments.api.Environment;
+  totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
+  googleMerchantId?: string;
+  buttonTheme?: google.payments.api.ButtonColor;
+  buttonType?: google.payments.api.ButtonType;
+  phoneNumberRequired?: boolean;
+  billingAddressFormat?: "FULL" | "MIN";
+  billingAddressRequired?: boolean;
+  acquirerCountryCode: string;
 };

@@ -2,7 +2,12 @@ import React from "react";
 import "./App.css";
 
 import { PayPal } from "./components/PayPal";
-import { CreditCard } from "./components/CreditCard";
+
+import {
+  ButtonColorOption,
+  ButtonLabelOption,
+  FlowType,
+} from "paypal-checkout-components";
 
 function App() {
   const cartInformation = {
@@ -31,20 +36,21 @@ function App() {
 
   return (
     <div className="App">
-      <CreditCard
-        createPaymentUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
-        getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
-        purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
+      <PayPal
+        flow={"checkout" as FlowType}
+        buttonLabel={"pay" as ButtonLabelOption}
+        buttonColor={"gold" as ButtonColorOption}
+        createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
+        getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
+        purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJmMDBjZGIwNS0wZTZmLTQ5YTYtOTQzMS0xMDU5ODViYzdkMzgiLCJ3aXNobGlzdElkIjoiYWMzNjBhYjgtODg0NS00YTc1LWJlNjctMzg1Njg1NmY3ODkyIn0.fyp-3rbe66woogyOwCO1wPeU729_T1yw4RXeiLLnGmQ"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiZGZmYmFiNDItNmY5MC00NGI5LWE5ZDktZmEyMGRlM2Y3M2M2IiwiY2FydElkIjoiYTI0YzQxNTUtNjJkZC00MDI3LThkN2YtOWM4MWQ2YmU0NmMxIn0.r_FTqJnWvCEWhY4nQGJGME35qFb5D-hg99l6cOZUBmY"
         purchaseCallback={(result) => {
           console.log("Do something");
         }}
         fullWidth={true}
         buttonText={"Pay €X"}
         cartInformation={cartInformation}
-        showCardHoldersName={true}
-        showPostalCode={true}
       />
     </div>
   );
