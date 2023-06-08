@@ -57,8 +57,8 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
   const clickVenmoButton = (e: any) => {
     e.preventDefault();
-    setVenmoDisabled(true);
     if (!currentVenmoInstance) return;
+    setVenmoDisabled(true);
 
     currentVenmoInstance.tokenize({}, (tokenizeErr: any, payload: any) => {
       setVenmoDisabled(false);
@@ -180,7 +180,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
         })}
         id="submit"
       >
-        venmo: {buttonText}
+        {buttonText}
       </button>
     </form>
   );

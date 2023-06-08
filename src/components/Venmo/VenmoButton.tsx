@@ -43,7 +43,7 @@ export const VenmoButton: React.FC<VenmoButton> = ({
     <PayButton
       fullWidth={fullWidth}
       disabled={disabled}
-      buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
+      buttonText={PAY_BUTTON_TEXT_FALLBACK}
     />
   );
 };
