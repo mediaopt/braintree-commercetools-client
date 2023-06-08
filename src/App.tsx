@@ -44,7 +44,7 @@ function App() {
         getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiZGZmYmFiNDItNmY5MC00NGI5LWE5ZDktZmEyMGRlM2Y3M2M2IiwiY2FydElkIjoiYTI0YzQxNTUtNjJkZC00MDI3LThkN2YtOWM4MWQ2YmU0NmMxIn0.r_FTqJnWvCEWhY4nQGJGME35qFb5D-hg99l6cOZUBmY"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiOWZiYzJiMDQtZDYzNS00YjdhLWFiODQtZDA1NGY3MjIyYTA5IiwiY2FydElkIjoiNzlkNjMwNmMtZjViMC00MjgzLThhOTMtZTczZjI0MGQ0MjVkIn0.Jc5ar_mMUpgonk3W4TG1GtuaYFlJushOrA8k7u5Up-Q"
         purchaseCallback={(result) => {
           console.log("Do something");
         }}
