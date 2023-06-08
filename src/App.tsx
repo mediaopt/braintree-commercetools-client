@@ -2,7 +2,12 @@ import React from "react";
 import "./App.css";
 
 import { PayPal } from "./components/PayPal";
-import { CreditCard } from "./components/CreditCard";
+
+import {
+  ButtonColorOption,
+  ButtonLabelOption,
+  FlowType,
+} from "paypal-checkout-components";
 import { Venmo } from "./components/Venmo";
 
 function App() {
