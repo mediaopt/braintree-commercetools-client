@@ -7,14 +7,14 @@ import { RenderPurchase } from "../../components/RenderPurchase";
 import { PayPalButton } from "./PayPalButton";
 import { isPayButtonDisabled } from "../PayButton";
 
-import { GeneralComponentsProps } from "../../types";
+import { GeneralComponentsProps, PayPalProps } from "../../types";
 
-type PayPalProps = {
-  flow: "vault" | "checkout";
-} & GeneralComponentsProps;
+type PayPalComponentProps = PayPalProps & GeneralComponentsProps;
 
-export const PayPal: React.FC<PayPalProps> = ({
+export const PayPal: React.FC<PayPalComponentProps> = ({
   flow,
+  buttonColor,
+  buttonLabel,
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -24,7 +24,7 @@ export const PayPal: React.FC<PayPalProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
-}: PayPalProps) => {
+}: PayPalComponentProps) => {
   return (
     <NotificationsProvider>
       <PaymentProvider
@@ -42,6 +42,8 @@ export const PayPal: React.FC<PayPalProps> = ({
             buttonText={buttonText}
             fullWidth={fullWidth}
             flow={flow}
+            buttonColor={buttonColor}
+            buttonLabel={buttonLabel}
           />
         </RenderPurchase>
       </PaymentProvider>

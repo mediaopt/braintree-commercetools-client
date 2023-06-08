@@ -1,3 +1,9 @@
+import {
+  ButtonColorOption,
+  ButtonLabelOption,
+  FlowType,
+} from "paypal-checkout-components";
+
 export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
@@ -64,6 +70,12 @@ export type CartInformation = {
     country: string;
     postalCode: string;
   };
+};
+
+export type PayPalProps = {
+  flow: FlowType;
+  buttonColor: ButtonColorOption;
+  buttonLabel: ButtonLabelOption;
 };
 
 export const CartInformationInitial: CartInformation = {

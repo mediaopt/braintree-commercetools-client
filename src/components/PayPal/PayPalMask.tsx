@@ -4,13 +4,18 @@ import { client as braintreeClient, paypalCheckout } from "braintree-web";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 
-export const PayPalMask: React.FC<
-  React.PropsWithChildren<{
-    fullWidth?: boolean;
-    buttonText: string;
-    flow: string;
-  }>
-> = ({ flow }) => {
+import { PayPalProps } from "../../types";
+
+type PayPalMaskProps = {
+  fullWidth?: boolean;
+  buttonText: string;
+} & PayPalProps;
+
+export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
+  flow,
+  buttonLabel,
+  buttonColor,
+}) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
 
@@ -45,8 +50,11 @@ export const PayPalMask: React.FC<
 
                 paypal
                   .Buttons({
+                    style: {
+                      label: buttonLabel,
+                      color: buttonColor,
+                    },
                     fundingSource: paypal.FUNDING.PAYPAL.toString(),
-
                     createOrder: function () {
                       return paypalCheckoutInstance.createPayment({
                         flow: flow,
@@ -85,7 +93,7 @@ export const PayPalMask: React.FC<
         );
       }
     );
-  }, [paymentInfo, clientToken]);
+  }, [paymentInfo, clientToken, buttonColor, buttonLabel, flow, notify]);
 
   return <div id="paypal-button"></div>;
 };
