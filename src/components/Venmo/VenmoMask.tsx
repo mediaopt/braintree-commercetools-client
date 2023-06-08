@@ -16,13 +16,6 @@ import classNames from "classnames";
 
 type VenmoMaskType = VenmoTypes & { fullWidth?: boolean; buttonText: string };
 
-type VenmoFlowOptionType = {
-  allowDesktopWebLogin?: boolean;
-  allowDesktop?: boolean;
-  allowNewBrowserTab?: boolean;
-  profileId?: string;
-};
-
 const TestPayload: VenmoTokenizePayload = {
   nonce: "fake-venmo-account-nonce",
   details: { username: "VenmoJoe" },
