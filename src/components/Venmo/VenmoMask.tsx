@@ -145,7 +145,10 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
             }
 
             if (venmoInstance.hasTokenizationResult()) {
-              venmoInstance.tokenize(function (tokenizeErr: any, payload: any) {
+              venmoInstance.tokenize(function (
+                tokenizeErr: BraintreeError,
+                payload: VenmoTokenizePayload
+              ) {
                 if (useTestNonce) {
                   handleVenmoSuccess(TestPayload);
                   return;
