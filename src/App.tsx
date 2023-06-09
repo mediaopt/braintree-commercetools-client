@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 
-import { PayPal } from "./components/PayPal";
+import { GooglePay } from "./components/GooglePay";
 
 import {
   ButtonColorOption,
@@ -36,10 +36,7 @@ function App() {
 
   return (
     <div className="App">
-      <PayPal
-        flow={"checkout" as FlowType}
-        buttonLabel={"pay" as ButtonLabelOption}
-        buttonColor={"gold" as ButtonColorOption}
+      <GooglePay
         createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
         getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
@@ -51,6 +48,9 @@ function App() {
         fullWidth={true}
         buttonText={"Pay €X"}
         cartInformation={cartInformation}
+        acquirerCountryCode={"DE"}
+        environment={"TEST"}
+        totalPriceStatus={"FINAL"}
       />
     </div>
   );
