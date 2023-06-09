@@ -17,7 +17,6 @@ import { useLoader } from "./useLoader";
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
-  errorMessage: string;
   handleGetClientToken: () => void;
   handlePurchase: (paymentNonce: string) => void;
   paymentInfo: PaymentInfo;
@@ -36,7 +35,6 @@ const PaymentInfoInitialObject = {
 const PaymentContext = createContext<PaymentContextT>({
   gettingClientToken: false,
   clientToken: "",
-  errorMessage: "",
   handleGetClientToken: () => {},
   handlePurchase: (paymentNonce: string) => {},
   paymentInfo: PaymentInfoInitialObject,
@@ -60,7 +58,6 @@ export const PaymentProvider: FC<
   const [resultMessage, setResultMessage] = useState<string>();
 
   const [clientToken, setClientToken] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
@@ -149,12 +146,11 @@ export const PaymentProvider: FC<
     return {
       gettingClientToken,
       clientToken,
-      errorMessage,
       handleGetClientToken,
       handlePurchase,
       paymentInfo,
     };
-  }, [clientToken, gettingClientToken, errorMessage]);
+  }, [clientToken, gettingClientToken]);
 
   return (
     <PaymentContext.Provider value={value}>

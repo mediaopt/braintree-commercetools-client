@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 
 import { CreditCard } from "./components/CreditCard";
-import { PayPal } from "./components/PayPal";
 
 function App() {
   const cartInformation = {
@@ -31,8 +30,7 @@ function App() {
 
   return (
     <div className="App">
-      <PayPal
-        flow={"checkout"}
+      <CreditCard
         createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
         getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
         purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
