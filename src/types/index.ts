@@ -113,3 +113,19 @@ export type GooglePayTypes = {
   billingAddressRequired?: boolean;
   acquirerCountryCode: string;
 };
+
+export type VenmoTypes = {
+  mobileWebFallBack: boolean;
+  desktopFlow: "desktopWebLogin" | "desktopQRCode";
+  paymentMethodUsage: "multi_use" | "single_use";
+  allowNewBrowserTab?: boolean;
+  profile_id?: string;
+  useTestNonce?: boolean;
+  setVenmoUserName: (venmoName: string) => any;
+  ignoreBowserSupport?: boolean;
+};
+
+export type GenericError = {
+  code: string;
+  message: string;
+};

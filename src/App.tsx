@@ -1,13 +1,14 @@
 import React from "react";
 import "./App.css";
 
-import { GooglePay } from "./components/GooglePay";
+import { PayPal } from "./components/PayPal";
 
 import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
 } from "paypal-checkout-components";
+import { Venmo } from "./components/Venmo";
 
 function App() {
   const cartInformation = {
@@ -36,21 +37,24 @@ function App() {
 
   return (
     <div className="App">
-      <GooglePay
-        createPaymentUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
-        getClientTokenUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
-        purchaseUrl="https://poc-majid-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
+      <Venmo
+        createPaymentUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPayment"
+        getClientTokenUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken"
+        purchaseUrl="https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase"
         sessionKey="frontastic-session"
-        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiOWZiYzJiMDQtZDYzNS00YjdhLWFiODQtZDA1NGY3MjIyYTA5IiwiY2FydElkIjoiNzlkNjMwNmMtZjViMC00MjgzLThhOTMtZTczZjI0MGQ0MjVkIn0.Jc5ar_mMUpgonk3W4TG1GtuaYFlJushOrA8k7u5Up-Q"
+        sessionValue="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIzNGI1YmIwZC0wMDM2LTQzZjktYjRjOS0xZWRjM2M2MjkyMWYifQ.cc1lMi7JtjzseFl6TykkbmKFXYDGl9C66Mykj_hVaDc"
         purchaseCallback={(result) => {
           console.log("Do something");
         }}
         fullWidth={true}
         buttonText={"Pay €X"}
         cartInformation={cartInformation}
-        acquirerCountryCode={"DE"}
-        environment={"TEST"}
-        totalPriceStatus={"FINAL"}
+        desktopFlow={"desktopWebLogin"}
+        mobileWebFallBack={true}
+        paymentMethodUsage={"multi_use"}
+        useTestNonce={true}
+        setVenmoUserName={(venmoName) => console.log(venmoName)}
+        ignoreBowserSupport={true}
       />
     </div>
   );
