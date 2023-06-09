@@ -4,6 +4,7 @@ import { NotificationsProvider } from "../../app/useNotifications";
 import { PaymentProvider } from "../../app/usePayment";
 import { RenderPurchase } from "../RenderPurchase";
 import { GooglePayButton } from "./GooglePayButton";
+import { LoaderProvider } from "../../app/useLoader";
 
 import { isPayButtonDisabled } from "../PayButton";
 
@@ -32,33 +33,35 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   acquirerCountryCode,
 }: GooglePayComponentProps) => {
   return (
-    <PaymentProvider
-      getClientTokenUrl={getClientTokenUrl}
-      createPaymentUrl={createPaymentUrl}
-      purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
-      purchaseCallback={purchaseCallback}
-      cartInformation={cartInformation}
-    >
-      <NotificationsProvider>
-        <RenderPurchase>
-          <GooglePayButton
-            disabled={isPayButtonDisabled(cartInformation)}
-            buttonText={buttonText}
-            fullWidth={fullWidth}
-            googleMerchantId={googleMerchantId}
-            totalPriceStatus={totalPriceStatus}
-            environment={environment}
-            buttonType={buttonType}
-            buttonTheme={buttonTheme}
-            billingAddressFormat={billingAddressFormat}
-            billingAddressRequired={billingAddressRequired}
-            phoneNumberRequired={phoneNumberRequired}
-            acquirerCountryCode={acquirerCountryCode}
-          />
-        </RenderPurchase>
-      </NotificationsProvider>
-    </PaymentProvider>
+    <NotificationsProvider>
+      <LoaderProvider>
+        <PaymentProvider
+          getClientTokenUrl={getClientTokenUrl}
+          createPaymentUrl={createPaymentUrl}
+          purchaseUrl={purchaseUrl}
+          sessionKey={sessionKey}
+          sessionValue={sessionValue}
+          purchaseCallback={purchaseCallback}
+          cartInformation={cartInformation}
+        >
+          <RenderPurchase>
+            <GooglePayButton
+              disabled={isPayButtonDisabled(cartInformation)}
+              buttonText={buttonText}
+              fullWidth={fullWidth}
+              googleMerchantId={googleMerchantId}
+              totalPriceStatus={totalPriceStatus}
+              environment={environment}
+              buttonType={buttonType}
+              buttonTheme={buttonTheme}
+              billingAddressFormat={billingAddressFormat}
+              billingAddressRequired={billingAddressRequired}
+              phoneNumberRequired={phoneNumberRequired}
+              acquirerCountryCode={acquirerCountryCode}
+            />
+          </RenderPurchase>
+        </PaymentProvider>
+      </LoaderProvider>
+    </NotificationsProvider>
   );
 };
