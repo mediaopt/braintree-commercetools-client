@@ -3,15 +3,18 @@ import React from "react";
 import { NotificationsProvider } from "../../app/useNotifications";
 import { PaymentProvider } from "../../app/usePayment";
 import { RenderPurchase } from "../RenderPurchase";
-import { GooglePayButton } from "./GooglePayButton";
 
+import { VenmoButton } from "./VenmoButton";
 import { isPayButtonDisabled } from "../PayButton";
 
-import { GeneralComponentsProps, GooglePayTypes } from "../../types";
+import { GeneralComponentsProps, VenmoTypes } from "../../types";
 
-type GooglePayComponentProps = GeneralComponentsProps & GooglePayTypes;
+export type VenmoProps = VenmoTypes & GeneralComponentsProps;
 
-export const GooglePay: React.FC<GooglePayComponentProps> = ({
+export const Venmo: React.FC<VenmoProps> = ({
+  mobileWebFallBack,
+  paymentMethodUsage,
+  desktopFlow,
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -21,16 +24,12 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
-  environment,
-  googleMerchantId,
-  totalPriceStatus,
-  buttonTheme,
-  buttonType,
-  billingAddressFormat,
-  billingAddressRequired,
-  phoneNumberRequired,
-  acquirerCountryCode,
-}: GooglePayComponentProps) => {
+  allowNewBrowserTab,
+  profile_id,
+  useTestNonce,
+  setVenmoUserName,
+  ignoreBowserSupport,
+}: VenmoProps) => {
   return (
     <NotificationsProvider>
       <PaymentProvider
@@ -43,19 +42,18 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
         cartInformation={cartInformation}
       >
         <RenderPurchase>
-          <GooglePayButton
+          <VenmoButton
             disabled={isPayButtonDisabled(cartInformation)}
             buttonText={buttonText}
             fullWidth={fullWidth}
-            googleMerchantId={googleMerchantId}
-            totalPriceStatus={totalPriceStatus}
-            environment={environment}
-            buttonType={buttonType}
-            buttonTheme={buttonTheme}
-            billingAddressFormat={billingAddressFormat}
-            billingAddressRequired={billingAddressRequired}
-            phoneNumberRequired={phoneNumberRequired}
-            acquirerCountryCode={acquirerCountryCode}
+            mobileWebFallBack={mobileWebFallBack}
+            desktopFlow={desktopFlow}
+            paymentMethodUsage={paymentMethodUsage}
+            allowNewBrowserTab={allowNewBrowserTab}
+            profile_id={profile_id}
+            useTestNonce={useTestNonce}
+            setVenmoUserName={setVenmoUserName}
+            ignoreBowserSupport={ignoreBowserSupport}
           />
         </RenderPurchase>
       </PaymentProvider>
