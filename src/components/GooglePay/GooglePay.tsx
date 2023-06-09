@@ -32,16 +32,16 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   acquirerCountryCode,
 }: GooglePayComponentProps) => {
   return (
-    <PaymentProvider
-      getClientTokenUrl={getClientTokenUrl}
-      createPaymentUrl={createPaymentUrl}
-      purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
-      purchaseCallback={purchaseCallback}
-      cartInformation={cartInformation}
-    >
-      <NotificationsProvider>
+    <NotificationsProvider>
+      <PaymentProvider
+        getClientTokenUrl={getClientTokenUrl}
+        createPaymentUrl={createPaymentUrl}
+        purchaseUrl={purchaseUrl}
+        sessionKey={sessionKey}
+        sessionValue={sessionValue}
+        purchaseCallback={purchaseCallback}
+        cartInformation={cartInformation}
+      >
         <RenderPurchase>
           <GooglePayButton
             disabled={isPayButtonDisabled(cartInformation)}
@@ -58,7 +58,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
             acquirerCountryCode={acquirerCountryCode}
           />
         </RenderPurchase>
-      </NotificationsProvider>
-    </PaymentProvider>
+      </PaymentProvider>
+    </NotificationsProvider>
   );
 };
