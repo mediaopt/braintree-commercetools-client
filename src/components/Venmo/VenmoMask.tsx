@@ -16,7 +16,7 @@ import classNames from "classnames";
 
 type VenmoMaskType = VenmoTypes & { fullWidth?: boolean; buttonText: string };
 
-const TestPayload: VenmoTokenizePayload = {
+const TEST_PAYLOAD: VenmoTokenizePayload = {
   nonce: "fake-venmo-account-nonce",
   details: { username: "VenmoJoe" },
   type: "",
@@ -67,7 +67,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
       setVenmoDisabled(false);
 
       if (useTestNonce) {
-        handleVenmoSuccess(TestPayload);
+        handleVenmoSuccess(TEST_PAYLOAD);
         return;
       } else if (tokenizeErr) {
         handleVenmoError(tokenizeErr);
@@ -146,17 +146,18 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
 
             if (venmoInstance.hasTokenizationResult()) {
               venmoInstance.tokenize(function (
-                tokenizeErr: BraintreeError,
-                payload: VenmoTokenizePayload
+                tokenizeErr: BraintreeError | undefined,
+                payload: VenmoTokenizePayload | undefined
               ) {
                 if (useTestNonce) {
-                  handleVenmoSuccess(TestPayload);
+                  handleVenmoSuccess(TEST_PAYLOAD);
                   return;
-                }
-                if (tokenizeErr) {
+                } else if (tokenizeErr) {
                   handleVenmoError(tokenizeErr);
-                } else {
+                } else if (payload) {
                   handleVenmoSuccess(payload);
+                } else {
+                  notify("Error", "Couldn't create payment");
                 }
               });
               return;
