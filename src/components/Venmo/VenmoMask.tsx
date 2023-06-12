@@ -11,10 +11,10 @@ import {
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 
-import { VenmoTypes } from "../../types";
+import { VenmoTypes, GeneralPayButtonProps } from "../../types";
 import classNames from "classnames";
 
-type VenmoMaskType = VenmoTypes & { fullWidth?: boolean; buttonText: string };
+type VenmoMaskType = VenmoTypes & GeneralPayButtonProps;
 
 const TEST_PAYLOAD: VenmoTokenizePayload = {
   nonce: "fake-venmo-account-nonce",

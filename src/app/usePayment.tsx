@@ -40,7 +40,7 @@ const PaymentContext = createContext<PaymentContextT>({
   gettingClientToken: false,
   clientToken: "",
   handleGetClientToken: () => {},
-  handlePurchase: (paymentNonce, options) => {},
+  handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
 });
 

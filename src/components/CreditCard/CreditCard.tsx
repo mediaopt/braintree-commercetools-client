@@ -1,17 +1,15 @@
 import React from "react";
-
 import {
   ThreeDSecureAdditionalInformation,
   ThreeDSecureBillingAddress,
 } from "braintree-web/modules/three-d-secure";
 
-import { PaymentProvider } from "../../app/usePayment";
-import { NotificationsProvider } from "../../app/useNotifications";
-import { RenderPurchase } from "../RenderPurchase";
+import { RenderTemplate } from "../RenderTemplate";
+import { isPayButtonDisabled } from "../PayButton";
+
+import { CreditCardButton } from "./CreditCardButton";
 
 import { GeneralComponentsProps } from "../../types";
-import { CreditCardButton } from "./CreditCardButton";
-import { isPayButtonDisabled } from "../PayButton";
 
 type CreditCardProps = GeneralComponentsProps & {
   showPostalCode?: boolean;
@@ -38,29 +36,25 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   threeDSAdditionalInformation,
 }: CreditCardProps) => {
   return (
-    <NotificationsProvider>
-      <PaymentProvider
-        getClientTokenUrl={getClientTokenUrl}
-        createPaymentUrl={createPaymentUrl}
-        purchaseUrl={purchaseUrl}
-        sessionKey={sessionKey}
-        sessionValue={sessionValue}
-        purchaseCallback={purchaseCallback}
-        cartInformation={cartInformation}
-      >
-        <RenderPurchase>
-          <CreditCardButton
-            disabled={isPayButtonDisabled(cartInformation)}
-            buttonText={buttonText}
-            fullWidth={fullWidth}
-            showPostalCode={showPostalCode}
-            showCardHoldersName={showCardHoldersName}
-            email={email}
-            threeDSBillingAddress={threeDSBillingAddress}
-            threeDSAdditionalInformation={threeDSAdditionalInformation}
-          />
-        </RenderPurchase>
-      </PaymentProvider>
-    </NotificationsProvider>
+    <RenderTemplate
+      getClientTokenUrl={getClientTokenUrl}
+      createPaymentUrl={createPaymentUrl}
+      purchaseUrl={purchaseUrl}
+      sessionKey={sessionKey}
+      sessionValue={sessionValue}
+      purchaseCallback={purchaseCallback}
+      cartInformation={cartInformation}
+    >
+      <CreditCardButton
+        disabled={isPayButtonDisabled(cartInformation)}
+        buttonText={buttonText}
+        fullWidth={fullWidth}
+        showPostalCode={showPostalCode}
+        showCardHoldersName={showCardHoldersName}
+        email={email}
+        threeDSBillingAddress={threeDSBillingAddress}
+        threeDSAdditionalInformation={threeDSAdditionalInformation}
+      />
+    </RenderTemplate>
   );
 };
