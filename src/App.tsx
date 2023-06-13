@@ -11,7 +11,7 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER = "majid";
+const COFE_IDENTIFIER = "liudmyla-credit-card";
 const COFE_SESSION_VALUE =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI1ZTE1NWNjNC1iNmMzLTRlZjktYmJmZS05ZDM2MzcyNjVlMWIiLCJ3aXNobGlzdElkIjoiNzc1OWVlY2YtNWNhMS00MTQyLWFiZWEtMjZiNDRjMWQ0MjYwIn0.d5J7dj0DQGTMKKFUb5-flBx_UFm2dPbuUI05p3w3cT8";
 
