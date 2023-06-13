@@ -1,12 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { usePayment } from "../../app/usePayment";
 import { CreditCardMask } from "./CreditCardMask";
-import {
-  PayButton,
-  PAY_BUTTON_TEXT_FALLBACK,
-  PayButtonProps,
-} from "../PayButton";
+import { PAY_BUTTON_TEXT_FALLBACK, PayButtonProps } from "../PayButton";
 
 import {
   ThreeDSecureAdditionalInformation,
@@ -30,8 +26,14 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   email,
   threeDSAdditionalInformation,
   threeDSBillingAddress,
-}) => {
-  const { clientToken } = usePayment();
+}: CreditCardButton) => {
+  const { clientToken, handleGetClientToken } = usePayment();
+
+  useEffect(() => {
+    if (disabled) return;
+
+    handleGetClientToken();
+  }, [disabled]);
 
   return clientToken ? (
     <CreditCardMask
@@ -44,10 +46,6 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
       threeDSBillingAddress={threeDSBillingAddress}
     />
   ) : (
-    <PayButton
-      fullWidth={fullWidth}
-      disabled={disabled}
-      buttonText={buttonText}
-    />
+    <></>
   );
 };

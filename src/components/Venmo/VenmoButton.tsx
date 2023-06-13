@@ -1,11 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { usePayment } from "../../app/usePayment";
-import {
-  PayButton,
-  PayButtonProps,
-  PAY_BUTTON_TEXT_FALLBACK,
-} from "../PayButton";
+import { PayButtonProps, PAY_BUTTON_TEXT_FALLBACK } from "../PayButton";
 
 import { VenmoMask } from "./VenmoMask";
 import { VenmoTypes } from "../../types";
@@ -24,7 +20,13 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   setVenmoUserName,
   ignoreBowserSupport,
 }: VenmoButton) => {
-  const { clientToken } = usePayment();
+  const { clientToken, handleGetClientToken } = usePayment();
+
+  useEffect(() => {
+    if (disabled) return;
+
+    handleGetClientToken();
+  }, [disabled]);
 
   return clientToken ? (
     <VenmoMask
@@ -40,10 +42,6 @@ export const VenmoButton: React.FC<VenmoButton> = ({
       ignoreBowserSupport={ignoreBowserSupport}
     />
   ) : (
-    <PayButton
-      fullWidth={fullWidth}
-      disabled={disabled}
-      buttonText={PAY_BUTTON_TEXT_FALLBACK}
-    />
+    <></>
   );
 };
