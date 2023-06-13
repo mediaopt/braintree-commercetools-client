@@ -115,6 +115,7 @@ export type GooglePayTypes = {
   billingAddressFormat?: "FULL" | "MIN";
   billingAddressRequired?: boolean;
   acquirerCountryCode: string;
+  fullWidth: boolean;
 };
 
 export type VenmoTypes = {
