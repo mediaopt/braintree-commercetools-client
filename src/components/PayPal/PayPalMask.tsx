@@ -4,12 +4,9 @@ import { client as braintreeClient, paypalCheckout } from "braintree-web";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 
-import { PayPalProps } from "../../types";
+import { PayPalProps, GeneralPayButtonProps } from "../../types";
 
-type PayPalMaskProps = {
-  fullWidth?: boolean;
-  buttonText: string;
-} & PayPalProps;
+type PayPalMaskProps = GeneralPayButtonProps & PayPalProps;
 
 export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   flow,
