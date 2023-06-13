@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { client as braintreeClient, googlePayment } from "braintree-web";
+import classNames from "classnames";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
@@ -19,6 +20,7 @@ export const GooglePayMask: React.FC<
   billingAddressFormat = "MIN",
   billingAddressRequired = false,
   acquirerCountryCode,
+  fullWidth,
 }: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -107,9 +109,12 @@ export const GooglePayMask: React.FC<
                       },
                       buttonColor: buttonTheme,
                       buttonType: buttonType,
+                      buttonSizeMode: "fill",
                     });
                     if (googlePayButtonContainer.current) {
-                      googlePayButtonContainer.current.after(googlePayButton);
+                      googlePayButtonContainer.current.appendChild(
+                        googlePayButton
+                      );
                     }
                   } else {
                     notify("Error", "Failed payment call. Retry");
@@ -138,5 +143,12 @@ export const GooglePayMask: React.FC<
     acquirerCountryCode,
   ]);
 
-  return <div ref={googlePayButtonContainer} />;
+  return (
+    <div
+      className={classNames({
+        "w-full": fullWidth,
+      })}
+      ref={googlePayButtonContainer}
+    />
+  );
 };
