@@ -9,6 +9,11 @@ export type ClientTokenRequest = {
   paymentVersion: number;
 };
 
+export type GeneralPayButtonProps = {
+  fullWidth?: boolean;
+  buttonText?: string;
+};
+
 export type GeneralComponentsProps = {
   purchaseUrl: string;
   createPaymentUrl: string;
@@ -17,9 +22,7 @@ export type GeneralComponentsProps = {
   sessionValue: string;
   purchaseCallback: (result: any) => void;
   cartInformation: CartInformation;
-  fullWidth?: boolean;
-  buttonText?: string;
-};
+} & GeneralPayButtonProps;
 
 export type ClientTokenResponse = {
   clientToken: string;

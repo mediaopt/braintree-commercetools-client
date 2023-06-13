@@ -1,11 +1,9 @@
 import React from "react";
 
-import { NotificationsProvider } from "../../app/useNotifications";
-import { PaymentProvider } from "../../app/usePayment";
-import { RenderPurchase } from "../../components/RenderPurchase";
+import { RenderTemplate } from "../RenderTemplate";
+import { isPayButtonDisabled } from "../PayButton";
 
 import { PayPalButton } from "./PayPalButton";
-import { isPayButtonDisabled } from "../PayButton";
 
 import { GeneralComponentsProps, PayPalProps } from "../../types";
 
@@ -26,27 +24,23 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   buttonText,
 }: PayPalComponentProps) => {
   return (
-    <NotificationsProvider>
-      <PaymentProvider
-        getClientTokenUrl={getClientTokenUrl}
-        createPaymentUrl={createPaymentUrl}
-        purchaseUrl={purchaseUrl}
-        sessionKey={sessionKey}
-        sessionValue={sessionValue}
-        purchaseCallback={purchaseCallback}
-        cartInformation={cartInformation}
-      >
-        <RenderPurchase>
-          <PayPalButton
-            disabled={isPayButtonDisabled(cartInformation)}
-            buttonText={buttonText}
-            fullWidth={fullWidth}
-            flow={flow}
-            buttonColor={buttonColor}
-            buttonLabel={buttonLabel}
-          />
-        </RenderPurchase>
-      </PaymentProvider>
-    </NotificationsProvider>
+    <RenderTemplate
+      getClientTokenUrl={getClientTokenUrl}
+      createPaymentUrl={createPaymentUrl}
+      purchaseUrl={purchaseUrl}
+      sessionKey={sessionKey}
+      sessionValue={sessionValue}
+      purchaseCallback={purchaseCallback}
+      cartInformation={cartInformation}
+    >
+      <PayPalButton
+        disabled={isPayButtonDisabled(cartInformation)}
+        buttonText={buttonText}
+        fullWidth={fullWidth}
+        flow={flow}
+        buttonColor={buttonColor}
+        buttonLabel={buttonLabel}
+      />
+    </RenderTemplate>
   );
 };

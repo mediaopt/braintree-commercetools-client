@@ -1,5 +1,18 @@
 .App {
-    text-align: center;
+    text-align: left;
+    padding: 20px;
+}
+
+.App details {
+    margin-bottom: 10px;
+}
+
+.App summary {
+    cursor: pointer;
+}
+
+.App .component-wrapper {
+    padding: 10px 0 20px;
 }
 
 .App-logo {
