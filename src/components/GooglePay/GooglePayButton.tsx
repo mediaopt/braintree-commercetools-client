@@ -39,6 +39,7 @@ export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
       billingAddressFormat={billingAddressFormat}
       phoneNumberRequired={phoneNumberRequired}
       acquirerCountryCode={acquirerCountryCode}
+      fullWidth={fullWidth}
     />
   ) : (
     <PayButton
