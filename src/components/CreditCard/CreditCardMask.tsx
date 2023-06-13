@@ -12,20 +12,22 @@ import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
 
+import { GeneralPayButtonProps } from "../../types";
+
 const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
 const HOSTED_FIELDS =
   "h-12 box-border w-full inline-block shadow-none font-semibold text-sm rounded-md border border-violet-50 leading-5 bg-slate-50 mb-3";
 
+type CreditCardMaskProps = GeneralPayButtonProps & {
+  showPostalCode: boolean;
+  showCardHoldersName: boolean;
+  threeDSBillingAddress?: ThreeDSecureBillingAddress;
+  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+  email?: string;
+};
+
 export const CreditCardMask: React.FC<
-  React.PropsWithChildren<{
-    fullWidth?: boolean;
-    buttonText: string;
-    showPostalCode: boolean;
-    showCardHoldersName: boolean;
-    threeDSBillingAddress?: ThreeDSecureBillingAddress;
-    threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-    email?: string;
-  }>
+  React.PropsWithChildren<CreditCardMaskProps>
 > = ({
   fullWidth = true,
   buttonText,

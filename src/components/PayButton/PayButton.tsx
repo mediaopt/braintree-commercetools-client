@@ -2,11 +2,11 @@ import { FC } from "react";
 import classNames from "classnames";
 import { usePayment } from "../../app/usePayment";
 
+import { GeneralPayButtonProps } from "../../types";
+
 export type PayButtonProps = {
   disabled: boolean;
-  fullWidth?: boolean;
-  buttonText?: string;
-};
+} & GeneralPayButtonProps;
 
 export const PAY_BUTTON_TEXT_FALLBACK = "Purchase";
 

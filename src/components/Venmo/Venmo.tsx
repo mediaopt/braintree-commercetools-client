@@ -1,11 +1,9 @@
 import React from "react";
 
-import { NotificationsProvider } from "../../app/useNotifications";
-import { PaymentProvider } from "../../app/usePayment";
-import { RenderPurchase } from "../RenderPurchase";
+import { RenderTemplate } from "../RenderTemplate";
+import { isPayButtonDisabled } from "../PayButton";
 
 import { VenmoButton } from "./VenmoButton";
-import { isPayButtonDisabled } from "../PayButton";
 
 import { GeneralComponentsProps, VenmoTypes } from "../../types";
 
@@ -31,32 +29,28 @@ export const Venmo: React.FC<VenmoProps> = ({
   ignoreBowserSupport,
 }: VenmoProps) => {
   return (
-    <NotificationsProvider>
-      <PaymentProvider
-        getClientTokenUrl={getClientTokenUrl}
-        createPaymentUrl={createPaymentUrl}
-        purchaseUrl={purchaseUrl}
-        sessionKey={sessionKey}
-        sessionValue={sessionValue}
-        purchaseCallback={purchaseCallback}
-        cartInformation={cartInformation}
-      >
-        <RenderPurchase>
-          <VenmoButton
-            disabled={isPayButtonDisabled(cartInformation)}
-            buttonText={buttonText}
-            fullWidth={fullWidth}
-            mobileWebFallBack={mobileWebFallBack}
-            desktopFlow={desktopFlow}
-            paymentMethodUsage={paymentMethodUsage}
-            allowNewBrowserTab={allowNewBrowserTab}
-            profile_id={profile_id}
-            useTestNonce={useTestNonce}
-            setVenmoUserName={setVenmoUserName}
-            ignoreBowserSupport={ignoreBowserSupport}
-          />
-        </RenderPurchase>
-      </PaymentProvider>
-    </NotificationsProvider>
+    <RenderTemplate
+      getClientTokenUrl={getClientTokenUrl}
+      createPaymentUrl={createPaymentUrl}
+      purchaseUrl={purchaseUrl}
+      sessionKey={sessionKey}
+      sessionValue={sessionValue}
+      purchaseCallback={purchaseCallback}
+      cartInformation={cartInformation}
+    >
+      <VenmoButton
+        disabled={isPayButtonDisabled(cartInformation)}
+        buttonText={buttonText}
+        fullWidth={fullWidth}
+        mobileWebFallBack={mobileWebFallBack}
+        desktopFlow={desktopFlow}
+        paymentMethodUsage={paymentMethodUsage}
+        allowNewBrowserTab={allowNewBrowserTab}
+        profile_id={profile_id}
+        useTestNonce={useTestNonce}
+        setVenmoUserName={setVenmoUserName}
+        ignoreBowserSupport={ignoreBowserSupport}
+      />
+    </RenderTemplate>
   );
 };
