@@ -5,12 +5,9 @@ import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
 
-import { PayPalProps } from "../../types";
+import { PayPalProps, GeneralPayButtonProps } from "../../types";
 
-type PayPalMaskProps = {
-  fullWidth?: boolean;
-  buttonText: string;
-} & PayPalProps;
+type PayPalMaskProps = GeneralPayButtonProps & PayPalProps;
 
 export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   flow,
