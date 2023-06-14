@@ -139,7 +139,7 @@ export const PaymentProvider: FC<
         purchaseUrl,
         requestBody
       );
-
+      isLoading(false);
       if (response.ok === false) {
         notify("Error", response.message);
         return;
