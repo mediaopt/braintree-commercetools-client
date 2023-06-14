@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 import { CreditCard } from "./components/CreditCard";
@@ -11,9 +11,9 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER = "majid";
-const COFE_SESSION_VALUE =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI1ZTE1NWNjNC1iNmMzLTRlZjktYmJmZS05ZDM2MzcyNjVlMWIiLCJ3aXNobGlzdElkIjoiNzc1OWVlY2YtNWNhMS00MTQyLWFiZWEtMjZiNDRjMWQ0MjYwIn0.d5J7dj0DQGTMKKFUb5-flBx_UFm2dPbuUI05p3w3cT8";
+const COFE_IDENTIFIER: string = "jye";
+const COFE_SESSION_VALUE: string =
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhYjNiNTE4YS1iMWYwLTQxYWQtYmQwYy1mM2IzZmNlYjQ3NzAifQ.Q54JAPD97xET2pyq7SA0g0l-T8HTOK8bKPqXjQox9oc";
 
 function App() {
   const cartInformation = {
@@ -46,7 +46,7 @@ function App() {
     purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
     sessionKey: "frontastic-session",
     sessionValue: COFE_SESSION_VALUE,
-    purchaseCallback: (result) => {
+    purchaseCallback: (result: any) => {
       console.log("Do something", result);
     },
     fullWidth: true,
@@ -54,54 +54,59 @@ function App() {
     cartInformation: cartInformation,
   };
 
+  const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
+  const paymentMethods: { [index: string]: JSX.Element } = {
+    CreditCard: <CreditCard {...params} />,
+    PayPal: (
+      <PayPal
+        flow={"checkout" as FlowType}
+        buttonColor={"blue" as ButtonColorOption}
+        buttonLabel={"pay" as ButtonLabelOption}
+        {...params}
+      />
+    ),
+    GooglePay: (
+      <GooglePay
+        totalPriceStatus={"FINAL"}
+        googleMerchantId={"merchant-id-from-google"}
+        acquirerCountryCode={"DE"}
+        environment={"TEST"}
+        {...params}
+      />
+    ),
+    Venmo: (
+      <Venmo
+        desktopFlow={"desktopWebLogin"}
+        mobileWebFallBack={true}
+        paymentMethodUsage={"multi_use"}
+        useTestNonce={true}
+        setVenmoUserName={(venmoName) => console.log(venmoName)}
+        ignoreBowserSupport={true}
+        {...params}
+      />
+    ),
+  };
+  const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.checked) return;
+    setChoosenPaymentMethod(e.target.value);
+  };
+
   return (
     <div className="App">
-      <details>
-        <summary>CreditCard</summary>
-        <div className="component-wrapper">
-          <CreditCard {...params} />
+      {Object.keys(paymentMethods).map((entry, index) => (
+        <div key={index}>
+          <label>
+            <input
+              onChange={changePaymentMethod}
+              type="radio"
+              name="paymentmethod"
+              value={entry}
+            />
+            {entry}
+          </label>
         </div>
-      </details>
-
-      <details>
-        <summary>PayPal</summary>
-        <div className="component-wrapper">
-          <PayPal
-            flow={"checkout" as FlowType}
-            buttonColor={"blue" as ButtonColorOption}
-            buttonLabel={"pay" as ButtonLabelOption}
-            {...params}
-          />
-        </div>
-      </details>
-
-      <details>
-        <summary>GooglePay</summary>
-        <div className="component-wrapper">
-          <GooglePay
-            totalPriceStatus={"FINAL"}
-            googleMerchantId={"merchant-id-from-google"}
-            acquirerCountryCode={"DE"}
-            environment={"TEST"}
-            {...params}
-          />
-        </div>
-      </details>
-
-      <details>
-        <summary>Venmo</summary>
-        <div className="component-wrapper">
-          <Venmo
-            desktopFlow={"desktopWebLogin"}
-            mobileWebFallBack={true}
-            paymentMethodUsage={"multi_use"}
-            useTestNonce={true}
-            setVenmoUserName={(venmoName) => console.log(venmoName)}
-            ignoreBowserSupport={true}
-            {...params}
-          />
-        </div>
-      </details>
+      ))}
+      <div>{paymentMethods[choosenPaymentMethod] ?? <></>}</div>
     </div>
   );
 }
