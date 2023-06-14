@@ -133,3 +133,8 @@ export type GenericError = {
   code: string;
   message: string;
 };
+
+export type LoadingOverlayType = {
+  loadingText?: string;
+  textStyles?: string;
+};

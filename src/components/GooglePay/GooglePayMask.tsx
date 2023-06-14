@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
+import { useLoader } from "../../app/useLoader";
 import loadScript from "../../app/loadScript";
 import { GooglePayTypes } from "../../types";
 
@@ -23,6 +24,7 @@ export const GooglePayMask: React.FC<
 }: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
+  const { isLoading } = useLoader();
   const GoogleApiVersion: number = 2;
   const GoogleApiMinorVersion: number = 0;
   const GooglePayVersion: number = 2;
@@ -30,6 +32,7 @@ export const GooglePayMask: React.FC<
   const googlePayButtonContainer = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    isLoading(true);
     loadScript("https://pay.google.com/gp/p/js/pay.js").then(() => {
       let paymentsClient = new google.payments.api.PaymentsClient({
         environment: environment,
@@ -124,6 +127,7 @@ export const GooglePayMask: React.FC<
           );
         }
       );
+      isLoading(false);
     });
   }, [
     environment,
