@@ -12,6 +12,7 @@ import {
 } from "../types";
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
+import { useLoader } from "./useLoader";
 
 type HandlePurchaseType = (
   paymentNonce: string,
@@ -67,10 +68,12 @@ export const PaymentProvider: FC<
   );
 
   const { notify } = useNotifications();
+  const { isLoading } = useLoader();
 
   const value = useMemo(() => {
     const handleGetClientToken = async () => {
       setGettingClientToken(true);
+      isLoading(true);
       try {
         const createPaymentResult = (await createPayment(
           sessionKey,
@@ -104,6 +107,7 @@ export const PaymentProvider: FC<
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
+            isLoading(false);
             return;
           }
         }
@@ -114,6 +118,7 @@ export const PaymentProvider: FC<
         console.error(error);
       }
       setGettingClientToken(false);
+      isLoading(false);
     };
 
     const handlePurchase: HandlePurchaseType = async (
@@ -134,7 +139,7 @@ export const PaymentProvider: FC<
         purchaseUrl,
         requestBody
       );
-
+      isLoading(false);
       if (response.ok === false) {
         notify("Error", response.message);
         return;
