@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { usePayment } from "../../app/usePayment";
 import { PayButtonProps } from "../PayButton";
+import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
 
 import { GooglePayMask } from "./GooglePayMask";
 import { GooglePayTypes } from "../../types";
@@ -21,13 +22,9 @@ export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
   phoneNumberRequired,
   acquirerCountryCode,
 }: GooglePayButtonProps) => {
-  const { clientToken, handleGetClientToken } = usePayment();
+  const { clientToken } = usePayment();
 
-  useEffect(() => {
-    if (disabled) return;
-
-    handleGetClientToken();
-  }, [disabled]);
+  useHandleGetClientToken(disabled);
 
   return clientToken ? (
     <GooglePayMask

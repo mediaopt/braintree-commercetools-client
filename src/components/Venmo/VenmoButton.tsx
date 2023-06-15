@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { usePayment } from "../../app/usePayment";
 import { PayButtonProps, PAY_BUTTON_TEXT_FALLBACK } from "../PayButton";
+import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
 
 import { VenmoMask } from "./VenmoMask";
 import { VenmoTypes } from "../../types";
@@ -20,13 +21,9 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   setVenmoUserName,
   ignoreBowserSupport,
 }: VenmoButton) => {
-  const { clientToken, handleGetClientToken } = usePayment();
+  const { clientToken } = usePayment();
 
-  useEffect(() => {
-    if (disabled) return;
-
-    handleGetClientToken();
-  }, [disabled]);
+  useHandleGetClientToken(disabled);
 
   return clientToken ? (
     <VenmoMask
