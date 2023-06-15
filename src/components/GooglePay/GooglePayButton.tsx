@@ -1,11 +1,8 @@
 import React from "react";
 
 import { usePayment } from "../../app/usePayment";
-import {
-  PayButton,
-  PayButtonProps,
-  PAY_BUTTON_TEXT_FALLBACK,
-} from "../PayButton";
+import { PayButtonProps } from "../PayButton";
+import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
 
 import { GooglePayMask } from "./GooglePayMask";
 import { GooglePayTypes } from "../../types";
@@ -15,7 +12,6 @@ type GooglePayButtonProps = GooglePayTypes & PayButtonProps;
 export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
   disabled,
   fullWidth = true,
-  buttonText,
   googleMerchantId,
   environment,
   totalPriceStatus,
@@ -27,6 +23,8 @@ export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
   acquirerCountryCode,
 }: GooglePayButtonProps) => {
   const { clientToken } = usePayment();
+
+  useHandleGetClientToken(disabled);
 
   return clientToken ? (
     <GooglePayMask
@@ -42,10 +40,6 @@ export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
       fullWidth={fullWidth}
     />
   ) : (
-    <PayButton
-      fullWidth={fullWidth}
-      disabled={disabled}
-      buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
-    />
+    <></>
   );
 };

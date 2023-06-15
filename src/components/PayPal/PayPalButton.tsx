@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { usePayment } from "../../app/usePayment";
 import { PayButtonProps, PAY_BUTTON_TEXT_FALLBACK } from "../PayButton";
+import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
 
 import { PayPalMask } from "./PayPalMask";
 
@@ -17,13 +18,9 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
   buttonLabel,
   buttonColor,
 }) => {
-  const { clientToken, handleGetClientToken } = usePayment();
+  const { clientToken } = usePayment();
 
-  useEffect(() => {
-    if (disabled) return;
-
-    handleGetClientToken();
-  }, [disabled]);
+  useHandleGetClientToken(disabled);
 
   return clientToken ? (
     <PayPalMask
