@@ -5,14 +5,21 @@ import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
 
-import { PayPalProps, GeneralPayButtonProps } from "../../types";
+import {
+  PayPalProps,
+  GeneralPayButtonProps,
+  PayPalFundingSourcesProp,
+} from "../../types";
 
 type PayPalMaskProps = GeneralPayButtonProps & PayPalProps;
+
+const FUNDING_SOURCES = ["paypal"];
 
 export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   flow,
   buttonLabel,
   buttonColor,
+  additionalFundingSources,
 }) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -20,6 +27,19 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
 
   useEffect(() => {
     isLoading(true);
+    const additionalFundingMethods = Object.keys(
+      additionalFundingSources ?? {}
+    );
+    FUNDING_SOURCES.push(...additionalFundingMethods);
+
+    const fundingButtonConfigs: PayPalFundingSourcesProp = {
+      paypal: {
+        buttonColor: buttonColor,
+        buttonLabel: buttonLabel,
+      },
+      ...(additionalFundingSources ?? {}),
+    };
+
     braintreeClient.create(
       {
         authorization: clientToken,
@@ -46,49 +66,53 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
               {
                 currency: paymentInfo.currency,
                 intent: "capture",
+                "enable-funding": additionalFundingMethods.toString(),
               },
               function () {
                 const paypal = global.paypal;
 
-                paypal
-                  .Buttons({
-                    style: {
-                      label: buttonLabel,
-                      color: buttonColor,
-                    },
-                    fundingSource: paypal.FUNDING.PAYPAL.toString(),
-                    createOrder: function () {
-                      return paypalCheckoutInstance.createPayment({
-                        flow: flow,
+                FUNDING_SOURCES.forEach((fundingSource) => {
+                  paypal
+                    .Buttons({
+                      style: {
+                        label: fundingButtonConfigs[fundingSource].buttonLabel,
+                        color: fundingButtonConfigs[fundingSource].buttonColor,
+                      },
+                      fundingSource: fundingSource,
+                      createOrder: function () {
+                        return paypalCheckoutInstance.createPayment({
+                          flow: flow,
 
-                        amount: paymentInfo.amount,
-                        currency: paymentInfo.currency,
+                          amount: paymentInfo.amount,
+                          currency: paymentInfo.currency,
 
-                        intent: "capture",
+                          intent: "capture",
 
-                        enableShippingAddress: true,
-                        shippingAddressEditable: false,
-                      });
-                    },
+                          enableShippingAddress: true,
+                          shippingAddressEditable: false,
+                        });
+                      },
 
-                    onApprove: function (data: any, actions: any) {
-                      return paypalCheckoutInstance.tokenizePayment(
-                        data,
-                        function (err: any, payload: any) {
-                          handlePurchase(payload.nonce);
-                        }
-                      );
-                    },
+                      onApprove: function (data: any, actions: any) {
+                        return paypalCheckoutInstance.tokenizePayment(
+                          data,
+                          function (err: any, payload: any) {
+                            handlePurchase(payload.nonce);
+                          }
+                        );
+                      },
 
-                    onCancel: function (data) {
-                      notify("Info", "PayPal payment cancelled.");
-                    },
+                      onCancel: function (data) {
+                        notify("Info", "PayPal payment cancelled.");
+                      },
 
-                    onError: function (err) {
-                      notify("Info", "PayPal payment cancelled.");
-                    },
-                  })
-                  .render("#paypal-button");
+                      onError: function (err) {
+                        notify("Info", "PayPal payment cancelled.");
+                      },
+                    })
+                    .render("#paypal-button");
+                });
+
                 isLoading(false);
               }
             );
@@ -96,7 +120,15 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
         );
       }
     );
-  }, [paymentInfo, clientToken, buttonColor, buttonLabel, flow, notify]);
+  }, [
+    paymentInfo,
+    clientToken,
+    buttonColor,
+    buttonLabel,
+    flow,
+    notify,
+    additionalFundingSources,
+  ]);
 
   return <div id="paypal-button"></div>;
 };

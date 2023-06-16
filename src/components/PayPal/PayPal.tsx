@@ -22,6 +22,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
+  additionalFundingSources,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -40,6 +41,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         flow={flow}
         buttonColor={buttonColor}
         buttonLabel={buttonLabel}
+        additionalFundingSources={additionalFundingSources}
       />
     </RenderTemplate>
   );

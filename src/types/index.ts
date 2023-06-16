@@ -75,10 +75,18 @@ export type CartInformation = {
   };
 };
 
+export type PayPalFundingSourcesProp = {
+  [index: string]: {
+    buttonColor?: ButtonColorOption;
+    buttonLabel?: ButtonLabelOption;
+  };
+};
+
 export type PayPalProps = {
   flow: FlowType;
   buttonColor: ButtonColorOption;
   buttonLabel: ButtonLabelOption;
+  additionalFundingSources?: PayPalFundingSourcesProp;
 };
 
 export const CartInformationInitial: CartInformation = {

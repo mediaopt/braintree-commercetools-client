@@ -17,6 +17,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
   flow,
   buttonLabel,
   buttonColor,
+  additionalFundingSources,
 }) => {
   const { clientToken } = usePayment();
 
@@ -29,6 +30,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
       flow={flow}
       buttonLabel={buttonLabel}
       buttonColor={buttonColor}
+      additionalFundingSources={additionalFundingSources}
     />
   ) : (
     <></>
