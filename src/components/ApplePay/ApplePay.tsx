@@ -5,11 +5,11 @@ import { isPayButtonDisabled } from "../PayButton";
 
 import { ApplePayButton } from "./ApplePayButton";
 
-import { GeneralComponentsProps } from "../../types";
+import { GeneralComponentsProps, ApllePayTypes } from "../../types";
 
-type GooglePayComponentProps = GeneralComponentsProps;
+type ApplePayComponentProps = ApllePayTypes & GeneralComponentsProps;
 
-export const ApplePay: React.FC<GooglePayComponentProps> = ({
+export const ApplePay: React.FC<ApplePayComponentProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -19,7 +19,8 @@ export const ApplePay: React.FC<GooglePayComponentProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
-}: GooglePayComponentProps) => {
+  apllePayDisplayName,
+}: ApplePayComponentProps) => {
   return (
     <RenderTemplate
       getClientTokenUrl={getClientTokenUrl}
@@ -34,6 +35,7 @@ export const ApplePay: React.FC<GooglePayComponentProps> = ({
         disabled={isPayButtonDisabled(cartInformation)}
         buttonText={buttonText}
         fullWidth={fullWidth}
+        apllePayDisplayName={apllePayDisplayName}
       />
     </RenderTemplate>
   );

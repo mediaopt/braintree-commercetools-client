@@ -4,15 +4,19 @@ import { useNotifications } from "../../app/useNotifications";
 import { usePayment } from "../../app/usePayment";
 import { PayButtonProps } from "../PayButton";
 import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
+import { ApllePayTypes } from "../../types";
 
 import { ApplePayMask } from "./ApplePayMask";
 
 declare const window: any;
 
-export const ApplePayButton: React.FC<PayButtonProps> = ({
+type ApplePayButtonProps = ApllePayTypes & PayButtonProps;
+
+export const ApplePayButton: React.FC<ApplePayButtonProps> = ({
   disabled,
   fullWidth = true,
-}: PayButtonProps) => {
+  apllePayDisplayName,
+}: ApplePayButtonProps) => {
   const [applyPaySupport, setApplyPaySupport] = useState(false);
   const { clientToken } = usePayment();
 
@@ -21,7 +25,7 @@ export const ApplePayButton: React.FC<PayButtonProps> = ({
   useEffect(() => {
     try {
       if (!("ApplePaySession" in window)) {
-        throw new Error("1");
+        throw new Error("ApplePaySession");
       } else {
         if (window.ApplePaySession.canMakePayments()) {
           setApplyPaySupport(true);
@@ -34,7 +38,10 @@ export const ApplePayButton: React.FC<PayButtonProps> = ({
 
   useHandleGetClientToken(disabled);
   return clientToken && applyPaySupport ? (
-    <ApplePayMask fullWidth={fullWidth} />
+    <ApplePayMask
+      fullWidth={fullWidth}
+      apllePayDisplayName={apllePayDisplayName}
+    />
   ) : (
     <></>
   );

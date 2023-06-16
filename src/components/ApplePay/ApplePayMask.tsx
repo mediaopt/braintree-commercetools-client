@@ -5,13 +5,15 @@ import classNames from "classnames";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
-import { GeneralPayButtonProps } from "../../types";
+import { GeneralPayButtonProps, ApllePayTypes } from "../../types";
 
 declare const window: any;
 
+type ApplePayMaskProps = ApllePayTypes & GeneralPayButtonProps;
+
 export const ApplePayMask: React.FC<
-  React.PropsWithChildren<GeneralPayButtonProps>
-> = ({ fullWidth }: GeneralPayButtonProps) => {
+  React.PropsWithChildren<ApplePayMaskProps>
+> = ({ fullWidth, apllePayDisplayName }: ApplePayMaskProps) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
@@ -43,14 +45,12 @@ export const ApplePayMask: React.FC<
 
             var paymentRequest = applePayInstance?.createPaymentRequest({
               total: {
-                label: "My Store",
-                amount: "19.99",
+                label: apllePayDisplayName,
+                amount: paymentInfo.amount.toString(),
               },
 
               requiredBillingContactFields: ["postalAddress"],
             });
-
-            console.log(paymentRequest);
 
             var session = new window.ApplePaySession(3, paymentRequest);
 
@@ -58,7 +58,7 @@ export const ApplePayMask: React.FC<
               applePayInstance?.performValidation(
                 {
                   validationURL: event.validationURL,
-                  displayName: "My Store",
+                  displayName: apllePayDisplayName,
                 },
                 function (err, merchantSession) {
                   if (err) {

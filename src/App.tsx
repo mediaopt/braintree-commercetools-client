@@ -15,7 +15,7 @@ import {
 
 const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIyZjY0YjFlMi1kZDBmLTQzY2QtYTBlOC1hNDMyZTRiMGE0Y2QifQ.yvv4zVGiTyc4K9uxSbKa1ptZBQ_8RW9gDMn71vOHnmE";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiMmUyMjcyNjUtOWMyOS00NjdiLWIxYmMtZGUwZWFjZmM4NDdlIiwiY2FydElkIjoiMTFiMWJmYjUtZDJkZC00ODVmLTg1M2UtZjdhYmNkYzZlYWMxIn0.WWo4nF6h47c_0sipoA2zdZasLq7hOPPVgMZYMutZT9M";
 
 function App() {
   const cartInformation = {
@@ -87,7 +87,7 @@ function App() {
         {...params}
       />
     ),
-    ApplePay: <ApplePay {...params} />,
+    ApplePay: <ApplePay apllePayDisplayName="My Store" {...params} />,
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
