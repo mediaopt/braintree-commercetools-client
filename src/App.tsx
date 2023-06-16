@@ -5,15 +5,17 @@ import { CreditCard } from "./components/CreditCard";
 import { GooglePay } from "./components/GooglePay";
 import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
+import { ApplePay } from "./components/ApplePay";
+
 import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhYjNiNTE4YS1iMWYwLTQxYWQtYmQwYy1mM2IzZmNlYjQ3NzAifQ.Q54JAPD97xET2pyq7SA0g0l-T8HTOK8bKPqXjQox9oc";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIyZjY0YjFlMi1kZDBmLTQzY2QtYTBlOC1hNDMyZTRiMGE0Y2QifQ.yvv4zVGiTyc4K9uxSbKa1ptZBQ_8RW9gDMn71vOHnmE";
 
 function App() {
   const cartInformation = {
@@ -85,6 +87,7 @@ function App() {
         {...params}
       />
     ),
+    ApplePay: <ApplePay {...params} />,
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
