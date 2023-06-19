@@ -86,7 +86,8 @@ export type PayPalProps = {
   flow: FlowType;
   buttonColor: ButtonColorOption;
   buttonLabel: ButtonLabelOption;
-  additionalFundingSources?: PayPalFundingSourcesProp;
+  payLater?: boolean;
+  payLaterButtonColor?: ButtonColorOption;
 };
 
 export const CartInformationInitial: CartInformation = {

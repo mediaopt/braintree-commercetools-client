@@ -19,7 +19,8 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   flow,
   buttonLabel,
   buttonColor,
-  additionalFundingSources,
+  payLater,
+  payLaterButtonColor,
 }) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -27,10 +28,21 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
 
   useEffect(() => {
     isLoading(true);
+    const additionalFundingSources: PayPalFundingSourcesProp = {};
+    if (payLater) {
+      additionalFundingSources["paylater"] = {
+        buttonColor: payLaterButtonColor,
+      };
+    }
     const additionalFundingMethods = Object.keys(
       additionalFundingSources ?? {}
     );
     FUNDING_SOURCES.push(...additionalFundingMethods);
+    const enableFunding = additionalFundingMethods.length
+      ? {
+          "enable-funding": additionalFundingMethods.toString(),
+        }
+      : {};
 
     const fundingButtonConfigs: PayPalFundingSourcesProp = {
       paypal: {
@@ -66,7 +78,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
               {
                 currency: paymentInfo.currency,
                 intent: "capture",
-                "enable-funding": additionalFundingMethods.toString(),
+                ...enableFunding,
               },
               function () {
                 const paypal = global.paypal;
@@ -127,7 +139,8 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     buttonLabel,
     flow,
     notify,
-    additionalFundingSources,
+    payLater,
+    payLaterButtonColor,
   ]);
 
   return <div id="paypal-button"></div>;
