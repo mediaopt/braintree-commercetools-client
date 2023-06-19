@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { client as braintreeClient, applePay, ApplePay } from "braintree-web";
+import {
+  client as braintreeClient,
+  applePay,
+  ApplePay,
+  ApplePayPayload,
+} from "braintree-web";
 import classNames from "classnames";
+import { useLoader } from "../../app/useLoader";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
@@ -16,6 +22,7 @@ export const ApplePayMask: React.FC<
   const [applePayInstanceState, setApplePayInstanceState] =
     useState<ApplePay>();
 
+  const { isLoading } = useLoader();
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
 
@@ -23,6 +30,7 @@ export const ApplePayMask: React.FC<
 
   useEffect(() => {
     if (!clientToken) return;
+    isLoading(true);
 
     braintreeClient.create(
       {
@@ -49,6 +57,7 @@ export const ApplePayMask: React.FC<
         );
       }
     );
+    isLoading(false);
   }, [clientToken]);
 
   return (
@@ -70,49 +79,56 @@ export const ApplePayMask: React.FC<
               requiredBillingContactFields: ["postalAddress"],
             });
 
-            const session = new window.ApplePaySession(3, paymentRequest);
+            if (paymentRequest) {
+              const session = new window.ApplePaySession(3, paymentRequest);
 
-            session.onvalidatemerchant = function (event: any) {
-              applePayInstanceState?.performValidation(
-                {
-                  validationURL: event.validationURL,
-                  displayName: apllePayDisplayName,
-                },
-                function (err, merchantSession) {
-                  if (err) {
-                    notify("Error", "Apple Pay failed to load.");
-                    return;
+              session.onvalidatemerchant = function (event: any) {
+                applePayInstanceState?.performValidation(
+                  {
+                    validationURL: event.validationURL,
+                    displayName: apllePayDisplayName,
+                  },
+                  function (err, merchantSession) {
+                    if (err) {
+                      notify("Error", "Apple Pay failed to load.");
+                      return;
+                    }
+                    session.completeMerchantValidation(merchantSession);
                   }
-                  session.completeMerchantValidation(merchantSession);
-                }
-              );
-            };
+                );
+              };
 
-            session.onpaymentauthorized = function (event: any) {
-              applePayInstanceState?.tokenize(
-                {
-                  token: event.payment.token,
-                },
-                function (tokenizeErr, payload: any) {
-                  if (tokenizeErr) {
-                    notify("Error", "Error tokenizing Apple Pay");
+              session.onpaymentauthorized = function (event: any) {
+                applePayInstanceState?.tokenize(
+                  {
+                    token: event.payment.token,
+                  },
+                  function (tokenizeErr, payload?: ApplePayPayload) {
+                    if (tokenizeErr) {
+                      notify("Error", "Error tokenizing Apple Pay");
+
+                      session.completePayment(
+                        window.ApplePaySession.STATUS_FAILURE
+                      );
+                      return;
+                    }
+
+                    if (payload) handlePurchase(payload.nonce);
 
                     session.completePayment(
-                      window.ApplePaySession.STATUS_FAILURE
+                      window.ApplePaySession.STATUS_SUCCESS
                     );
-                    return;
                   }
+                );
+              };
 
-                  handlePurchase(payload.nonce);
-
-                  session.completePayment(
-                    window.ApplePaySession.STATUS_SUCCESS
-                  );
-                }
+              session.begin();
+            } else {
+              notify(
+                "Error",
+                "There is an error in Apple Pay create payment request"
               );
-            };
-
-            session.begin();
+            }
           }}
           type="button"
           className="w-full justify-center text-white bg-primary-900 focus:ring-4 focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 mr-2 mb-2"
