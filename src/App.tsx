@@ -13,7 +13,7 @@ import {
 
 const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI0YWJkY2ZmMi0yNGI4LTRlMDMtOTYzYS0zZDdiMzQ5NWJhZTMifQ.FHu4Rw846nUFSVL4qNmwE7smtccnt9tkzZNx0Z0jJ0E";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJlZTIwNzIzNi0xMTBlLTQxYmMtYTBiZS03ZDE1ZDljZDQ5NjYifQ.4vTwRbuVBylthrQ2RlIMeRQss6j3iqBENk6cZ3C0_Ro";
 
 function App() {
   const cartInformation = {
@@ -62,6 +62,8 @@ function App() {
         flow={"checkout" as FlowType}
         buttonColor={"blue" as ButtonColorOption}
         buttonLabel={"pay" as ButtonLabelOption}
+        payLater={true}
+        payLaterButtonColor={"blue" as ButtonColorOption}
         {...params}
       />
     ),
