@@ -4,25 +4,27 @@ In here we explain how to use the client app and get payment methods to work.
 
 ## General properties
 
-Each payment component takes a set of props that will be the same for everything. They are as follow:
-- **createPaymentUrl**: string  
-    foo
-- **getClientTokenUrl**: string  
-    foo
-- **purchaseUrl**: string  
-    foo
-- **purchaseCallback**: function  
-    foo
-- **sessionValue**: string  
-    the session value of the CoFe app to be able to connect to the cart
-- **sessionKey**: string  
-    the key for the session to be used in conjunction with the session value
-- **fullWidth**: boolean  
-    defaults to true
-- **buttonText**: string  
-    foo
-- **cartInformation**: object  
-  account: {
+Each payment component takes a set of props that will be the same for everything. They are as follows:
+- **createPaymentUrl**: `string`  
+    The url that gets called to the endpoint of the connect app to create a payment in commerce tools.
+- **getClientTokenUrl**: `string`  
+    The url that gets called to the endpoint of the connect app to get the client token.
+- **purchaseUrl**: `string`  
+    The url that gets called to the endpoint of the connect app to make the purchase at.
+- **purchaseCallback**: `(result: any) => void`  
+    Function to execute after a successful purchase.
+- **sessionValue**: `string`  
+    The session value of the CoFe app to be able to connect to the cart.
+- **sessionKey**: `string`  
+    The key for the session to be used in conjunction with the session value.
+- **fullWidth**: `boolean`  
+    Makes the pay button use the full amount of width available (defaults to true).
+- **buttonText**: `string`  
+    The text to be shown on the pay button. Could be the final amount the customer has to pay.
+- **cartInformation**: `object`  
+Information about the customers cart to crate payments with. 
+Structure:
+  ```account: {
   email: string;
   };
   billing: {
@@ -43,72 +45,75 @@ Each payment component takes a set of props that will be the same for everything
   country: string;
   postalCode: string;
   };
+  ```
 ## Payment specific properties
 In addition, each payment component comes with its own specific properties.
 
 ### ApplePay
+- **applePayDisplayName**: `string`
+
 ### CreditCard
-- **showPostalCode**: boolean  
-  Show field for postal code in credit card mask
-- **showCardHoldersName**: boolean
-    Show field for name in credit card mask
-- **threeDSBillingAddress**: object
+- **showPostalCode**: `boolean`  
+  Show field for postal code in credit card mask.
+- **showCardHoldersName**: `boolean`  
+    Show field for name in credit card mask.
+- **threeDSBillingAddress**: `object`  
     foo
-- **threeDSAdditionalInformation**: object
-    Show field for name in credit card mask
-- **email**: string  
-    customers email address
+- **threeDSAdditionalInformation**: `object`  
+    foo
+- **email**: `string`  
+    Customers email address.
 
 ### GooglePay
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
-- **text**: string  
-  foo
+- **environment**: `"PRODUCTION" | "TEST"`  
+  Environment in which GooglePay operates in.
+- **totalPriceStatus**: `"NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL"`  
+  Specifies the status of amount the shown amount. See [Googles reference](https://developers.google.com/pay/api/web/reference/request-objects#TransactionInfo) for more details.
+- **googleMerchantId**: `string`  
+  A Google merchant identifier issued after registration with the Google Pay and Wallet Console.
+- **buttonTheme**: `google.payments.api.ButtonColor`  
+  Sets the color theme of the button.
+- **buttonType**: `google.payments.api.ButtonType`  
+  Sets what kind of label the button will get. 
+- **phoneNumberRequired**: `booloean`  
+  Customer has to provide their phone number in the GooglePay form.
+- **billingAddressFormat**: `"FULL" | "MIN"`  
+  Sets whether the customer is required to provide a full or minimal billing address.
+- **billingAddressRequired**: `boolean`  
+  Customer is required to provide a billing address in the GooglePay form.
+- **acquirerCountryCode**: `string`  
+  The ISO 3166-1 alpha-2 country code where the transaction is processed. Merchants must specify the acquirer bank country code.
 
-  environment: google.payments.api.Environment;
-  totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
-  googleMerchantId?: string;
-  buttonTheme?: google.payments.api.ButtonColor;
-  buttonType?: google.payments.api.ButtonType;
-  phoneNumberRequired?: boolean;
-  billingAddressFormat?: "FULL" | "MIN";
-  billingAddressRequired?: boolean;
-  acquirerCountryCode: string;
 ### PayPal
-- **text**: string  
+- **flow**: `FlowType`  
   foo
+- **buttonColor**: `ButtonColorOption`  
+  Sets the color theme of the PayPal button.
+- **buttonLabel**: `ButtonLabelOption`  
+  Sets what kind of label the PayPal button will get.
+- **payLater**: `booloean`  
+  Set to true to show an extra pay later button from PayPal. 
+- **payLaterButtonColor**: `ButtonColorOption`  
+  Sets the color theme of the pay later button.
 
-  flow: FlowType;
-  buttonColor: ButtonColorOption;
-  buttonLabel: ButtonLabelOption;
-  payLater?: boolean;
-  payLaterButtonColor?: ButtonColorOption;
 ### Venmo
-- **text**: string  
+- **mobileWebFallBack**: `string`  
   foo
+- **desktopFlow**: `string`  
+  foo
+- **paymentMethodUsage**: `string`  
+  foo
+- **allowNewBrowserTab**: `string`  
+  foo
+- **profile_id**: `string`  
+  foo
+- **useTestNonce**: `boolean`  
+  If set to true the component will use a test nonce and username to succeed the payment. Even if you cancel the login popup it will continue.
+- **setVenmoUserName**: `(venmoName: string) => any`  
+  Returns the venmo username of the customer. Has to be shown in the checkout according to Venmo guidelines.
+- **ignoreBowserSupport**: `boolean`  
+  Venmo does check for browser support and won't load if it fails. You can ignore the check here. Useful for testing purposes, should not be used in production.
 
-  mobileWebFallBack: boolean;
-  desktopFlow: "desktopWebLogin" | "desktopQRCode";
-  paymentMethodUsage: "multi_use" | "single_use";
-  allowNewBrowserTab?: boolean;
-  profile_id?: string;
-  useTestNonce?: boolean;
-  setVenmoUserName: (venmoName: string) => any;
-  ignoreBowserSupport?: boolean;
 ## Available Scripts
 
 In the project directory, you can run:
