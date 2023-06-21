@@ -138,6 +138,10 @@ export type VenmoTypes = {
   ignoreBowserSupport?: boolean;
 };
 
+export type ApllePayTypes = {
+  apllePayDisplayName: string;
+};
+
 export type GenericError = {
   code: string;
   message: string;

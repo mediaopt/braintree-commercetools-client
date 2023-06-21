@@ -5,6 +5,8 @@ import { CreditCard } from "./components/CreditCard";
 import { GooglePay } from "./components/GooglePay";
 import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
+import { ApplePay } from "./components/ApplePay";
+
 import {
   ButtonColorOption,
   ButtonLabelOption,
@@ -87,6 +89,7 @@ function App() {
         {...params}
       />
     ),
+    ApplePay: <ApplePay apllePayDisplayName="My Store" {...params} />,
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
