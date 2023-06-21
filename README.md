@@ -1,7 +1,114 @@
-# Getting Started with Create React App
+# Braintree client app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In here we explain how to use the client app and get payment methods to work.
 
+## General properties
+
+Each payment component takes a set of props that will be the same for everything. They are as follow:
+- **createPaymentUrl**: string  
+    foo
+- **getClientTokenUrl**: string  
+    foo
+- **purchaseUrl**: string  
+    foo
+- **purchaseCallback**: function  
+    foo
+- **sessionValue**: string  
+    the session value of the CoFe app to be able to connect to the cart
+- **sessionKey**: string  
+    the key for the session to be used in conjunction with the session value
+- **fullWidth**: boolean  
+    defaults to true
+- **buttonText**: string  
+    foo
+- **cartInformation**: object  
+  account: {
+  email: string;
+  };
+  billing: {
+  firstName: string;
+  lastName: string;
+  streetName: string;
+  streetNumber: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  };
+  shipping: {
+  firstName: string;
+  lastName: string;
+  streetName: string;
+  streetNumber: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  };
+## Payment specific properties
+In addition, each payment component comes with its own specific properties.
+
+### ApplePay
+### CreditCard
+- **showPostalCode**: boolean  
+  Show field for postal code in credit card mask
+- **showCardHoldersName**: boolean
+    Show field for name in credit card mask
+- **threeDSBillingAddress**: object
+    foo
+- **threeDSAdditionalInformation**: object
+    Show field for name in credit card mask
+- **email**: string  
+    customers email address
+
+### GooglePay
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+- **text**: string  
+  foo
+
+  environment: google.payments.api.Environment;
+  totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
+  googleMerchantId?: string;
+  buttonTheme?: google.payments.api.ButtonColor;
+  buttonType?: google.payments.api.ButtonType;
+  phoneNumberRequired?: boolean;
+  billingAddressFormat?: "FULL" | "MIN";
+  billingAddressRequired?: boolean;
+  acquirerCountryCode: string;
+### PayPal
+- **text**: string  
+  foo
+
+  flow: FlowType;
+  buttonColor: ButtonColorOption;
+  buttonLabel: ButtonLabelOption;
+  payLater?: boolean;
+  payLaterButtonColor?: ButtonColorOption;
+### Venmo
+- **text**: string  
+  foo
+
+  mobileWebFallBack: boolean;
+  desktopFlow: "desktopWebLogin" | "desktopQRCode";
+  paymentMethodUsage: "multi_use" | "single_use";
+  allowNewBrowserTab?: boolean;
+  profile_id?: string;
+  useTestNonce?: boolean;
+  setVenmoUserName: (venmoName: string) => any;
+  ignoreBowserSupport?: boolean;
 ## Available Scripts
 
 In the project directory, you can run:
@@ -39,8 +146,3 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
