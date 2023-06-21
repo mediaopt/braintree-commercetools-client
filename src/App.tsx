@@ -13,9 +13,9 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI2NDZkNDdlNy1hY2Y1LTQzYjctOTIwYy0yOTI0ODdjMTBkNmYiLCJ3aXNobGlzdElkIjoiNWY1MmMzM2ItOWI1MS00M2I4LTkwZmUtMWI3ZjhiNTcxYzNjIn0.6f0fVF5P83My8jy3RJRJEXEZ5RF8O-iOTVGiqj71QMY";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJlZTIwNzIzNi0xMTBlLTQxYmMtYTBiZS03ZDE1ZDljZDQ5NjYifQ.4vTwRbuVBylthrQ2RlIMeRQss6j3iqBENk6cZ3C0_Ro";
 
 function App() {
   const cartInformation = {
@@ -64,6 +64,8 @@ function App() {
         flow={"checkout" as FlowType}
         buttonColor={"blue" as ButtonColorOption}
         buttonLabel={"pay" as ButtonLabelOption}
+        payLater={true}
+        payLaterButtonColor={"blue" as ButtonColorOption}
         {...params}
       />
     ),
