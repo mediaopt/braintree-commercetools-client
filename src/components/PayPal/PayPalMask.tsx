@@ -42,7 +42,6 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
         FUNDING_SOURCES.push(additionalFundingMethod);
       }
     });
-    console.log(FUNDING_SOURCES);
 
     const enableFunding = additionalFundingMethods.length
       ? {
