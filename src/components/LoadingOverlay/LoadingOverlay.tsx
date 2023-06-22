@@ -6,9 +6,9 @@ export const LoadingOverlay: FC<LoadingOverlayType> = ({
   textStyles = "text-center",
 }: LoadingOverlayType) => {
   return (
-    <div className="h-full fill-white text-white w-full bg-slate-300 bg-opacity-50 flex flex-col justify-center content-center gap-2 p-3 items-center">
+    <div className="h-full fill-gray-500 text-gray-500 w-full bg-slate-300 bg-opacity-50 flex flex-col justify-center content-center gap-2 p-3 items-center">
       <svg
-        className="h-6 w-6 animate-spin text-white"
+        className="h-6 w-6 animate-spin"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
       >
