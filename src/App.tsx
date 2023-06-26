@@ -89,7 +89,7 @@ function App() {
         {...params}
       />
     ),
-    ApplePay: <ApplePay apllePayDisplayName="My Store" {...params} />,
+    ApplePay: <ApplePay applePayDisplayName="My Store" {...params} />,
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;

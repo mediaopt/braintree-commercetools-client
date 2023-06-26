@@ -10,15 +10,15 @@ import { useLoader } from "../../app/useLoader";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
-import { GeneralPayButtonProps, ApllePayTypes } from "../../types";
+import { GeneralPayButtonProps, ApplePayTypes } from "../../types";
 
 declare const window: any;
 
-type ApplePayMaskProps = ApllePayTypes & GeneralPayButtonProps;
+type ApplePayMaskProps = ApplePayTypes & GeneralPayButtonProps;
 
 export const ApplePayMask: React.FC<
   React.PropsWithChildren<ApplePayMaskProps>
-> = ({ fullWidth, apllePayDisplayName }: ApplePayMaskProps) => {
+> = ({ fullWidth, applePayDisplayName }: ApplePayMaskProps) => {
   const [applePayInstanceState, setApplePayInstanceState] =
     useState<ApplePay>();
 
@@ -72,7 +72,7 @@ export const ApplePayMask: React.FC<
           onClick={() => {
             const paymentRequest = applePayInstanceState?.createPaymentRequest({
               total: {
-                label: apllePayDisplayName,
+                label: applePayDisplayName,
                 amount: paymentInfo.amount.toString(),
               },
 
@@ -86,7 +86,7 @@ export const ApplePayMask: React.FC<
                 applePayInstanceState?.performValidation(
                   {
                     validationURL: event.validationURL,
-                    displayName: apllePayDisplayName,
+                    displayName: applePayDisplayName,
                   },
                   function (err, merchantSession) {
                     if (err) {
