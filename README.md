@@ -50,7 +50,8 @@ Structure:
 In addition, each payment component comes with its own specific properties.
 
 ### ApplePay
-- **applePayDisplayName**: `string`
+- **applePayDisplayName**: `string`  
+    Name of your store.
 
 ### CreditCard
 - **showPostalCode**: `boolean`  
@@ -58,9 +59,9 @@ In addition, each payment component comes with its own specific properties.
 - **showCardHoldersName**: `boolean`  
     Show field for name in credit card mask.
 - **threeDSBillingAddress**: `object`  
-    foo
+    An optional [billingAddress](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~billingAddress) object for verification.
 - **threeDSAdditionalInformation**: `object`  
-    foo
+    An optional [additionalInformation](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~additionalInformation) object for verification.
 - **email**: `string`  
     Customers email address.
 
@@ -86,7 +87,7 @@ In addition, each payment component comes with its own specific properties.
 
 ### PayPal
 - **flow**: `FlowType`  
-  foo
+  Set to *checkout* for one-time payment flow, or *vault* for Vault flow. If *vault* is used with a client token generated with a customer ID, the PayPal account will be added to that customer as a saved payment method.
 - **buttonColor**: `ButtonColorOption`  
   Sets the color theme of the PayPal button.
 - **buttonLabel**: `ButtonLabelOption`  
@@ -97,20 +98,24 @@ In addition, each payment component comes with its own specific properties.
   Sets the color theme of the pay later button.
 
 ### Venmo
-- **mobileWebFallBack**: `string`  
-  foo
-- **desktopFlow**: `string`  
-  foo
-- **paymentMethodUsage**: `string`  
-  foo
-- **allowNewBrowserTab**: `string`  
-  foo
+- **mobileWebFallBack**: `boolean`  
+  Use this option when you want to use a web-login experience, such as if on mobile and the Venmo app isn't installed.
+- **desktopFlow**: `"desktopWebLogin" | "desktopQRCode"`  
+  Sets Venmos desktop usage.
+  - *desktopWebLogin* - the customer will authorize payment via a window popup that allows them to sign in to their Venmo account. This is used explicitly for customers operating from desktop browsers wanting to avoid the QR Code flow.
+  - *desktopQRCode* - render a scannable QR-code customers scan with their phone to approve via the mobile app.
+- **paymentMethodUsage**: `"multi_use" | "single_use"`  
+  The intended usage for the Venmo payment method nonce. Possible options are:
+  - *single_use* - intended as a one time transaction
+  - *multi_use* - intended to be vaulted and used for multiple transactions
+- **allowNewBrowserTab**: `boolean`  
+  This should be set to false if your payment flow requires returning to the same tab, e.g. single page applications. Doing so causes isBrowserSupported to return true only for mobile web browsers that support returning from the Venmo app to the same tab.
 - **profile_id**: `string`  
-  foo
+  The Venmo profile ID to be used during payment authorization. Customers will see the business name and logo associated with this Venmo profile.
 - **useTestNonce**: `boolean`  
   If set to true the component will use a test nonce and username to succeed the payment. Even if you cancel the login popup it will continue.
 - **setVenmoUserName**: `(venmoName: string) => any`  
-  Returns the venmo username of the customer. Has to be shown in the checkout according to Venmo guidelines.
+  Returns the Venmo username of the customer. Has to be shown in the checkout according to Venmo guidelines.
 - **ignoreBowserSupport**: `boolean`  
   Venmo does check for browser support and won't load if it fails. You can ignore the check here. Useful for testing purposes, should not be used in production.
 
