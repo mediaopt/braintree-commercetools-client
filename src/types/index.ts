@@ -21,8 +21,8 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: (result: any) => void;
-  cartInformation: CartInformation;
-} & GeneralPayButtonProps;
+} & CartInformationProps &
+  GeneralPayButtonProps;
 
 export type ClientTokenResponse = {
   clientToken: string;
@@ -48,8 +48,7 @@ export type PaymentInfo = {
   currency: string;
   lineItems: Array<any>;
   shippingMethod: {};
-  cartInformation: CartInformation;
-};
+} & CartInformationProps;
 
 export type CartInformation = {
   account: {
@@ -113,6 +112,8 @@ export const CartInformationInitial: CartInformation = {
     postalCode: "",
   },
 };
+
+export type CartInformationProps = { cartInformation: CartInformation };
 
 export type GooglePayTypes = {
   environment: google.payments.api.Environment;
