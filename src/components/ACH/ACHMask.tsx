@@ -3,6 +3,7 @@ import {
   client as braintreeClient,
   dataCollector,
   usBankAccount,
+  BraintreeError,
 } from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
@@ -96,7 +97,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
     formButtonDisabled = formButtonDisabled || !firstName || !lastName;
   }
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formButtonDisabled) return;
@@ -166,7 +167,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
                 bankDetails: bankDetails,
                 mandateText: mandateText,
               },
-              function (tokenizeErr: any, tokenizedPayload: any) {
+              function (tokenizeErr?: BraintreeError, tokenizedPayload?: any) {
                 if (tokenizeErr) {
                   notify(
                     "Error",
