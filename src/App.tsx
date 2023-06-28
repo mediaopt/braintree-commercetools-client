@@ -6,6 +6,7 @@ import { GooglePay } from "./components/GooglePay";
 import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
+import { ACH } from "./components/ACH";
 
 import {
   ButtonColorOption,
@@ -13,9 +14,9 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJlZTIwNzIzNi0xMTBlLTQxYmMtYTBiZS03ZDE1ZDljZDQ5NjYifQ.4vTwRbuVBylthrQ2RlIMeRQss6j3iqBENk6cZ3C0_Ro";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIzYTVhYzk2NS0wYWE1LTQ4MzctYTI0MC01ZWNkYjE0NWU0M2QiLCJ3aXNobGlzdElkIjoiN2ZmYWZlYWEtYjI1ZS00NWFiLTgwODgtZGIwZjdmOTIxYmM2In0.DCJ8W4rBTREXhX_E6m06AZ2zjok8r527mY6UXF7UYNQ";
 
 function App() {
   const cartInformation = {
@@ -90,6 +91,12 @@ function App() {
       />
     ),
     ApplePay: <ApplePay applePayDisplayName="My Store" {...params} />,
+    ACH: (
+      <ACH
+        mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
+        {...params}
+      />
+    ),
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
