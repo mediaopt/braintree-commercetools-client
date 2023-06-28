@@ -9,7 +9,11 @@ import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
 
-import { GeneralPayButtonProps, CartInformationProps } from "../../types";
+import {
+  GeneralPayButtonProps,
+  CartInformationProps,
+  GeneralACHProps,
+} from "../../types";
 
 import {
   HOSTED_FIELDS_LABEL,
@@ -36,12 +40,15 @@ type BankDetails = {
   businessName?: string;
 };
 
-type ACHMaskProps = CartInformationProps & GeneralPayButtonProps;
+type ACHMaskProps = CartInformationProps &
+  GeneralPayButtonProps &
+  GeneralACHProps;
 
 export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   fullWidth = true,
   buttonText,
   cartInformation,
+  mandateText,
 }: ACHMaskProps) => {
   const { handlePurchase, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -157,8 +164,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
             usBankAccountInstance.tokenize(
               {
                 bankDetails: bankDetails,
-                mandateText:
-                  'By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.',
+                mandateText: mandateText,
               },
               function (tokenizeErr: any, tokenizedPayload: any) {
                 if (tokenizeErr) {

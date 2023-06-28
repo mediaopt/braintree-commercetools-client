@@ -152,3 +152,5 @@ export type LoadingOverlayType = {
   loadingText?: string;
   textStyles?: string;
 };
+
+export type GeneralACHProps = { mandateText: string };

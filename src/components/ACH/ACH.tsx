@@ -5,9 +5,11 @@ import { isPayButtonDisabled } from "../PayButton";
 
 import { ACHButton } from "./ACHButton";
 
-import { GeneralComponentsProps } from "../../types";
+import { GeneralComponentsProps, GeneralACHProps } from "../../types";
 
-export const ACH: React.FC<GeneralComponentsProps> = ({
+type ACHProps = GeneralComponentsProps & GeneralACHProps;
+
+export const ACH: React.FC<ACHProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
@@ -17,7 +19,8 @@ export const ACH: React.FC<GeneralComponentsProps> = ({
   cartInformation,
   fullWidth,
   buttonText,
-}: GeneralComponentsProps) => {
+  mandateText,
+}: ACHProps) => {
   return (
     <RenderTemplate
       getClientTokenUrl={getClientTokenUrl}
@@ -33,6 +36,7 @@ export const ACH: React.FC<GeneralComponentsProps> = ({
         buttonText={buttonText}
         fullWidth={fullWidth}
         cartInformation={cartInformation}
+        mandateText={mandateText}
       />
     </RenderTemplate>
   );

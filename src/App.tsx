@@ -91,7 +91,12 @@ function App() {
       />
     ),
     ApplePay: <ApplePay applePayDisplayName="My Store" {...params} />,
-    ACH: <ACH {...params} />,
+    ACH: (
+      <ACH
+        mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
+        {...params}
+      />
+    ),
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
