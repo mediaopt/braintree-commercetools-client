@@ -194,7 +194,14 @@ export const CreditCardMask: React.FC<
             };
             threeDS
               .verifyCard(threeDSecureParameters)
-              .then(function (response) {
+              .then(function (response: any) {
+                if (
+                  response.threeDSecureInfo.status !== "authenticate_successful"
+                ) {
+                  isLoading(false);
+                  notify("Error", "Could not authenticate");
+                  return;
+                }
                 if (response.threeDSecureInfo.liabilityShifted) {
                   handlePurchase(response.nonce);
                 } else if (response.threeDSecureInfo.liabilityShiftPossible) {
@@ -205,7 +212,7 @@ export const CreditCardMask: React.FC<
               })
               .catch(function (error) {
                 isLoading(false);
-                if (error.code.indexOf("THREEDS_LOOKUP") === 0) {
+                if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
                   if (
                     error.code ===
                     "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
