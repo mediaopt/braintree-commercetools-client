@@ -24,10 +24,11 @@ Each payment component takes a set of props that will be the same for everything
 - **cartInformation**: `object`  
 Information about the customers cart to crate payments with. 
 Structure:
-  ```account: {
+```
+account: {
   email: string;
-  };
-  billing: {
+};
+billing: {
   firstName: string;
   lastName: string;
   streetName: string;
@@ -35,8 +36,8 @@ Structure:
   city: string;
   country: string;
   postalCode: string;
-  };
-  shipping: {
+};
+shipping: {
   firstName: string;
   lastName: string;
   streetName: string;
@@ -44,8 +45,8 @@ Structure:
   city: string;
   country: string;
   postalCode: string;
-  };
-  ```
+};
+ ```
 ## Payment specific properties
 In addition, each payment component comes with its own specific properties.
 
