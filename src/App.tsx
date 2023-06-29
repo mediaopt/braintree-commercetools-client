@@ -16,7 +16,7 @@ import {
 
 const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIzYTVhYzk2NS0wYWE1LTQ4MzctYTI0MC01ZWNkYjE0NWU0M2QiLCJ3aXNobGlzdElkIjoiN2ZmYWZlYWEtYjI1ZS00NWFiLTgwODgtZGIwZjdmOTIxYmM2In0.DCJ8W4rBTREXhX_E6m06AZ2zjok8r527mY6UXF7UYNQ";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI3ODkxMjdkMC05MjE0LTQ2MDQtYTY5NC05OTJhZDYxYTQ4YzciLCJ3aXNobGlzdElkIjoiYjA0YmJiMzktYTQ1MC00NjMzLTgyMzMtZjlkMTNkNjk0ODVlIn0.Ynd6Wc93FQSfZ8YpMhQT0MOsYs5jIwQiK2Zzqh7R5q0";
 
 function App() {
   const cartInformation = {
@@ -59,7 +59,7 @@ function App() {
 
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
-    CreditCard: <CreditCard {...params} />,
+    CreditCard: <CreditCard {...params} enableVaulting={true} />,
     PayPal: (
       <PayPal
         flow={"checkout" as FlowType}

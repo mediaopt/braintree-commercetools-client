@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { hostedFields } from "braintree-web";
-import {
-  ThreeDSecureVerifyOptions,
-  ThreeDSecureAdditionalInformation,
-  ThreeDSecureBillingAddress,
-} from "braintree-web/modules/three-d-secure";
+import { ThreeDSecureVerifyOptions } from "braintree-web/modules/three-d-secure";
 
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
@@ -13,7 +9,7 @@ import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
 import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
 
-import { GeneralPayButtonProps } from "../../types";
+import { GeneralPayButtonProps, GeneralCreditCardProps } from "../../types";
 
 import {
   HOSTED_FIELDS_LABEL,
@@ -21,13 +17,7 @@ import {
   renderMaskButtonClasses,
 } from "../../styles";
 
-type CreditCardMaskProps = GeneralPayButtonProps & {
-  showPostalCode: boolean;
-  showCardHoldersName: boolean;
-  threeDSBillingAddress?: ThreeDSecureBillingAddress;
-  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-  email?: string;
-};
+type CreditCardMaskProps = GeneralPayButtonProps & GeneralCreditCardProps;
 
 export const CreditCardMask: React.FC<
   React.PropsWithChildren<CreditCardMaskProps>
@@ -39,6 +29,7 @@ export const CreditCardMask: React.FC<
   threeDSBillingAddress,
   email,
   showCardHoldersName,
+  enableVaulting,
 }) => {
   const { handlePurchase, paymentInfo } = usePayment();
   const { notify } = useNotifications();
@@ -55,6 +46,7 @@ export const CreditCardMask: React.FC<
   const ccCvvRef = React.useRef<HTMLDivElement>(null);
   const ccPostalRef = React.useRef<HTMLDivElement>(null);
   const ccExpireRef = React.useRef<HTMLDivElement>(null);
+  const ccVaultCheckbox = React.useRef<HTMLInputElement>(null);
 
   const borderClassToggle: Array<string> = ["border-2", "border-rose-600"];
 
@@ -174,70 +166,76 @@ export const CreditCardMask: React.FC<
         });
         var tokenize = function (event: any) {
           event.preventDefault();
+
           isLoading(true);
+          const shouldVault = ccVaultCheckbox.current?.checked || false;
 
-          hostedFieldsInstance.tokenize(function (err, payload) {
-            if (err || !payload) {
-              isLoading(false);
-              notify(
-                "Error",
-                "Something went wrong. Check your card details and try again."
-              );
-              return;
-            }
-
-            let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-              amount: paymentInfo.amount,
-              nonce: payload.nonce,
-              bin: payload.details.bin,
-              email: email,
-              billingAddress: threeDSBillingAddress,
-              additionalInformation: threeDSAdditionalInformation,
-            };
-            threeDS
-              .verifyCard(threeDSecureParameters)
-              .then(function (response: any) {
-                if (
-                  response.threeDSecureInfo.status !== "authenticate_successful"
-                ) {
-                  isLoading(false);
-                  notify("Error", "Could not authenticate");
-                  return;
-                }
-                if (response.threeDSecureInfo.liabilityShifted) {
-                  handlePurchase(response.nonce);
-                } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-                  // @todo liability shift possible - Decide if you want to submit the nonce
-                } else {
-                  // @todo no liability shift - Decide if you want to submit the nonce
-                }
-              })
-              .catch(function (error) {
+          hostedFieldsInstance.tokenize(
+            { vault: shouldVault },
+            function (err, payload) {
+              if (err || !payload) {
                 isLoading(false);
-                if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
+                notify(
+                  "Error",
+                  "Something went wrong. Check your card details and try again."
+                );
+                return;
+              }
+
+              let threeDSecureParameters: ThreeDSecureVerifyOptions = {
+                amount: paymentInfo.amount,
+                nonce: payload.nonce,
+                bin: payload.details.bin,
+                email: email,
+                billingAddress: threeDSBillingAddress,
+                additionalInformation: threeDSAdditionalInformation,
+              };
+              threeDS
+                .verifyCard(threeDSecureParameters)
+                .then(function (response: any) {
                   if (
-                    error.code ===
-                    "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
+                    response.threeDSecureInfo.status !==
+                    "authenticate_successful"
                   ) {
-                    notify(
-                      "Error",
-                      "Payment nonce does not exist or was already used"
-                    );
-                  } else if (
-                    error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
-                  ) {
-                    notify(
-                      "Error",
-                      "Validation error - check your input or try a different payment"
-                    );
+                    isLoading(false);
+                    notify("Error", "Could not authenticate");
+                    return;
+                  }
+                  if (response.threeDSecureInfo.liabilityShifted) {
+                    handlePurchase(response.nonce);
+                  } else if (response.threeDSecureInfo.liabilityShiftPossible) {
+                    // @todo liability shift possible - Decide if you want to submit the nonce
+                  } else {
+                    // @todo no liability shift - Decide if you want to submit the nonce
+                  }
+                })
+                .catch(function (error) {
+                  isLoading(false);
+                  if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
+                    if (
+                      error.code ===
+                      "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
+                    ) {
+                      notify(
+                        "Error",
+                        "Payment nonce does not exist or was already used"
+                      );
+                    } else if (
+                      error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
+                    ) {
+                      notify(
+                        "Error",
+                        "Validation error - check your input or try a different payment"
+                      );
+                    } else {
+                      notify("Error", "Something went wrong - try again");
+                    }
                   } else {
                     notify("Error", "Something went wrong - try again");
                   }
-                } else {
-                  notify("Error", "Something went wrong - try again");
-                }
-              });
-          });
+                });
+            }
+          );
         };
         form.addEventListener("submit", tokenize, false);
         isLoading(false);
@@ -309,6 +307,15 @@ export const CreditCardMask: React.FC<
             CVV
           </label>
           <div ref={ccCvvRef} id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
+
+          {enableVaulting && (
+            <>
+              <label className={HOSTED_FIELDS_LABEL} htmlFor="vaulting">
+                Save my card
+              </label>
+              <input ref={ccVaultCheckbox} type="checkbox" id="vaulting" />
+            </>
+          )}
 
           <div className="block text-center">
             <input
