@@ -6,10 +6,13 @@ In here we explain how to use the client app and get payment methods to work.
 
 Each payment component takes a set of props that will be the same for everything. They are as follows:
 - **createPaymentUrl**: `string`  
+    *POST*-Request - we get a *CreatePaymentResponse*  
     The url that gets called to the endpoint of the connect app to create a payment in commerce tools.
 - **getClientTokenUrl**: `string`  
+    *POST*-Request  - we get a *ClientTokenResponse*  
     The url that gets called to the endpoint of the connect app to get the client token.
 - **purchaseUrl**: `string`  
+    *POST*-Request - we get a result including the *paymentVersion* and a *transactionSaleResponse* detailing the full transaction    
     The url that gets called to the endpoint of the connect app to make the purchase at.
 - **purchaseCallback**: `(result: any) => void`  
     Function to execute after a successful purchase.
