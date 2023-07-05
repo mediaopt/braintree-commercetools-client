@@ -7,10 +7,11 @@ export const getClientToken = async (
   sessionValue: string,
   url: string,
   paymentId: string,
-  paymentVersion: number
+  paymentVersion: number,
+  customerId?: string
 ) => {
   try {
-    const data: ClientTokenRequest = { paymentId, paymentVersion };
+    const data: ClientTokenRequest = { paymentId, paymentVersion, customerId };
 
     const result = await makeRequest<ClientTokenResponse, ClientTokenRequest>(
       sessionKey,

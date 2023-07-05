@@ -14,9 +14,9 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI3ODkxMjdkMC05MjE0LTQ2MDQtYTY5NC05OTJhZDYxYTQ4YzciLCJ3aXNobGlzdElkIjoiYjA0YmJiMzktYTQ1MC00NjMzLTgyMzMtZjlkMTNkNjk0ODVlIn0.Ynd6Wc93FQSfZ8YpMhQT0MOsYs5jIwQiK2Zzqh7R5q0";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhODI5ODM0ZC03YWI1LTRmOTQtYTU0NS1lMWFiOWY0YWQ2OWQiLCJ3aXNobGlzdElkIjoiN2ViNDY4ZDUtYjY5ZC00NjdmLTk2ZTMtOWJkOTM2N2QzZjI0In0.vYJ7vo4evef0V7-iA5L_DkFPODGgYflza-6XxiseS90";
 
 function App() {
   const cartInformation = {
@@ -55,6 +55,7 @@ function App() {
     fullWidth: true,
     buttonText: "Pay €X",
     cartInformation: cartInformation,
+    customerId: "b38aaaa9-007f-4f57-b9c4-427968a0fc2d",
   };
 
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");

@@ -11,6 +11,7 @@ import {
 export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
+  customerId?: string;
 };
 
 export type GeneralPayButtonProps = {
@@ -25,6 +26,7 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: (result: any) => void;
+  customerId?: string;
 } & CartInformationProps &
   GeneralPayButtonProps;
 

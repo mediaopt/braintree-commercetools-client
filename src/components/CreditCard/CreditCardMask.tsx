@@ -7,7 +7,10 @@ import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
-import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
+import {
+  HostedFieldsAccountDetails,
+  HostedFieldsHostedFieldsFieldName,
+} from "braintree-web/modules/hosted-fields";
 
 import { GeneralPayButtonProps, GeneralCreditCardProps } from "../../types";
 
@@ -18,6 +21,11 @@ import {
 } from "../../styles";
 
 type CreditCardMaskProps = GeneralPayButtonProps & GeneralCreditCardProps;
+
+type LimitedVaultedPayment = {
+  nonce: string;
+  details: HostedFieldsAccountDetails;
+};
 
 export const CreditCardMask: React.FC<
   React.PropsWithChildren<CreditCardMaskProps>
@@ -31,12 +39,15 @@ export const CreditCardMask: React.FC<
   showCardHoldersName,
   enableVaulting,
 }) => {
-  const { handlePurchase, paymentInfo } = usePayment();
+  const { handlePurchase, paymentInfo, vaultedPaymentMethods } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
   const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
+  const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
+    LimitedVaultedPayment[]
+  >([]);
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -58,6 +69,18 @@ export const CreditCardMask: React.FC<
     expirationDate: ccExpireRef,
     cardholderName: ccNameRef,
     postalCode: ccPostalRef,
+  };
+  const handleGetVaultedPaymentMethodsByType = (type: string) => {
+    const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
+    vaultedPaymentMethods.forEach((pM) => {
+      if (pM.type === type) {
+        filteredPaymentMethods.push({
+          nonce: pM.nonce,
+          details: pM.details as HostedFieldsAccountDetails,
+        });
+      }
+    });
+    return filteredPaymentMethods;
   };
 
   useEffect(() => {
@@ -244,8 +267,48 @@ export const CreditCardMask: React.FC<
     );
   }, [client, threeDS]);
 
+  useEffect(() => {
+    setLimitedVaultedPaymentMethods(
+      handleGetVaultedPaymentMethodsByType("CreditCard")
+    );
+  }, [vaultedPaymentMethods]);
+
   return (
     <>
+      <div>
+        {limitedVaultedPayments.map((vaultedMethod, index) => {
+          return (
+            <div
+              key={index}
+              className="flex gap-x-5 justify-start content-center"
+            >
+              <input
+                className="w-5 justify-self-center"
+                id={`credit-card-${index}`}
+                type="radio"
+              />
+              <label
+                htmlFor="{`credit-card-${index}`}"
+                className={HOSTED_FIELDS_LABEL}
+              >
+                <span className={HOSTED_FIELDS_LABEL}>
+                  {vaultedMethod.details.cardType}
+                </span>
+                <span className={HOSTED_FIELDS_LABEL}>
+                  **** **** **** {vaultedMethod.details.lastFour}
+                </span>
+                <span className={HOSTED_FIELDS_LABEL}>
+                  {vaultedMethod.details.cardholderName}
+                </span>
+                <span className={HOSTED_FIELDS_LABEL}>
+                  {vaultedMethod.details.expirationMonth} /{" "}
+                  {vaultedMethod.details.expirationYear}
+                </span>
+              </label>
+            </div>
+          );
+        })}
+      </div>
       <div
         className={classNames({
           "demo-frame": true,

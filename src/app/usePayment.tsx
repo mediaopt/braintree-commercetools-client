@@ -1,5 +1,10 @@
 import { FC, createContext, useMemo, useContext, useState } from "react";
-
+import {
+  BraintreeError,
+  FetchPaymentMethodsPayload,
+  VaultManager,
+  vaultManager,
+} from "braintree-web";
 import { getClientToken, createPayment } from "../services";
 import { Result } from "../components/Result";
 
@@ -25,6 +30,7 @@ type PaymentContextT = {
   handleGetClientToken: () => void;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
+  vaultedPaymentMethods: FetchPaymentMethodsPayload[];
 };
 
 const PaymentInfoInitialObject = {
@@ -43,6 +49,7 @@ const PaymentContext = createContext<PaymentContextT>({
   handleGetClientToken: () => {},
   handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
+  vaultedPaymentMethods: [],
 });
 
 export const PaymentProvider: FC<
@@ -56,6 +63,7 @@ export const PaymentProvider: FC<
   purchaseCallback,
   children,
   cartInformation,
+  customerId,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -66,6 +74,9 @@ export const PaymentProvider: FC<
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
+  const [vaultedPaymentMethods, setVaultedPaymentMethods] = useState<
+    FetchPaymentMethodsPayload[]
+  >([]);
 
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
@@ -88,7 +99,8 @@ export const PaymentProvider: FC<
             sessionValue,
             getClientTokenUrl,
             createPaymentResult.id,
-            createPaymentResult.version
+            createPaymentResult.version,
+            customerId
           )) as ClientTokenResponse;
 
           const { amountPlanned, lineItems, shippingMethod } =
@@ -107,6 +119,7 @@ export const PaymentProvider: FC<
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
+            await handleGetVaultedPaymentMethods(clientTokenresult.clientToken);
             isLoading(false);
             return;
           }
@@ -119,6 +132,40 @@ export const PaymentProvider: FC<
       }
       setGettingClientToken(false);
       isLoading(false);
+    };
+
+    const handleGetVaultedPaymentMethods = async (token: string) => {
+      vaultManager.create(
+        { authorization: token },
+        (
+          err: BraintreeError | undefined,
+          vaultInstance: VaultManager | undefined
+        ) => {
+          if (err) {
+            notify("Error", err.message);
+            return;
+          }
+          if (vaultInstance === undefined) {
+            notify("Info", "No vault manager");
+            return;
+          }
+          vaultInstance.fetchPaymentMethods(
+            { defaultFirst: true },
+            (
+              err: BraintreeError | undefined,
+              customerPaymentMethods: FetchPaymentMethodsPayload[] | undefined
+            ) => {
+              if (err) {
+                notify("Error", err.message);
+                return;
+              }
+              if (customerPaymentMethods !== undefined) {
+                setVaultedPaymentMethods(customerPaymentMethods);
+              }
+            }
+          );
+        }
+      );
     };
 
     const handlePurchase: HandlePurchaseType = async (
@@ -159,6 +206,7 @@ export const PaymentProvider: FC<
       handleGetClientToken,
       handlePurchase,
       paymentInfo,
+      vaultedPaymentMethods,
     };
   }, [clientToken, gettingClientToken]);
 
