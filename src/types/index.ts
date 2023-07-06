@@ -41,6 +41,15 @@ export type CreatePaymentResponse = {
   shippingMethod: object; // @todo add better types maybe?
 };
 
+export type TransactionSaleResponse = {
+  ok: boolean;
+  message: string;
+  result: {
+    transactionSaleResponse: Record<string, any>;
+    paymentVersion: number;
+  };
+};
+
 export type PaymentInfo = {
   id: string;
   version: number;

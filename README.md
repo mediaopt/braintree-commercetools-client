@@ -8,15 +8,18 @@ Each payment component takes a set of props that will be the same for everything
 - **createPaymentUrl**: `string`  
     *POST*-Request - we get a [*CreatePaymentResponse*](src/types/index.ts)  
     It is **your** responsibility to develop this API  
-    The url that gets called to the endpoint of the connect app to create a payment in commerce tools.
+    The url that gets called to the endpoint of the connect app to create a payment in commerce tools. Communicates with CommerceTools backend  
+    See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **getClientTokenUrl**: `string`  
     *POST*-Request  - we get a [*ClientTokenResponse*]((src/types/index.ts))  
     It is **your** responsibility to develop this API  
-    The url that gets called to the endpoint of the connect app to get the client token.
+    The url that gets called to the endpoint of the connect app to get the client token. Communicates with CommerceTools backend
+    See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **purchaseUrl**: `string`  
-    *POST*-Request - we get a [*TransactionSaleRequest*](src/types/index.ts)    
+    *POST*-Request - we get a [*TransactionSaleRequest*](src/types/index.ts) that will be returned from the Braintree integration module    
     It is **your** responsibility to develop this API  
-    The url that gets called to the endpoint of the connect app to make the purchase at.
+    The url that gets called to the endpoint of the connect app to make the purchase at. Communicates with CommerceTools backend
+    See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **purchaseCallback**: `(result: any) => void`  
     Function to execute after a successful purchase.
 - **sessionValue**: `string`  
