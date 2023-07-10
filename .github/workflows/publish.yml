@@ -13,8 +13,8 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org
-      - name: prepare & publish
-        run: npm run prepare && npm publish
+      - name: install && prepare & publish
+        run: npm install && npm run prepare && npm publish
         working-directory: .
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
