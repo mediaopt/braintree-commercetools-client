@@ -13,8 +13,18 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org
-      - name: install && prepare & publish
-        run: npm i -g copyfiles && npm install && npm run prepare && npm publish
+      - name: Install rimraf
+        run: npm i -g rimraf
+      - name: Install copyfiles
+        run: npm i -g copyfiles
+      - name: NPM Install
+        run: npm install
+        working-directory: .
+      - name: Prepare
+        run: npm run prepare
+        working-directory: .
+      - name: NPM publish
+        run: npm publish
         working-directory: .
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
