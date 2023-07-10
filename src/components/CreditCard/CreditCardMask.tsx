@@ -39,15 +39,18 @@ export const CreditCardMask: React.FC<
   showCardHoldersName,
   enableVaulting,
 }) => {
-  const { handlePurchase, paymentInfo, vaultedPaymentMethods } = usePayment();
+  const { handlePurchase, paymentInfo, handleGetVaultedPaymentMethods } =
+    usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
+  const [showNewCreditCardForm, setShowNewCreditCardForm] = useState(false);
   const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
   >([]);
+  const [selectedCard, setSelectedCard] = useState("");
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -72,15 +75,19 @@ export const CreditCardMask: React.FC<
   };
   const handleGetVaultedPaymentMethodsByType = (type: string) => {
     const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
-    vaultedPaymentMethods.forEach((pM) => {
-      if (pM.type === type) {
-        filteredPaymentMethods.push({
-          nonce: pM.nonce,
-          details: pM.details as HostedFieldsAccountDetails,
+    handleGetVaultedPaymentMethods()
+      .then((paymentMethods) => {
+        paymentMethods.forEach((pM) => {
+          if (pM.type === type) {
+            filteredPaymentMethods.push({
+              nonce: pM.nonce,
+              details: pM.details as HostedFieldsAccountDetails,
+            });
+          }
         });
-      }
-    });
-    return filteredPaymentMethods;
+        setLimitedVaultedPaymentMethods(filteredPaymentMethods);
+      })
+      .finally(() => setHostedFieldsCreated(true));
   };
 
   useEffect(() => {
@@ -261,58 +268,91 @@ export const CreditCardMask: React.FC<
           );
         };
         form.addEventListener("submit", tokenize, false);
+        handleGetVaultedPaymentMethodsByType("CreditCard");
         isLoading(false);
-        setHostedFieldsCreated(true);
       }
     );
   }, [client, threeDS]);
 
+  const changeCard = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedCard(e.target.value);
+    setShowNewCreditCardForm(e.target.value === "new");
+  };
+
+  const submitVaultedCard = async () => {
+    isLoading(true);
+    await handlePurchase(selectedCard);
+    isLoading(false);
+  };
+
   useEffect(() => {
-    setLimitedVaultedPaymentMethods(
-      handleGetVaultedPaymentMethodsByType("CreditCard")
-    );
-  }, [vaultedPaymentMethods]);
+    if (!hostedFieldsCreated || limitedVaultedPayments.length) {
+      setShowNewCreditCardForm(false);
+      setSelectedCard("");
+      return;
+    }
+    setShowNewCreditCardForm(true);
+    setSelectedCard("new");
+  }, [limitedVaultedPayments, hostedFieldsCreated]);
 
   return (
     <>
-      <div>
-        {limitedVaultedPayments.map((vaultedMethod, index) => {
-          return (
-            <div
-              key={index}
-              className="flex gap-x-5 justify-start content-center"
-            >
-              <input
-                className="w-5 justify-self-center"
-                id={`credit-card-${index}`}
-                type="radio"
-              />
-              <label
-                htmlFor="{`credit-card-${index}`}"
-                className={HOSTED_FIELDS_LABEL}
-              >
-                <span className={HOSTED_FIELDS_LABEL}>
-                  {vaultedMethod.details.cardType}
-                </span>
-                <span className={HOSTED_FIELDS_LABEL}>
-                  **** **** **** {vaultedMethod.details.lastFour}
-                </span>
-                <span className={HOSTED_FIELDS_LABEL}>
-                  {vaultedMethod.details.cardholderName}
-                </span>
-                <span className={HOSTED_FIELDS_LABEL}>
-                  {vaultedMethod.details.expirationMonth} /{" "}
-                  {vaultedMethod.details.expirationYear}
-                </span>
-              </label>
+      <>
+        {!!limitedVaultedPayments.length && (
+          <>
+            <div className="grid gap-10 grid-cols-1 md:grid-cols-3">
+              {limitedVaultedPayments.map((vaultedMethod, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded"
+                  >
+                    <input
+                      className="w-3 justify-self-center"
+                      id={`credit-card-${index}`}
+                      type="radio"
+                      name="select-credit-card"
+                      value={vaultedMethod.nonce}
+                      onChange={changeCard}
+                    />
+                    <label
+                      htmlFor={`credit-card-${index}`}
+                      className="cursor-pointer w-full"
+                    >
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        {vaultedMethod.details.cardType}
+                      </span>
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        **** **** **** {vaultedMethod.details.lastFour}
+                      </span>
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        {vaultedMethod.details.cardholderName}
+                      </span>
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        {vaultedMethod.details.expirationMonth} /{" "}
+                        {vaultedMethod.details.expirationYear}
+                      </span>
+                    </label>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+            <label className={HOSTED_FIELDS_LABEL}>
+              <input
+                type="radio"
+                name="select-credit-card"
+                value="new"
+                onChange={changeCard}
+              />
+              new credit card
+            </label>
+          </>
+        )}
+      </>
       <div
         className={classNames({
           "demo-frame": true,
-          hidden: !hostedFieldsCreated,
+          hidden: !showNewCreditCardForm,
         })}
       >
         <form
@@ -373,28 +413,40 @@ export const CreditCardMask: React.FC<
 
           {enableVaulting && (
             <>
-              <label className={HOSTED_FIELDS_LABEL} htmlFor="vaulting">
+              <label className={HOSTED_FIELDS_LABEL}>
+                <input className="mr-3" ref={ccVaultCheckbox} type="checkbox" />
                 Save my card
               </label>
-              <input ref={ccVaultCheckbox} type="checkbox" id="vaulting" />
             </>
           )}
 
           <div className="block text-center">
-            <input
-              disabled={emptyInputs && invalidInput}
-              type="submit"
-              className={renderMaskButtonClasses(
-                fullWidth,
-                !(emptyInputs && invalidInput),
-                emptyInputs || invalidInput
-              )}
-              value={buttonText}
-              id="submit"
-            />
+            {selectedCard === "new" && (
+              <input
+                disabled={emptyInputs && invalidInput}
+                type="submit"
+                className={renderMaskButtonClasses(
+                  fullWidth,
+                  !(emptyInputs && invalidInput),
+                  emptyInputs || invalidInput
+                )}
+                value={buttonText}
+                id="submit"
+              />
+            )}
           </div>
         </form>
       </div>
+      {selectedCard && selectedCard !== "new" && (
+        <div className="m-auto p-8 max-w-screen-md">
+          <button
+            onClick={submitVaultedCard}
+            className={renderMaskButtonClasses(fullWidth, true, false)}
+          >
+            {buttonText}
+          </button>
+        </div>
+      )}
     </>
   );
 };

@@ -31,6 +31,7 @@ type PaymentContextT = {
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
+  handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
 };
 
 const PaymentInfoInitialObject = {
@@ -50,6 +51,10 @@ const PaymentContext = createContext<PaymentContextT>({
   handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
   vaultedPaymentMethods: [],
+  handleGetVaultedPaymentMethods: () =>
+    new Promise<FetchPaymentMethodsPayload[]>(
+      (resolve) => [] as FetchPaymentMethodsPayload[]
+    ),
 });
 
 export const PaymentProvider: FC<
@@ -119,7 +124,6 @@ export const PaymentProvider: FC<
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
-            await handleGetVaultedPaymentMethods(clientTokenresult.clientToken);
             isLoading(false);
             return;
           }
@@ -134,36 +138,37 @@ export const PaymentProvider: FC<
       isLoading(false);
     };
 
-    const handleGetVaultedPaymentMethods = async (token: string) => {
-      vaultManager.create(
-        { authorization: token },
-        (
-          err: BraintreeError | undefined,
-          vaultInstance: VaultManager | undefined
-        ) => {
-          if (err) {
-            notify("Error", err.message);
-            return;
-          }
+    const handleGetVaultedPaymentMethods = () => {
+      if (!clientToken || vaultedPaymentMethods.length)
+        return new Promise<FetchPaymentMethodsPayload[]>(() => {
+          return vaultedPaymentMethods;
+        });
+      isLoading(true);
+      return vaultManager.create({ authorization: clientToken }).then(
+        (vaultInstance: VaultManager | undefined) => {
           if (vaultInstance === undefined) {
             notify("Info", "No vault manager");
-            return;
+            isLoading(false);
+            return vaultedPaymentMethods;
           }
-          vaultInstance.fetchPaymentMethods(
-            { defaultFirst: true },
+          return vaultInstance.fetchPaymentMethods({ defaultFirst: true }).then(
             (
-              err: BraintreeError | undefined,
               customerPaymentMethods: FetchPaymentMethodsPayload[] | undefined
             ) => {
-              if (err) {
-                notify("Error", err.message);
-                return;
-              }
+              isLoading(false);
               if (customerPaymentMethods !== undefined) {
                 setVaultedPaymentMethods(customerPaymentMethods);
+                return customerPaymentMethods;
               }
+              return vaultedPaymentMethods;
+            },
+            () => {
+              return vaultedPaymentMethods;
             }
           );
+        },
+        () => {
+          return vaultedPaymentMethods;
         }
       );
     };
@@ -207,6 +212,7 @@ export const PaymentProvider: FC<
       handlePurchase,
       paymentInfo,
       vaultedPaymentMethods,
+      handleGetVaultedPaymentMethods,
     };
   }, [clientToken, gettingClientToken]);
 
