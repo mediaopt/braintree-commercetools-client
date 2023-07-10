@@ -29,7 +29,9 @@
     "eject": "react-scripts eject",
     "clean": "rimraf dist",
     "copy-files": "copyfiles -e *.ts -e **/*.ts -e **/*.tsx -u 1 src/**/**/*.css dist/esm/src",
-    "tsc": "npm run clean && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-files",
+    "tsc-local": "npm run clean && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-files",
+    "prepare-local": "npm run tsc",
+    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && npm run copy-files",
     "prepare": "npm run tsc"
   },
   "eslintConfig": {
