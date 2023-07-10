@@ -1,6 +1,5 @@
 import { FC, createContext, useMemo, useContext, useState } from "react";
 import {
-  BraintreeError,
   FetchPaymentMethodsPayload,
   VaultManager,
   vaultManager,
