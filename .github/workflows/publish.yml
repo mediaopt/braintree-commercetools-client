@@ -23,6 +23,9 @@ jobs:
       - name: NPM Install
         run: npm install
         working-directory: .
+      - name: NPM Tests
+        run: npm test
+        working-directory: .
       - name: Prepare
         run: npm run prepare
         working-directory: .
