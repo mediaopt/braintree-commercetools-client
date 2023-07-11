@@ -21,8 +21,8 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: (result: any) => void;
-  cartInformation: CartInformation;
-} & GeneralPayButtonProps;
+} & CartInformationProps &
+  GeneralPayButtonProps;
 
 export type ClientTokenResponse = {
   clientToken: string;
@@ -57,8 +57,7 @@ export type PaymentInfo = {
   currency: string;
   lineItems: Array<any>;
   shippingMethod: {};
-  cartInformation: CartInformation;
-};
+} & CartInformationProps;
 
 export type CartInformation = {
   account: {
@@ -123,6 +122,8 @@ export const CartInformationInitial: CartInformation = {
   },
 };
 
+export type CartInformationProps = { cartInformation: CartInformation };
+
 export type GooglePayTypes = {
   environment: google.payments.api.Environment;
   totalPriceStatus: "NOT_CURRENTLY_KNOWN" | "ESTIMATED" | "FINAL";
@@ -160,3 +161,5 @@ export type LoadingOverlayType = {
   loadingText?: string;
   textStyles?: string;
 };
+
+export type GeneralACHProps = { mandateText: string };

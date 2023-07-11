@@ -15,9 +15,11 @@ import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-
 
 import { GeneralPayButtonProps } from "../../types";
 
-const HOSTED_FIELDS_LABEL = "uppercase text-sm block mb-1.5";
-const HOSTED_FIELDS =
-  "h-12 box-border w-full inline-block shadow-none font-semibold text-sm rounded-md border border-violet-50 leading-5 bg-slate-50 mb-3";
+import {
+  HOSTED_FIELDS_LABEL,
+  HOSTED_FIELDS,
+  renderMaskButtonClasses,
+} from "../../styles";
 
 type CreditCardMaskProps = GeneralPayButtonProps & {
   showPostalCode: boolean;
@@ -194,7 +196,14 @@ export const CreditCardMask: React.FC<
             };
             threeDS
               .verifyCard(threeDSecureParameters)
-              .then(function (response) {
+              .then(function (response: any) {
+                if (
+                  response.threeDSecureInfo.status !== "authenticate_successful"
+                ) {
+                  isLoading(false);
+                  notify("Error", "Could not authenticate");
+                  return;
+                }
                 if (response.threeDSecureInfo.liabilityShifted) {
                   handlePurchase(response.nonce);
                 } else if (response.threeDSecureInfo.liabilityShiftPossible) {
@@ -205,7 +214,7 @@ export const CreditCardMask: React.FC<
               })
               .catch(function (error) {
                 isLoading(false);
-                if (error.code.indexOf("THREEDS_LOOKUP") === 0) {
+                if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
                   if (
                     error.code ===
                     "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
@@ -305,14 +314,11 @@ export const CreditCardMask: React.FC<
             <input
               disabled={emptyInputs && invalidInput}
               type="submit"
-              className={classNames({
-                "justify-center align-center rounded-md px-4 py-2 text-sm font-medium focus:outline-none text-white shadow-sm":
-                  true,
-                "w-full": fullWidth,
-                "focus:ring-2 focus:ring-blue-500 bg-blue-500 hover:bg-blue-600 ":
-                  !(emptyInputs && invalidInput),
-                "bg-gray-500": emptyInputs || invalidInput,
-              })}
+              className={renderMaskButtonClasses(
+                fullWidth,
+                !(emptyInputs && invalidInput),
+                emptyInputs || invalidInput
+              )}
               value={buttonText}
               id="submit"
             />
