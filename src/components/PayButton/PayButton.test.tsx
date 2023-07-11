@@ -2,8 +2,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { PayButton, PAY_BUTTON_TEXT_FALLBACK } from "./PayButton";
 
-const text: string = "custom text";
-
 test("button has default text", () => {
   render(<PayButton disabled={false} />);
   const linkElement = screen.getByText(new RegExp(PAY_BUTTON_TEXT_FALLBACK));
@@ -11,8 +9,9 @@ test("button has default text", () => {
 });
 
 test("button has custom text", () => {
-  render(<PayButton disabled={false} buttonText={text} />);
-  const linkElement = screen.getByText(new RegExp(text));
+  const TEXT: string = "custom text";
+  render(<PayButton disabled={false} buttonText={TEXT} />);
+  const linkElement = screen.getByText(new RegExp(TEXT));
   expect(linkElement).toBeInTheDocument();
 });
 

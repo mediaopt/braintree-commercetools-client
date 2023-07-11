@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Result } from "./Result";
 
-const text: string = "My Text";
+const TEXT: string = "My Text";
 
 test("default success has default message", () => {
   render(<Result />);
@@ -11,8 +11,8 @@ test("default success has default message", () => {
 });
 
 test("custom success message gets shown", () => {
-  render(<Result message={text} />);
-  const linkElement = screen.getByText(new RegExp(text));
+  render(<Result message={TEXT} />);
+  const linkElement = screen.getByText(new RegExp(TEXT));
   expect(linkElement).toBeInTheDocument();
 });
 
@@ -31,7 +31,7 @@ test("unsuccessful result has failure classes", () => {
 test("result component displays children", () => {
   const { container } = render(
     <Result>
-      <label>{text}</label>
+      <label>{TEXT}</label>
     </Result>
   );
   const linkElement = container.querySelector("label");
