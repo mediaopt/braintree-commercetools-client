@@ -77,11 +77,11 @@ export const CreditCardMask: React.FC<
     const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
     handleGetVaultedPaymentMethods()
       .then((paymentMethods) => {
-        paymentMethods.forEach((pM) => {
-          if (pM.type === type) {
+        paymentMethods.forEach((paymentMethod) => {
+          if (paymentMethod.type === type) {
             filteredPaymentMethods.push({
-              nonce: pM.nonce,
-              details: pM.details as HostedFieldsAccountDetails,
+              nonce: paymentMethod.nonce,
+              details: paymentMethod.details as HostedFieldsAccountDetails,
             });
           }
         });
@@ -232,7 +232,9 @@ export const CreditCardMask: React.FC<
                     return;
                   }
                   if (response.threeDSecureInfo.liabilityShifted) {
-                    handlePurchase(response.nonce);
+                    handlePurchase(response.nonce, {
+                      storeInVault: shouldVault,
+                    });
                   } else if (response.threeDSecureInfo.liabilityShiftPossible) {
                     // @todo liability shift possible - Decide if you want to submit the nonce
                   } else {
@@ -275,13 +277,15 @@ export const CreditCardMask: React.FC<
   }, [client, threeDS]);
 
   const changeCard = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedCard(e.target.value);
-    setShowNewCreditCardForm(e.target.value === "new");
+    const value = e.target.value;
+    setSelectedCard(value);
+    setShowNewCreditCardForm(value === "new");
   };
 
   const submitVaultedCard = async () => {
     isLoading(true);
-    await handlePurchase(selectedCard);
+    const shouldVault = ccVaultCheckbox.current?.checked || false;
+    await handlePurchase(selectedCard, { storeInVault: shouldVault });
     isLoading(false);
   };
 

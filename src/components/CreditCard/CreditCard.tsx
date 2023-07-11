@@ -25,7 +25,6 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   threeDSBillingAddress,
   threeDSAdditionalInformation,
   enableVaulting,
-  customerId,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
@@ -36,7 +35,6 @@ export const CreditCard: React.FC<CreditCardProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
-      customerId={customerId}
     >
       <CreditCardButton
         disabled={isPayButtonDisabled(cartInformation)}

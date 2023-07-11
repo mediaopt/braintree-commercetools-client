@@ -20,7 +20,7 @@ import { useLoader } from "./useLoader";
 
 type HandlePurchaseType = (
   paymentNonce: string,
-  options?: { [index: string]: string }
+  options?: { [index: string]: string | boolean }
 ) => void;
 
 type PaymentContextT = {
@@ -67,7 +67,6 @@ export const PaymentProvider: FC<
   purchaseCallback,
   children,
   cartInformation,
-  customerId,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -104,7 +103,7 @@ export const PaymentProvider: FC<
             getClientTokenUrl,
             createPaymentResult.id,
             createPaymentResult.version,
-            customerId
+            createPaymentResult.braintreeCustomerId
           )) as ClientTokenResponse;
 
           const { amountPlanned, lineItems, shippingMethod } =

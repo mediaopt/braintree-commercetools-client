@@ -55,7 +55,6 @@ function App() {
     fullWidth: true,
     buttonText: "Pay €X",
     cartInformation: cartInformation,
-    customerId: "b38aaaa9-007f-4f57-b9c4-427968a0fc2d",
   };
 
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");

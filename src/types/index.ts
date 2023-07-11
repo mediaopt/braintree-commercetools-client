@@ -26,7 +26,6 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: (result: any) => void;
-  customerId?: string;
 } & CartInformationProps &
   GeneralPayButtonProps;
 
@@ -45,6 +44,7 @@ export type CreatePaymentResponse = {
   };
   lineItems: [object]; // @todo add better types maybe?
   shippingMethod: object; // @todo add better types maybe?
+  braintreeCustomerId: string;
 };
 
 export type PaymentInfo = {
