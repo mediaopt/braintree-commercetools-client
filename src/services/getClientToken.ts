@@ -8,10 +8,14 @@ export const getClientToken = async (
   url: string,
   paymentId: string,
   paymentVersion: number,
-  customerId?: string
+  braintreeCustomerId?: string
 ) => {
   try {
-    const data: ClientTokenRequest = { paymentId, paymentVersion, customerId };
+    const data: ClientTokenRequest = {
+      paymentId,
+      paymentVersion,
+      braintreeCustomerId,
+    };
 
     const result = await makeRequest<ClientTokenResponse, ClientTokenRequest>(
       sessionKey,

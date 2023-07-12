@@ -118,7 +118,6 @@ export const PaymentProvider: FC<
             shippingMethod: shippingMethod,
             cartInformation: cartInformation,
           });
-
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
