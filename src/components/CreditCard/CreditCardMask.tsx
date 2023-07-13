@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { hostedFields } from "braintree-web";
+import { hostedFields, dataCollector } from "braintree-web";
 import {
   ThreeDSecureVerifyOptions,
   ThreeDSecureAdditionalInformation,
@@ -46,6 +46,7 @@ export const CreditCardMask: React.FC<
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
   const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
+  const [deviceData, setDeviceData] = useState("");
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -172,6 +173,20 @@ export const CreditCardMask: React.FC<
           }
           setInvalidInput(!isValid);
         });
+
+        dataCollector.create(
+          {
+            client: client,
+            paypal: true,
+          },
+          function (dataCollectorErr, dataCollectorInstance) {
+            if (dataCollectorErr || !dataCollectorInstance) {
+              return;
+            }
+            setDeviceData(dataCollectorInstance.deviceData);
+          }
+        );
+
         var tokenize = function (event: any) {
           event.preventDefault();
           isLoading(true);
@@ -205,7 +220,7 @@ export const CreditCardMask: React.FC<
                   return;
                 }
                 if (response.threeDSecureInfo.liabilityShifted) {
-                  handlePurchase(response.nonce);
+                  handlePurchase(response.nonce, { deviceData: deviceData });
                 } else if (response.threeDSecureInfo.liabilityShiftPossible) {
                   // @todo liability shift possible - Decide if you want to submit the nonce
                 } else {
