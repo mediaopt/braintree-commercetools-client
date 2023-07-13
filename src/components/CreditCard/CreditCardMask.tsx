@@ -284,8 +284,7 @@ export const CreditCardMask: React.FC<
 
   const submitVaultedCard = async () => {
     isLoading(true);
-    const shouldVault = ccVaultCheckbox.current?.checked || false;
-    await handlePurchase(selectedCard, { storeInVault: shouldVault });
+    await handlePurchase(selectedCard);
     isLoading(false);
   };
 
