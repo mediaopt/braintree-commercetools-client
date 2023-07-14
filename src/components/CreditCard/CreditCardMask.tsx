@@ -300,7 +300,7 @@ export const CreditCardMask: React.FC<
 
   const submitVaultedCard = async () => {
     isLoading(true);
-    await handlePurchase(selectedCard);
+    await handlePurchase(selectedCard, { deviceData: deviceData });
     isLoading(false);
   };
 
