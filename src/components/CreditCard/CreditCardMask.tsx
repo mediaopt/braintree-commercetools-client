@@ -202,10 +202,9 @@ export const CreditCardMask: React.FC<
             paypal: true,
           },
           function (dataCollectorErr, dataCollectorInstance) {
-            if (dataCollectorErr || !dataCollectorInstance) {
-              return;
+            if (!dataCollectorErr && dataCollectorInstance) {
+              setDeviceData(dataCollectorInstance.deviceData);
             }
-            setDeviceData(dataCollectorInstance.deviceData);
           }
         );
 
