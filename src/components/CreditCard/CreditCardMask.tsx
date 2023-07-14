@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { hostedFields, dataCollector } from "braintree-web";
-import {
-  ThreeDSecureVerifyOptions,
-  ThreeDSecureAdditionalInformation,
-  ThreeDSecureBillingAddress,
-} from "braintree-web/modules/three-d-secure";
+import { ThreeDSecureVerifyOptions } from "braintree-web/modules/three-d-secure";
 
 import { useBraintreeClient } from "../../app/useBraintreeClient";
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 import { useLoader } from "../../app/useLoader";
-import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
+import {
+  HostedFieldsAccountDetails,
+  HostedFieldsHostedFieldsFieldName,
+} from "braintree-web/modules/hosted-fields";
 
-import { GeneralPayButtonProps } from "../../types";
+import { GeneralPayButtonProps, GeneralCreditCardProps } from "../../types";
 
 import {
   HOSTED_FIELDS_LABEL,
@@ -21,12 +20,11 @@ import {
   renderMaskButtonClasses,
 } from "../../styles";
 
-type CreditCardMaskProps = GeneralPayButtonProps & {
-  showPostalCode: boolean;
-  showCardHoldersName: boolean;
-  threeDSBillingAddress?: ThreeDSecureBillingAddress;
-  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-  email?: string;
+type CreditCardMaskProps = GeneralPayButtonProps & GeneralCreditCardProps;
+
+type LimitedVaultedPayment = {
+  nonce: string;
+  details: HostedFieldsAccountDetails;
 };
 
 export const CreditCardMask: React.FC<
@@ -39,14 +37,21 @@ export const CreditCardMask: React.FC<
   threeDSBillingAddress,
   email,
   showCardHoldersName,
+  enableVaulting,
 }) => {
-  const { handlePurchase, paymentInfo } = usePayment();
+  const { handlePurchase, paymentInfo, handleGetVaultedPaymentMethods } =
+    usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
+  const [showNewCreditCardForm, setShowNewCreditCardForm] = useState(false);
   const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
   const [deviceData, setDeviceData] = useState("");
+  const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
+    LimitedVaultedPayment[]
+  >([]);
+  const [selectedCard, setSelectedCard] = useState("");
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -56,6 +61,7 @@ export const CreditCardMask: React.FC<
   const ccCvvRef = React.useRef<HTMLDivElement>(null);
   const ccPostalRef = React.useRef<HTMLDivElement>(null);
   const ccExpireRef = React.useRef<HTMLDivElement>(null);
+  const ccVaultCheckbox = React.useRef<HTMLInputElement>(null);
 
   const borderClassToggle: Array<string> = ["border-2", "border-rose-600"];
 
@@ -67,6 +73,22 @@ export const CreditCardMask: React.FC<
     expirationDate: ccExpireRef,
     cardholderName: ccNameRef,
     postalCode: ccPostalRef,
+  };
+  const handleGetVaultedPaymentMethodsByType = (type: string) => {
+    const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
+    handleGetVaultedPaymentMethods()
+      .then((paymentMethods) => {
+        paymentMethods.forEach((paymentMethod) => {
+          if (paymentMethod.type === type) {
+            filteredPaymentMethods.push({
+              nonce: paymentMethod.nonce,
+              details: paymentMethod.details as HostedFieldsAccountDetails,
+            });
+          }
+        });
+        setLimitedVaultedPaymentMethods(filteredPaymentMethods);
+      })
+      .finally(() => setHostedFieldsCreated(true));
   };
 
   useEffect(() => {
@@ -189,84 +211,167 @@ export const CreditCardMask: React.FC<
 
         var tokenize = function (event: any) {
           event.preventDefault();
+
           isLoading(true);
+          const shouldVault = ccVaultCheckbox.current?.checked || false;
 
-          hostedFieldsInstance.tokenize(function (err, payload) {
-            if (err || !payload) {
-              isLoading(false);
-              notify(
-                "Error",
-                "Something went wrong. Check your card details and try again."
-              );
-              return;
-            }
-
-            let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-              amount: paymentInfo.amount,
-              nonce: payload.nonce,
-              bin: payload.details.bin,
-              email: email,
-              billingAddress: threeDSBillingAddress,
-              additionalInformation: threeDSAdditionalInformation,
-            };
-            threeDS
-              .verifyCard(threeDSecureParameters)
-              .then(function (response: any) {
-                if (
-                  response.threeDSecureInfo.status !== "authenticate_successful"
-                ) {
-                  isLoading(false);
-                  notify("Error", "Could not authenticate");
-                  return;
-                }
-                if (response.threeDSecureInfo.liabilityShifted) {
-                  handlePurchase(response.nonce, { deviceData: deviceData });
-                } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-                  // @todo liability shift possible - Decide if you want to submit the nonce
-                } else {
-                  // @todo no liability shift - Decide if you want to submit the nonce
-                }
-              })
-              .catch(function (error) {
+          hostedFieldsInstance.tokenize(
+            { vault: shouldVault },
+            function (err, payload) {
+              if (err || !payload) {
                 isLoading(false);
-                if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
+                notify(
+                  "Error",
+                  "Something went wrong. Check your card details and try again."
+                );
+                return;
+              }
+
+              let threeDSecureParameters: ThreeDSecureVerifyOptions = {
+                amount: paymentInfo.amount,
+                nonce: payload.nonce,
+                bin: payload.details.bin,
+                email: email,
+                billingAddress: threeDSBillingAddress,
+                additionalInformation: threeDSAdditionalInformation,
+              };
+              threeDS
+                .verifyCard(threeDSecureParameters)
+                .then(function (response: any) {
                   if (
-                    error.code ===
-                    "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
+                    response.threeDSecureInfo.status !==
+                    "authenticate_successful"
                   ) {
-                    notify(
-                      "Error",
-                      "Payment nonce does not exist or was already used"
-                    );
-                  } else if (
-                    error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
-                  ) {
-                    notify(
-                      "Error",
-                      "Validation error - check your input or try a different payment"
-                    );
+                    isLoading(false);
+                    notify("Error", "Could not authenticate");
+                    return;
+                  }
+                  if (response.threeDSecureInfo.liabilityShifted) {
+                    handlePurchase(response.nonce, {
+                      storeInVault: shouldVault,
+                      deviceData: deviceData,
+                    });
+                  } else if (response.threeDSecureInfo.liabilityShiftPossible) {
+                    // @todo liability shift possible - Decide if you want to submit the nonce
+                  } else {
+                    // @todo no liability shift - Decide if you want to submit the nonce
+                  }
+                })
+                .catch(function (error) {
+                  isLoading(false);
+                  if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
+                    if (
+                      error.code ===
+                      "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
+                    ) {
+                      notify(
+                        "Error",
+                        "Payment nonce does not exist or was already used"
+                      );
+                    } else if (
+                      error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
+                    ) {
+                      notify(
+                        "Error",
+                        "Validation error - check your input or try a different payment"
+                      );
+                    } else {
+                      notify("Error", "Something went wrong - try again");
+                    }
                   } else {
                     notify("Error", "Something went wrong - try again");
                   }
-                } else {
-                  notify("Error", "Something went wrong - try again");
-                }
-              });
-          });
+                });
+            }
+          );
         };
         form.addEventListener("submit", tokenize, false);
+        handleGetVaultedPaymentMethodsByType("CreditCard");
         isLoading(false);
-        setHostedFieldsCreated(true);
       }
     );
   }, [client, threeDS]);
 
+  const changeCard = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSelectedCard(value);
+    setShowNewCreditCardForm(value === "new");
+  };
+
+  const submitVaultedCard = async () => {
+    isLoading(true);
+    await handlePurchase(selectedCard);
+    isLoading(false);
+  };
+
+  useEffect(() => {
+    if (!hostedFieldsCreated || limitedVaultedPayments.length) {
+      setShowNewCreditCardForm(false);
+      setSelectedCard("");
+      return;
+    }
+    setShowNewCreditCardForm(true);
+    setSelectedCard("new");
+  }, [limitedVaultedPayments, hostedFieldsCreated]);
+
   return (
     <>
+      <>
+        {!!limitedVaultedPayments.length && (
+          <>
+            <div className="grid gap-10 grid-cols-1 md:grid-cols-3">
+              {limitedVaultedPayments.map((vaultedMethod, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded"
+                  >
+                    <input
+                      className="w-3 justify-self-center"
+                      id={`credit-card-${index}`}
+                      type="radio"
+                      name="select-credit-card"
+                      value={vaultedMethod.nonce}
+                      onChange={changeCard}
+                    />
+                    <label
+                      htmlFor={`credit-card-${index}`}
+                      className="cursor-pointer w-full"
+                    >
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        {vaultedMethod.details.cardType}
+                      </span>
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        **** **** **** {vaultedMethod.details.lastFour}
+                      </span>
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        {vaultedMethod.details.cardholderName}
+                      </span>
+                      <span className={HOSTED_FIELDS_LABEL}>
+                        {vaultedMethod.details.expirationMonth} /{" "}
+                        {vaultedMethod.details.expirationYear}
+                      </span>
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+            <label className={HOSTED_FIELDS_LABEL}>
+              <input
+                type="radio"
+                name="select-credit-card"
+                value="new"
+                onChange={changeCard}
+              />
+              new credit card
+            </label>
+          </>
+        )}
+      </>
       <div
         className={classNames({
           "demo-frame": true,
-          hidden: !hostedFieldsCreated,
+          hidden: !showNewCreditCardForm,
         })}
       >
         <form
@@ -325,21 +430,42 @@ export const CreditCardMask: React.FC<
           </label>
           <div ref={ccCvvRef} id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
 
+          {enableVaulting && (
+            <>
+              <label className={HOSTED_FIELDS_LABEL}>
+                <input className="mr-3" ref={ccVaultCheckbox} type="checkbox" />
+                Save my card
+              </label>
+            </>
+          )}
+
           <div className="block text-center">
-            <input
-              disabled={emptyInputs && invalidInput}
-              type="submit"
-              className={renderMaskButtonClasses(
-                fullWidth,
-                !(emptyInputs && invalidInput),
-                emptyInputs || invalidInput
-              )}
-              value={buttonText}
-              id="submit"
-            />
+            {selectedCard === "new" && (
+              <input
+                disabled={emptyInputs && invalidInput}
+                type="submit"
+                className={renderMaskButtonClasses(
+                  fullWidth,
+                  !(emptyInputs && invalidInput),
+                  emptyInputs || invalidInput
+                )}
+                value={buttonText}
+                id="submit"
+              />
+            )}
           </div>
         </form>
       </div>
+      {selectedCard && selectedCard !== "new" && (
+        <div className="m-auto p-8 max-w-screen-md">
+          <button
+            onClick={submitVaultedCard}
+            className={renderMaskButtonClasses(fullWidth, true, false)}
+          >
+            {buttonText}
+          </button>
+        </div>
+      )}
     </>
   );
 };

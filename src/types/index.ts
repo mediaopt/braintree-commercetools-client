@@ -3,10 +3,15 @@ import {
   ButtonLabelOption,
   FlowType,
 } from "paypal-checkout-components";
+import {
+  ThreeDSecureAdditionalInformation,
+  ThreeDSecureBillingAddress,
+} from "braintree-web/modules/three-d-secure";
 
 export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
+  braintreeCustomerId?: string;
 };
 
 export type GeneralPayButtonProps = {
@@ -39,6 +44,7 @@ export type CreatePaymentResponse = {
   };
   lineItems: [object]; // @todo add better types maybe?
   shippingMethod: object; // @todo add better types maybe?
+  braintreeCustomerId: string;
 };
 
 export type TransactionSaleResponse = {
@@ -163,3 +169,12 @@ export type LoadingOverlayType = {
 };
 
 export type GeneralACHProps = { mandateText: string };
+
+export type GeneralCreditCardProps = {
+  showPostalCode?: boolean;
+  showCardHoldersName?: boolean;
+  threeDSBillingAddress?: ThreeDSecureBillingAddress;
+  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+  email?: string;
+  enableVaulting?: boolean;
+};

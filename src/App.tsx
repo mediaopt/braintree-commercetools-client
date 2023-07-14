@@ -14,9 +14,9 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIzYTVhYzk2NS0wYWE1LTQ4MzctYTI0MC01ZWNkYjE0NWU0M2QiLCJ3aXNobGlzdElkIjoiN2ZmYWZlYWEtYjI1ZS00NWFiLTgwODgtZGIwZjdmOTIxYmM2In0.DCJ8W4rBTREXhX_E6m06AZ2zjok8r527mY6UXF7UYNQ";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhN2ZkYzYxYi1kZWMzLTQ1ZTQtYmJmMy00MGJkNDY0OWVmOGYifQ.nGKBe6hlffxpdPKs8NSqvH2PjtEmcQwsqZsWuBQxkNY";
 
 function App() {
   const cartInformation = {
@@ -59,7 +59,7 @@ function App() {
 
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
-    CreditCard: <CreditCard {...params} />,
+    CreditCard: <CreditCard {...params} enableVaulting={true} />,
     PayPal: (
       <PayPal
         flow={"checkout" as FlowType}

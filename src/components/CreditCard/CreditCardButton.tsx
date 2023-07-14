@@ -3,20 +3,10 @@ import React from "react";
 import { usePayment } from "../../app/usePayment";
 import { CreditCardMask } from "./CreditCardMask";
 import { PAY_BUTTON_TEXT_FALLBACK, PayButtonProps } from "../PayButton";
+import { GeneralCreditCardProps } from "../../types";
 import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
 
-import {
-  ThreeDSecureAdditionalInformation,
-  ThreeDSecureBillingAddress,
-} from "braintree-web/modules/three-d-secure";
-
-type CreditCardButton = {
-  showPostalCode: boolean;
-  showCardHoldersName: boolean;
-  threeDSBillingAddress?: ThreeDSecureBillingAddress;
-  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-  email?: string;
-} & PayButtonProps;
+type CreditCardButton = GeneralCreditCardProps & PayButtonProps;
 
 export const CreditCardButton: React.FC<CreditCardButton> = ({
   disabled,
@@ -27,6 +17,7 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   email,
   threeDSAdditionalInformation,
   threeDSBillingAddress,
+  enableVaulting,
 }: CreditCardButton) => {
   const { clientToken } = usePayment();
 
@@ -41,6 +32,7 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
       email={email}
       threeDSAdditionalInformation={threeDSAdditionalInformation}
       threeDSBillingAddress={threeDSBillingAddress}
+      enableVaulting={enableVaulting}
     />
   ) : (
     <></>
