@@ -32,6 +32,7 @@ type PaymentContextT = {
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
   handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
+  braintreeCustomerId: string;
 };
 
 const PaymentInfoInitialObject = {
@@ -55,6 +56,7 @@ const PaymentContext = createContext<PaymentContextT>({
     new Promise<FetchPaymentMethodsPayload[]>(
       (resolve) => [] as FetchPaymentMethodsPayload[]
     ),
+  braintreeCustomerId: "",
 });
 
 export const PaymentProvider: FC<
@@ -75,6 +77,7 @@ export const PaymentProvider: FC<
   const [resultMessage, setResultMessage] = useState<string>();
 
   const [clientToken, setClientToken] = useState("");
+  const [braintreeCustomerId, setBraintreeCustomerId] = useState("");
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
@@ -97,6 +100,7 @@ export const PaymentProvider: FC<
           cartInformation
         )) as CreatePaymentResponse;
 
+        setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
         if (createPaymentResult.id && createPaymentResult.version) {
           const clientTokenresult = (await getClientToken(
             sessionKey,
@@ -211,6 +215,7 @@ export const PaymentProvider: FC<
       paymentInfo,
       vaultedPaymentMethods,
       handleGetVaultedPaymentMethods,
+      braintreeCustomerId,
     };
   }, [clientToken, gettingClientToken]);
 
