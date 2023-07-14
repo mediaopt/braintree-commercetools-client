@@ -47,6 +47,15 @@ export type CreatePaymentResponse = {
   braintreeCustomerId: string;
 };
 
+export type TransactionSaleResponse = {
+  ok: boolean;
+  message: string;
+  result: {
+    transactionSaleResponse: Record<string, any>;
+    paymentVersion: number;
+  };
+};
+
 export type PaymentInfo = {
   id: string;
   version: number;

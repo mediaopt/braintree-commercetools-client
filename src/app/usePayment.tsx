@@ -13,6 +13,7 @@ import {
   CreatePaymentResponse,
   PaymentInfo,
   CartInformationInitial,
+  TransactionSaleResponse,
 } from "../types";
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
@@ -182,12 +183,12 @@ export const PaymentProvider: FC<
         ...additional,
       };
 
-      const response = await makeTransactionSaleRequest(
+      const response = (await makeTransactionSaleRequest(
         sessionKey,
         sessionValue,
         purchaseUrl,
         requestBody
-      );
+      )) as TransactionSaleResponse;
       isLoading(false);
       if (response.ok === false) {
         notify("Error", response.message);
