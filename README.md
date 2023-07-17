@@ -116,6 +116,22 @@ In addition, each payment component comes with its own specific properties.
   Set to true to show an extra pay later button from PayPal.
 - **payLaterButtonColor**: `ButtonColorOption`  
   Sets the color theme of the pay later button.
+- **locale**: `string`  
+  Sets the locale for PayPal buttons.
+- **intent**: `Intent`  
+  Sets the intent for PayPal buttons.
+- **commit**: `boolean`  
+  Sets the commit for PayPal buttons.
+- **enableShippingAddress**: `boolean`  
+  Sets the enableShippingAddress for PayPal buttons.
+- **paypalLineItem**: `LineItem[]`  
+  Sets the lineItens for PayPal buttons.
+- **billingAgreementDescription**: `string`  
+  Sets the billingAgreementDescription for PayPal buttons.
+- **shippingAddressOverride**: `ShippingAddressOverride`  
+  Sets the shippingAddressOverride for PayPal buttons.
+
+You see information about all these options in the [PayPal official documents](https://braintree.github.io/braintree-web/3.34.0/PayPalCheckout.html#createPayment).
 
 ### Venmo
 
