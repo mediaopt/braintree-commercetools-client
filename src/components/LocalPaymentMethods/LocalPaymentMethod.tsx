@@ -22,6 +22,8 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
   currencyCode,
   fullWidth,
   merchantAccountId,
+  fallbackUrl,
+  fallbackButtonText,
 }: LocalPaymentMethodType) => {
   return (
     <RenderTemplate
@@ -40,6 +42,8 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
         disabled={isPayButtonDisabled(cartInformation)}
         fullWidth={fullWidth}
         merchantAccountId={merchantAccountId}
+        fallbackUrl={fallbackUrl}
+        fallbackButtonText={fallbackButtonText}
       />
     </RenderTemplate>
   );

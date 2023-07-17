@@ -185,63 +185,64 @@ export type LocalPaymentMethodsType = {
   countryCode: any;
   currencyCode: any;
   merchantAccountId: string;
+  shippingAddressRequired?: boolean;
+  fallbackUrl: string;
+  fallbackButtonText?: string;
 };
 
-type LocalPaymentBancontact = {
+interface LocalPaymentBancontact extends LocalPaymentMethodsType {
   paymentType: "bancontact";
   countryCode: "BE";
   currencyCode: "EUR";
-  merchantAccountId: string;
-};
+}
 
-type LocalPaymentBLIK = {
+interface LocalPaymentBLIK extends LocalPaymentMethodsType {
   paymentType: "blik";
   countryCode: "PL";
   currencyCode: "PLN";
-  merchantAccountId: string;
-};
-type LocalPaymentEPS = {
+}
+
+interface LocalPaymentEPS extends LocalPaymentMethodsType {
   paymentType: "eps";
   countryCode: "AT";
   currencyCode: "EUR";
-  merchantAccountId: string;
-};
-type LocalPaymentGiropay = {
+}
+
+interface LocalPaymentGiropay extends LocalPaymentMethodsType {
   paymentType: "giropay";
   countryCode: "DE";
   currencyCode: "EUR";
-  merchantAccountId: string;
-};
-type LocalPaymentGrabpay = {
+}
+
+interface LocalPaymentGrabpay extends LocalPaymentMethodsType {
   paymentType: "grabpay";
   countryCode: "SG";
   currencyCode: "SGD";
-  merchantAccountId: string;
-};
-type LocalPaymentIdeal = {
+}
+
+interface LocalPaymentIdeal extends LocalPaymentMethodsType {
   paymentType: "ideal";
   countryCode: "NL";
   currencyCode: "EUR";
-  merchantAccountId: string;
-};
-type LocalPaymentSofort = {
+}
+
+interface LocalPaymentSofort extends LocalPaymentMethodsType {
   paymentType: "sofort";
   countryCode: "AT" | "BE" | "DE" | "IT" | "NL" | "ES" | "GB";
   currencyCode: "EUR" | "GBP";
-  merchantAccountId: string;
-};
-type LocalPaymentMyBank = {
+}
+
+interface LocalPaymentMyBank extends LocalPaymentMethodsType {
   paymentType: "mybank";
   countryCode: "IT";
   currencyCode: "EUR";
-  merchantAccountId: string;
-};
-type LocalPaymentP24 = {
+}
+
+interface LocalPaymentP24 extends LocalPaymentMethodsType {
   paymentType: "p24";
   countryCode: "PL";
   currencyCode: "EUR" | "PL";
-  merchantAccountId: string;
-};
+}
 
 export type LocalPaymentBancontactType = React.FC<
   GeneralComponentsProps & LocalPaymentBancontact
@@ -249,4 +250,32 @@ export type LocalPaymentBancontactType = React.FC<
 
 export type LocalPaymentP24Type = React.FC<
   GeneralComponentsProps & LocalPaymentP24
+>;
+
+export type LocalPaymentSofortType = React.FC<
+  GeneralComponentsProps & LocalPaymentSofort
+>;
+
+export type LocalPaymentBLIKType = React.FC<
+  GeneralComponentsProps & LocalPaymentBLIK
+>;
+
+export type LocalPaymentEPSType = React.FC<
+  GeneralComponentsProps & LocalPaymentEPS
+>;
+
+export type LocalPaymentGiropayType = React.FC<
+  GeneralComponentsProps & LocalPaymentGiropay
+>;
+
+export type LocalPaymentGrabpayType = React.FC<
+  GeneralComponentsProps & LocalPaymentGrabpay
+>;
+
+export type LocalPaymentIDealType = React.FC<
+  GeneralComponentsProps & LocalPaymentIdeal
+>;
+
+export type LocalPaymentMyBankType = React.FC<
+  GeneralComponentsProps & LocalPaymentMyBank
 >;

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   client as braintreeClient,
   localPayment,
-  BraintreeError,
   LocalPayment,
 } from "braintree-web";
 
@@ -10,7 +9,6 @@ import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 
 import { LocalPaymentMethodsType, GeneralPayButtonProps } from "../../types";
-import classNames from "classnames";
 import { useLoader } from "../../app/useLoader";
 import { renderMaskButtonClasses } from "../../styles";
 
@@ -26,6 +24,8 @@ export const LocalPaymentMethodMask: React.FC<
   fullWidth = true,
   buttonText,
   merchantAccountId,
+  fallbackUrl,
+  fallbackButtonText,
 }: LocalPaymentMethodMaskType) => {
   const [localPaymentInstance, setLocalPaymentInstance] =
     useState<LocalPayment>();
@@ -47,8 +47,16 @@ export const LocalPaymentMethodMask: React.FC<
       {
         paymentType: paymentType,
         amount: paymentInfo.amount,
-        // fallback @todo how to do this
+        fallback: {
+          url: fallbackUrl,
+          buttonText: fallbackButtonText,
+        },
+        email: "",
+        paymentTypeCountryCode: countryCode,
         currencyCode: currencyCode,
+        address: {
+          countryCode: countryCode,
+        },
         onPaymentStart: function (data, start) {
           //@todo we have to store the data.paymentId somewhere (on the server); BT recommends to map it to a cart identifier
           start();
@@ -73,31 +81,34 @@ export const LocalPaymentMethodMask: React.FC<
     );
   };
 
-  braintreeClient.create(
-    {
-      authorization: clientToken,
-    },
-    function (clientError, clientInstance) {
-      isLoading(true);
-      if (clientError) {
-        isLoading(false);
-        notify("Error", clientError.message);
-        return;
-      }
-      localPayment.create(
-        { client: clientInstance, merchantAccountId: merchantAccountId },
-        function (localPaymentError, paymentInstance) {
-          if (localPaymentError) {
-            isLoading(false);
-            notify("Error", localPaymentError.message);
-            return;
-          }
-          setLocalPaymentInstance(paymentInstance);
+  useEffect(() => {
+    braintreeClient.create(
+      {
+        authorization: clientToken,
+      },
+      function (clientError, clientInstance) {
+        isLoading(true);
+        if (clientError) {
           isLoading(false);
+          notify("Error", clientError.message);
+          return;
         }
-      );
-    }
-  );
+        localPayment.create(
+          { client: clientInstance, authorization: clientToken }, //@todo docs mention using merchant id in case you need different merchants for different currencies
+          function (localPaymentError, paymentInstance) {
+            if (localPaymentError) {
+              isLoading(false);
+              notify("Error", localPaymentError.message);
+              return;
+            }
+            setLocalPaymentInstance(paymentInstance);
+            isLoading(false);
+          }
+        );
+      }
+    );
+  }, [clientToken, merchantAccountId]);
+
   return (
     <>
       <button

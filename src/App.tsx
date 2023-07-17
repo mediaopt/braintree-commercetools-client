@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
 
-import { LocalPaymentBancontactType, LocalPaymentP24Type } from "./types";
 import { CreditCard } from "./components/CreditCard";
 import { GooglePay } from "./components/GooglePay";
 import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
 import { ACH } from "./components/ACH";
-import { LocalPaymentMethod } from "./components/LocalPaymentMethods";
+import { Bancontact, P24, Sofort } from "./components/LocalPaymentMethods";
 
 import {
   ButtonColorOption,
@@ -59,8 +58,12 @@ function App() {
     cartInformation: cartInformation,
   };
 
-  const Bancontact = LocalPaymentMethod as LocalPaymentBancontactType;
-  const P24 = LocalPaymentMethod as LocalPaymentP24Type;
+  const localPaymentParams = {
+    fallbackUrl: "/test",
+    fallbackButtonText: "purchase",
+    merchantAccountId: "kr4txbybddqkgs84",
+  };
+
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
     CreditCard: <CreditCard {...params} enableVaulting={true} />,
@@ -104,19 +107,28 @@ function App() {
     Bancontact: (
       <Bancontact
         {...params}
+        {...localPaymentParams}
         currencyCode={"EUR"}
         countryCode={"BE"}
         paymentType={"bancontact"}
-        merchantAccountId={"test"}
       />
     ),
     P24: (
       <P24
         {...params}
-        currencyCode={["EUR", "PL"]}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
         paymentType={"p24"}
         countryCode={"PL"}
-        merchantAccountId={"test"}
+      />
+    ),
+    Sofort: (
+      <Sofort
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        paymentType={"sofort"}
+        countryCode={"DE"}
       />
     ),
   };
