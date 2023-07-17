@@ -22,6 +22,8 @@ import {
   renderMaskButtonClasses,
 } from "../../styles";
 
+import { getAchVaultToken } from "../../services/getAchVaultToken";
+
 type AccountType = "" | "checking" | "savings";
 type OwnershipType = "" | "personal" | "business";
 type BankDetails = {
@@ -50,8 +52,10 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   buttonText,
   cartInformation,
   mandateText,
+  getAchVaultTokenURL,
 }: ACHMaskProps) => {
-  const { handlePurchase, clientToken } = usePayment();
+  const { handlePurchase, clientToken, sessionKey, sessionValue } =
+    usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
 
@@ -167,7 +171,10 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
                 bankDetails: bankDetails,
                 mandateText: mandateText,
               },
-              function (tokenizeErr?: BraintreeError, tokenizedPayload?: any) {
+              async function (
+                tokenizeErr?: BraintreeError,
+                tokenizedPayload?: any
+              ) {
                 if (tokenizeErr) {
                   notify(
                     "Error",
@@ -177,15 +184,39 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
                   throw tokenizeErr;
                 }
 
-                handlePurchase(tokenizedPayload.nonce, {
-                  deviceData: deviceData,
-                });
+                const vaultResponse = await getAchVaultToken(
+                  sessionKey,
+                  sessionValue,
+                  getAchVaultTokenURL,
+                  tokenizedPayload.nonce
+                );
+
+                const { token: vaultToken, verified: vaultVerified } =
+                  vaultResponse || {};
+
+                if (
+                  vaultResponse &&
+                  vaultToken &&
+                  vaultResponse.status === true &&
+                  vaultVerified === true
+                ) {
+                  handlePurchase(vaultToken, {
+                    deviceData: deviceData,
+                  });
+                } else if (vaultVerified === false) {
+                  notify("Error", "Bank account is not verified");
+                } else {
+                  notify(
+                    "Error",
+                    vaultResponse?.message ??
+                      "There is an error in ACH transaction"
+                  );
+                }
+                isLoading(false);
               }
             );
           }
         );
-
-        isLoading(false);
       }
     );
   };

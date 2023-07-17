@@ -14,9 +14,9 @@ import {
   FlowType,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhN2ZkYzYxYi1kZWMzLTQ1ZTQtYmJmMy00MGJkNDY0OWVmOGYifQ.nGKBe6hlffxpdPKs8NSqvH2PjtEmcQwsqZsWuBQxkNY";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiNzVmM2Y2MDAtMjg5Mi00MTZkLTk3ZDgtYzA2NzU1YTYxMjBlIiwiY2FydElkIjoiOGEwMTRiMDItYjM4Ny00MjI5LWI3M2ItZjQ0YmI1NzFhMzE0In0.MnYKDeBgrnCWuTSIeuBE4x1ci5sAMG5L-KWOsGQBbcY";
 
 function App() {
   const cartInformation = {
@@ -94,6 +94,7 @@ function App() {
     ACH: (
       <ACH
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
+        getAchVaultTokenURL={`https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getAchVaultToken`}
         {...params}
       />
     ),

@@ -32,6 +32,8 @@ type PaymentContextT = {
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
   handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
+  sessionKey: string;
+  sessionValue: string;
 };
 
 const PaymentInfoInitialObject = {
@@ -42,6 +44,8 @@ const PaymentInfoInitialObject = {
   lineItems: [],
   shippingMethod: {},
   cartInformation: CartInformationInitial,
+  sessionKey: "",
+  sessionValue: "",
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -55,6 +59,8 @@ const PaymentContext = createContext<PaymentContextT>({
     new Promise<FetchPaymentMethodsPayload[]>(
       (resolve) => [] as FetchPaymentMethodsPayload[]
     ),
+  sessionKey: "",
+  sessionValue: "",
 });
 
 export const PaymentProvider: FC<
@@ -211,6 +217,8 @@ export const PaymentProvider: FC<
       paymentInfo,
       vaultedPaymentMethods,
       handleGetVaultedPaymentMethods,
+      sessionValue,
+      sessionKey,
     };
   }, [clientToken, gettingClientToken]);
 
