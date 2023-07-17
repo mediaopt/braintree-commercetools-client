@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./App.css";
 
+import { LocalPaymentBancontactType, LocalPaymentP24Type } from "./types";
 import { CreditCard } from "./components/CreditCard";
 import { GooglePay } from "./components/GooglePay";
 import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
 import { ACH } from "./components/ACH";
+import { LocalPaymentMethod } from "./components/LocalPaymentMethods";
 
 import {
   ButtonColorOption,
@@ -16,7 +18,7 @@ import {
 
 const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhN2ZkYzYxYi1kZWMzLTQ1ZTQtYmJmMy00MGJkNDY0OWVmOGYifQ.nGKBe6hlffxpdPKs8NSqvH2PjtEmcQwsqZsWuBQxkNY";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI0MzE1YmY4Mi1lMTQzLTQzZTUtOGEyNi1mNjY1YjQ2ZWE4NTIifQ.orcqtWR4RJaWACM_1T2_nLclkncbWW6wbYJVJfUx3z8";
 
 function App() {
   const cartInformation = {
@@ -57,6 +59,8 @@ function App() {
     cartInformation: cartInformation,
   };
 
+  const Bancontact = LocalPaymentMethod as LocalPaymentBancontactType;
+  const P24 = LocalPaymentMethod as LocalPaymentP24Type;
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
     CreditCard: <CreditCard {...params} enableVaulting={true} />,
@@ -95,6 +99,24 @@ function App() {
       <ACH
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
         {...params}
+      />
+    ),
+    Bancontact: (
+      <Bancontact
+        {...params}
+        currencyCode={"EUR"}
+        countryCode={"BE"}
+        paymentType={"bancontact"}
+        merchantAccountId={"test"}
+      />
+    ),
+    P24: (
+      <P24
+        {...params}
+        currencyCode={["EUR", "PL"]}
+        paymentType={"p24"}
+        countryCode={"PL"}
+        merchantAccountId={"test"}
       />
     ),
   };

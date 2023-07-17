@@ -1,0 +1,1 @@
+export { LocalPaymentMethod } from "./LocalPaymentMethod";

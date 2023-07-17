@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ButtonColorOption,
   ButtonLabelOption,
@@ -178,3 +179,74 @@ export type GeneralCreditCardProps = {
   email?: string;
   enableVaulting?: boolean;
 };
+
+export type LocalPaymentMethodsType = {
+  paymentType: any;
+  countryCode: any;
+  currencyCode: any;
+  merchantAccountId: string;
+};
+
+type LocalPaymentBancontact = {
+  paymentType: "bancontact";
+  countryCode: "BE";
+  currencyCode: "EUR";
+  merchantAccountId: string;
+};
+
+type LocalPaymentBLIK = {
+  paymentType: "blik";
+  countryCode: "PL";
+  currencyCode: "PLN";
+  merchantAccountId: string;
+};
+type LocalPaymentEPS = {
+  paymentType: "eps";
+  countryCode: "AT";
+  currencyCode: "EUR";
+  merchantAccountId: string;
+};
+type LocalPaymentGiropay = {
+  paymentType: "giropay";
+  countryCode: "DE";
+  currencyCode: "EUR";
+  merchantAccountId: string;
+};
+type LocalPaymentGrabpay = {
+  paymentType: "grabpay";
+  countryCode: "SG";
+  currencyCode: "SGD";
+  merchantAccountId: string;
+};
+type LocalPaymentIdeal = {
+  paymentType: "ideal";
+  countryCode: "NL";
+  currencyCode: "EUR";
+  merchantAccountId: string;
+};
+type LocalPaymentSofort = {
+  paymentType: "sofort";
+  countryCode: "AT" | "BE" | "DE" | "IT" | "NL" | "ES" | "GB";
+  currencyCode: "EUR" | "GBP";
+  merchantAccountId: string;
+};
+type LocalPaymentMyBank = {
+  paymentType: "mybank";
+  countryCode: "IT";
+  currencyCode: "EUR";
+  merchantAccountId: string;
+};
+type LocalPaymentP24 = {
+  paymentType: "p24";
+  countryCode: "PL";
+  currencyCode: "EUR" | "PL";
+  merchantAccountId: string;
+};
+
+export type LocalPaymentBancontactType = React.FC<
+  GeneralComponentsProps & LocalPaymentBancontact
+>;
+
+export type LocalPaymentP24Type = React.FC<
+  GeneralComponentsProps & LocalPaymentP24
+>;
