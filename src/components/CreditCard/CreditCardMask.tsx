@@ -356,7 +356,7 @@ export const CreditCardMask: React.FC<
               })}
             </>
 
-            <label className={`${HOSTED_FIELDS_LABEL} mt-2`}>
+            <label className={`${HOSTED_FIELDS_LABEL} mt-2 mb-2`}>
               <input
                 type="radio"
                 name="select-credit-card"
