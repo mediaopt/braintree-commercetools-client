@@ -2,6 +2,8 @@ import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
+  Intent,
+  LineItem,
 } from "paypal-checkout-components";
 import {
   ThreeDSecureAdditionalInformation,
@@ -102,6 +104,25 @@ export type PayPalProps = {
   buttonLabel: ButtonLabelOption;
   payLater?: boolean;
   payLaterButtonColor?: ButtonColorOption;
+  locale?: string;
+  intent?: Intent;
+  commit?: boolean;
+  enableShippingAddress?: boolean;
+  shippingAddressEditable?: boolean;
+  paypalLineItem?: LineItem[];
+  billingAgreementDescription?: string;
+  shippingAddressOverride?: ShippingAddressOverride;
+};
+
+export type ShippingAddressOverride = {
+  recipientName: string;
+  line1?: string;
+  line2?: string;
+  city?: string;
+  countryCode?: string;
+  postalCode?: string;
+  state?: string;
+  phone?: string;
 };
 
 export const CartInformationInitial: CartInformation = {
