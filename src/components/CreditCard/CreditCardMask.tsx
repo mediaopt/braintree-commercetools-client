@@ -433,7 +433,7 @@ export const CreditCardMask: React.FC<
 
           {enableVaulting && (
             <>
-              <label className={HOSTED_FIELDS_LABEL}>
+              <label className={`${HOSTED_FIELDS_LABEL} mb-2`}>
                 <input className="mr-3" ref={ccVaultCheckbox} type="checkbox" />
                 Save my card
               </label>
