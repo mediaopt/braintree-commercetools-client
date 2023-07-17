@@ -317,13 +317,13 @@ export const CreditCardMask: React.FC<
     <>
       <>
         {!!limitedVaultedPayments.length && (
-          <>
-            <div className="grid gap-10 grid-cols-1 md:grid-cols-3">
+          <div className="block mt-4">
+            <>
               {limitedVaultedPayments.map((vaultedMethod, index) => {
                 return (
                   <div
                     key={index}
-                    className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded"
+                    className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded mt-4"
                   >
                     <input
                       className="w-3 justify-self-center"
@@ -354,17 +354,19 @@ export const CreditCardMask: React.FC<
                   </div>
                 );
               })}
-            </div>
-            <label className={HOSTED_FIELDS_LABEL}>
+            </>
+
+            <label className={`${HOSTED_FIELDS_LABEL} mt-2`}>
               <input
                 type="radio"
                 name="select-credit-card"
                 value="new"
                 onChange={changeCard}
+                className="mr-2"
               />
               new credit card
             </label>
-          </>
+          </div>
         )}
       </>
       <div
