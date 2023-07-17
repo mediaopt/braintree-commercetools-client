@@ -80,6 +80,8 @@ In addition, each payment component comes with its own specific properties.
    An optional [additionalInformation](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~additionalInformation) object for verification.
 - **email**: `string`  
    Customers email address.
+- **enableVaulting**: `boolean`  
+   Displays a checkbox enabling the customer to store their card information in braintree.
 
 ### GooglePay
 
