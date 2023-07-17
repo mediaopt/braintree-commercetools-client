@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { client as braintreeClient, paypalCheckout } from "braintree-web";
+import {
+  client as braintreeClient,
+  paypalCheckout,
+  dataCollector,
+} from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
@@ -21,6 +25,14 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   buttonColor,
   payLater,
   payLaterButtonColor,
+  locale,
+  intent,
+  commit,
+  enableShippingAddress,
+  paypalLineItem,
+  billingAgreementDescription,
+  shippingAddressEditable,
+  shippingAddressOverride,
 }) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -72,65 +84,87 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
           {
             client: clientInstance,
           },
-          function (paypalCheckoutErr, paypalCheckoutInstance) {
+          (paypalCheckoutErr, paypalCheckoutInstance) => {
             if (paypalCheckoutErr) {
               isLoading(false);
               notify("Error", "Error in paypal checkout.");
               return;
             }
 
-            paypalCheckoutInstance.loadPayPalSDK(
+            dataCollector.create(
               {
-                currency: paymentInfo.currency,
-                intent: "capture",
-                ...enableFunding,
+                client: clientInstance,
+                paypal: true,
               },
-              function () {
-                const paypal = global.paypal;
+              (dataCollectorErr, dataCollectorInstance) => {
+                if (dataCollectorErr) {
+                  isLoading(false);
+                  notify("Error", "Error in data collector for PayPal.");
+                  return;
+                }
 
-                FUNDING_SOURCES.forEach((fundingSource) => {
-                  paypal
-                    .Buttons({
-                      style: {
-                        label: fundingButtonConfigs[fundingSource].buttonLabel,
-                        color: fundingButtonConfigs[fundingSource].buttonColor,
-                      },
-                      fundingSource: fundingSource,
-                      createOrder: function () {
-                        return paypalCheckoutInstance.createPayment({
-                          flow: flow,
+                paypalCheckoutInstance.loadPayPalSDK(
+                  {
+                    currency: paymentInfo.currency,
+                    intent: intent,
+                    ...enableFunding,
+                  },
+                  () => {
+                    const paypal = global.paypal;
 
-                          amount: paymentInfo.amount,
-                          currency: paymentInfo.currency,
+                    FUNDING_SOURCES.forEach((fundingSource) => {
+                      paypal
+                        .Buttons({
+                          style: {
+                            label:
+                              fundingButtonConfigs[fundingSource].buttonLabel,
+                            color:
+                              fundingButtonConfigs[fundingSource].buttonColor,
+                          },
+                          fundingSource: fundingSource,
+                          createOrder: () => {
+                            return paypalCheckoutInstance.createPayment({
+                              flow: flow,
+                              locale: locale,
+                              amount: paymentInfo.amount,
+                              currency: paymentInfo.currency,
+                              intent: intent,
+                              commit: commit,
+                              enableShippingAddress: enableShippingAddress,
+                              shippingAddressEditable: shippingAddressEditable,
+                              paypalLineItem: paypalLineItem,
+                              billingAgreementDescription:
+                                billingAgreementDescription,
+                              shippingAddressOverride: shippingAddressOverride,
+                            });
+                          },
 
-                          intent: "capture",
+                          onApprove: (data: any, actions: any) => {
+                            return paypalCheckoutInstance.tokenizePayment(
+                              data,
+                              function (err: any, payload: any) {
+                                handlePurchase(payload.nonce, {
+                                  deviceData:
+                                    dataCollectorInstance?.deviceData ?? false,
+                                });
+                              }
+                            );
+                          },
 
-                          enableShippingAddress: true,
-                          shippingAddressEditable: false,
-                        });
-                      },
+                          onCancel: (data) => {
+                            notify("Info", "PayPal payment cancelled.");
+                          },
 
-                      onApprove: function (data: any, actions: any) {
-                        return paypalCheckoutInstance.tokenizePayment(
-                          data,
-                          function (err: any, payload: any) {
-                            handlePurchase(payload.nonce);
-                          }
-                        );
-                      },
+                          onError: (err) => {
+                            notify("Info", "PayPal payment cancelled.");
+                          },
+                        })
+                        .render("#paypal-button");
+                    });
 
-                      onCancel: function (data) {
-                        notify("Info", "PayPal payment cancelled.");
-                      },
-
-                      onError: function (err) {
-                        notify("Info", "PayPal payment cancelled.");
-                      },
-                    })
-                    .render("#paypal-button");
-                });
-
-                isLoading(false);
+                    isLoading(false);
+                  }
+                );
               }
             );
           }
@@ -146,6 +180,15 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     notify,
     payLater,
     payLaterButtonColor,
+    commit,
+    enableShippingAddress,
+    intent,
+    isLoading,
+    locale,
+    paypalLineItem,
+    billingAgreementDescription,
+    shippingAddressEditable,
+    shippingAddressOverride,
   ]);
 
   return <div id="paypal-button"></div>;

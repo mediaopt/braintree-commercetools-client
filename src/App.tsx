@@ -7,16 +7,20 @@ import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
 import { ACH } from "./components/ACH";
+import { ShippingAddressOverride } from "./types";
 
 import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
+  Intent,
+  LineItem,
+  LineItemKind,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhN2ZkYzYxYi1kZWMzLTQ1ZTQtYmJmMy00MGJkNDY0OWVmOGYifQ.nGKBe6hlffxpdPKs8NSqvH2PjtEmcQwsqZsWuBQxkNY";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI5NmRlODE0YS1jMzc4LTRkOTktOWFkMi0zODA5YzgzZjllYzQifQ.dCmmJoHzK9U0lQac1-_hWCEOGaDRR3iMRJYGKNZW-eI";
 
 function App() {
   const cartInformation = {
@@ -57,6 +61,39 @@ function App() {
     cartInformation: cartInformation,
   };
 
+  const paypalLineItemUndefinedValues = {
+    unitTaxAmount: undefined,
+    description: undefined,
+    productCode: undefined,
+    url: undefined,
+  };
+  const paypalLineItem: LineItem[] = [
+    {
+      quantity: "10",
+      unitAmount: "100.00",
+      name: "test name",
+      kind: "debit" as LineItemKind,
+      ...paypalLineItemUndefinedValues,
+    },
+    {
+      quantity: "10",
+      unitAmount: "100.00",
+      name: "test name",
+      kind: "debit" as LineItemKind,
+      ...paypalLineItemUndefinedValues,
+    },
+  ];
+  const paypalShippingAddressOverride: ShippingAddressOverride = {
+    recipientName: "Scruff McGruff",
+    line1: "1234 Main St.",
+    line2: "Unit 1",
+    city: "Chicago",
+    countryCode: "US",
+    postalCode: "60652",
+    state: "IL",
+    phone: "123.456.7890",
+  };
+
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
     CreditCard: <CreditCard {...params} enableVaulting={true} />,
@@ -67,6 +104,14 @@ function App() {
         buttonLabel={"pay" as ButtonLabelOption}
         payLater={true}
         payLaterButtonColor={"blue" as ButtonColorOption}
+        locale="en_GB"
+        intent={"capture" as Intent}
+        commit={true}
+        enableShippingAddress={true}
+        shippingAddressEditable={false}
+        paypalLineItem={paypalLineItem}
+        billingAgreementDescription="Your agreement description"
+        shippingAddressOverride={paypalShippingAddressOverride}
         {...params}
       />
     ),
