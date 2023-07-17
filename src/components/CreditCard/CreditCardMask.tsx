@@ -317,7 +317,7 @@ export const CreditCardMask: React.FC<
     <>
       <>
         {!!limitedVaultedPayments.length && (
-          <div className="block mt-4">
+          <div className="block w-full">
             <>
               {limitedVaultedPayments.map((vaultedMethod, index) => {
                 return (
