@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   client as braintreeClient,
   paypalCheckout,
   dataCollector,
 } from "braintree-web";
+import { FlowType } from "paypal-checkout-components";
 
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
@@ -15,7 +16,18 @@ import {
   PayPalFundingSourcesProp,
 } from "../../types";
 
+import { HOSTED_FIELDS_LABEL, renderMaskButtonClasses } from "../../styles";
+
 type PayPalMaskProps = GeneralPayButtonProps & PayPalProps;
+
+type LimitedVaultedPaymentDetails = {
+  email: string;
+};
+
+type LimitedVaultedPayment = {
+  nonce: string;
+  details: LimitedVaultedPaymentDetails;
+};
 
 const FUNDING_SOURCES = ["paypal"];
 
@@ -33,13 +45,44 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   billingAgreementDescription,
   shippingAddressEditable,
   shippingAddressOverride,
+  fullWidth,
+  buttonText,
 }) => {
-  const { handlePurchase, paymentInfo, clientToken } = usePayment();
+  const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
+    LimitedVaultedPayment[]
+  >([]);
+  const [selectedAccount, setSelectedAccount] = useState("");
+  const [deviceData, setDeviceData] = useState("");
+
+  const {
+    handlePurchase,
+    paymentInfo,
+    clientToken,
+    handleGetVaultedPaymentMethods,
+  } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
 
   useEffect(() => {
+    const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
+    handleGetVaultedPaymentMethods().then((paymentMethods) => {
+      paymentMethods.forEach((paymentMethod) => {
+        if (paymentMethod.type === "PayPalAccount") {
+          filteredPaymentMethods.push({
+            nonce: paymentMethod.nonce,
+            details: paymentMethod.details as LimitedVaultedPaymentDetails,
+          });
+        }
+      });
+      setLimitedVaultedPaymentMethods(filteredPaymentMethods);
+    });
+  }, [clientToken]);
+
+  useEffect(() => {
     isLoading(true);
+
+    const isVault: boolean = flow === ("vault" as FlowType);
+
     const additionalFundingSources: PayPalFundingSourcesProp = {};
     if (payLater) {
       additionalFundingSources["paylater"] = {
@@ -49,6 +92,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     const additionalFundingMethods = Object.keys(
       additionalFundingSources ?? {}
     );
+
     additionalFundingMethods.map((additionalFundingMethod) => {
       if (!FUNDING_SOURCES.includes(additionalFundingMethod)) {
         FUNDING_SOURCES.push(additionalFundingMethod);
@@ -80,6 +124,18 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
           return;
         }
 
+        dataCollector.create(
+          {
+            client: clientInstance,
+            paypal: true,
+          },
+          function (dataCollectorErr, dataCollectorInstance) {
+            if (!dataCollectorErr && dataCollectorInstance) {
+              setDeviceData(dataCollectorInstance.deviceData);
+            }
+          }
+        );
+
         paypalCheckout.create(
           {
             client: clientInstance,
@@ -91,80 +147,94 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
               return;
             }
 
-            dataCollector.create(
-              {
-                client: clientInstance,
-                paypal: true,
-              },
-              (dataCollectorErr, dataCollectorInstance) => {
-                if (dataCollectorErr) {
-                  isLoading(false);
-                  notify("Error", "Error in data collector for PayPal.");
-                  return;
-                }
-
-                paypalCheckoutInstance.loadPayPalSDK(
-                  {
+            paypalCheckoutInstance.loadPayPalSDK(
+              isVault
+                ? { vault: true }
+                : {
                     currency: paymentInfo.currency,
                     intent: intent,
                     ...enableFunding,
                   },
-                  () => {
-                    const paypal = global.paypal;
+              () => {
+                const paypal = global.paypal;
 
-                    FUNDING_SOURCES.forEach((fundingSource) => {
-                      paypal
-                        .Buttons({
-                          style: {
-                            label:
-                              fundingButtonConfigs[fundingSource].buttonLabel,
-                            color:
-                              fundingButtonConfigs[fundingSource].buttonColor,
-                          },
-                          fundingSource: fundingSource,
-                          createOrder: () => {
-                            return paypalCheckoutInstance.createPayment({
-                              flow: flow,
-                              locale: locale,
-                              amount: paymentInfo.amount,
-                              currency: paymentInfo.currency,
-                              intent: intent,
-                              commit: commit,
-                              enableShippingAddress: enableShippingAddress,
-                              shippingAddressEditable: shippingAddressEditable,
-                              paypalLineItem: paypalLineItem,
-                              billingAgreementDescription:
-                                billingAgreementDescription,
-                              shippingAddressOverride: shippingAddressOverride,
-                            });
-                          },
+                const handleOnApprove = (data: any, actions: any) => {
+                  return paypalCheckoutInstance.tokenizePayment(
+                    data,
+                    function (err: any, payload: any) {
+                      handlePurchase(payload.nonce, {
+                        deviceData: deviceData,
+                      });
+                    }
+                  );
+                };
+                const handleOnClose = (data: any) => {
+                  notify("Info", "PayPal payment cancelled.");
+                };
+                const handleOnError = (err: any) => {
+                  notify("Info", "PayPal payment cancelled.");
+                };
 
-                          onApprove: (data: any, actions: any) => {
-                            return paypalCheckoutInstance.tokenizePayment(
-                              data,
-                              function (err: any, payload: any) {
-                                handlePurchase(payload.nonce, {
-                                  deviceData:
-                                    dataCollectorInstance?.deviceData ?? false,
-                                });
-                              }
-                            );
-                          },
+                if (isVault) {
+                  paypal
+                    .Buttons({
+                      style: {
+                        label: buttonLabel,
+                        color: buttonColor,
+                      },
+                      fundingSource: "paypal",
+                      createBillingAgreement: function () {
+                        return paypalCheckoutInstance.createPayment({
+                          flow: flow,
+                          billingAgreementDescription:
+                            billingAgreementDescription,
+                          enableShippingAddress: enableShippingAddress,
+                          shippingAddressEditable: shippingAddressEditable,
+                          shippingAddressOverride: shippingAddressOverride,
+                        });
+                      },
 
-                          onCancel: (data) => {
-                            notify("Info", "PayPal payment cancelled.");
-                          },
+                      onApprove: handleOnApprove,
+                      onCancel: handleOnClose,
+                      onError: handleOnError,
+                    })
+                    .render("#paypal-button");
+                } else {
+                  FUNDING_SOURCES.forEach((fundingSource) => {
+                    paypal
+                      .Buttons({
+                        style: {
+                          label:
+                            fundingButtonConfigs[fundingSource].buttonLabel,
+                          color:
+                            fundingButtonConfigs[fundingSource].buttonColor,
+                        },
+                        fundingSource: fundingSource,
+                        createOrder: () => {
+                          return paypalCheckoutInstance.createPayment({
+                            flow: flow,
+                            locale: locale,
+                            amount: paymentInfo.amount,
+                            currency: paymentInfo.currency,
+                            intent: intent,
+                            commit: commit,
+                            enableShippingAddress: enableShippingAddress,
+                            shippingAddressEditable: shippingAddressEditable,
+                            paypalLineItem: paypalLineItem,
+                            billingAgreementDescription:
+                              billingAgreementDescription,
+                            shippingAddressOverride: shippingAddressOverride,
+                          });
+                        },
 
-                          onError: (err) => {
-                            notify("Info", "PayPal payment cancelled.");
-                          },
-                        })
-                        .render("#paypal-button");
-                    });
-
-                    isLoading(false);
-                  }
-                );
+                        onApprove: handleOnApprove,
+                        onCancel: handleOnClose,
+                        onError: handleOnError,
+                      })
+                      .render("#paypal-button");
+                  });
+                }
+                isLoading(false);
               }
             );
           }
@@ -191,5 +261,66 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     shippingAddressOverride,
   ]);
 
-  return <div id="paypal-button"></div>;
+  const changeAccount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSelectedAccount(value);
+  };
+
+  const handleVaultedPurchase = async () => {
+    isLoading(true);
+    await handlePurchase(selectedAccount, {
+      deviceData: deviceData,
+    });
+    isLoading(false);
+  };
+
+  return (
+    <>
+      {!!limitedVaultedPayments.length && (
+        <div className="block w-full">
+          {limitedVaultedPayments.map((vaultedMethod, index) => {
+            return (
+              <div
+                key={index}
+                className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded my-4"
+              >
+                <input
+                  className="w-3 justify-self-center"
+                  id={`credit-card-${index}`}
+                  type="radio"
+                  name="select-credit-card"
+                  value={vaultedMethod.nonce}
+                  onChange={changeAccount}
+                />
+                <label
+                  htmlFor={`credit-card-${index}`}
+                  className="cursor-pointer w-full"
+                >
+                  <span className={HOSTED_FIELDS_LABEL}>
+                    {vaultedMethod.details.email}
+                  </span>
+                </label>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {selectedAccount !== "" && (
+        <div>
+          <button
+            onClick={handleVaultedPurchase}
+            className={`${renderMaskButtonClasses(
+              fullWidth ?? false,
+              true,
+              false
+            )} mb-5`}
+          >
+            {buttonText}
+          </button>
+        </div>
+      )}
+      {selectedAccount === "" && <div id="paypal-button"></div>}
+    </>
+  );
 };
