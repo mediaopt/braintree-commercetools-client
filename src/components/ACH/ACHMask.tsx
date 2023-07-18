@@ -78,6 +78,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
   >([]);
+  const [selectedAccount, setSelectedAccount] = useState("");
   const [showVaultedAccounts, setShowVaultedAccounts] = useState(true);
   const [showVaultForm, setShowVaultForm] = useState(false);
   const [showVaultedMessage, setShowVaultedMessage] = useState(false);
@@ -89,7 +90,6 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   const [businessName, setBusinessName] = useState<string>("");
 
   const [deviceData, setDeviceData] = useState("");
-  const [selectedAccount, setSelectedAccount] = useState("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [streetAddress, setStreetAddress] = useState<string>("");
@@ -127,7 +127,6 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   useEffect(() => {
     const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
     handleGetVaultedPaymentMethods().then((paymentMethods) => {
-      console.log(paymentMethods);
       paymentMethods.forEach((paymentMethod) => {
         if (paymentMethod.type === "UsBankAccount") {
           filteredPaymentMethods.push({
