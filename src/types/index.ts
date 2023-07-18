@@ -189,7 +189,10 @@ export type LoadingOverlayType = {
   textStyles?: string;
 };
 
-export type GeneralACHProps = { mandateText: string };
+export type GeneralACHProps = {
+  mandateText: string;
+  getAchVaultTokenURL: string;
+};
 
 export type GeneralCreditCardProps = {
   showPostalCode?: boolean;
@@ -198,4 +201,13 @@ export type GeneralCreditCardProps = {
   threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
   email?: string;
   enableVaulting?: boolean;
+};
+
+export type AchVaultRequest = { paymentMethodNonce: string };
+
+export type AchVaultResponse = {
+  status: boolean;
+  token?: string;
+  message?: string;
+  verified?: boolean;
 };

@@ -32,6 +32,8 @@ type PaymentContextT = {
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
   handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
+  sessionKey: string;
+  sessionValue: string;
   braintreeCustomerId: string;
 };
 
@@ -43,6 +45,8 @@ const PaymentInfoInitialObject = {
   lineItems: [],
   shippingMethod: {},
   cartInformation: CartInformationInitial,
+  sessionKey: "",
+  sessionValue: "",
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -56,6 +60,8 @@ const PaymentContext = createContext<PaymentContextT>({
     new Promise<FetchPaymentMethodsPayload[]>(
       (resolve) => [] as FetchPaymentMethodsPayload[]
     ),
+  sessionKey: "",
+  sessionValue: "",
   braintreeCustomerId: "",
 });
 
@@ -215,6 +221,8 @@ export const PaymentProvider: FC<
       paymentInfo,
       vaultedPaymentMethods,
       handleGetVaultedPaymentMethods,
+      sessionValue,
+      sessionKey,
       braintreeCustomerId,
     };
   }, [clientToken, gettingClientToken]);
