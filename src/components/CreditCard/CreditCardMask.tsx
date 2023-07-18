@@ -39,8 +39,12 @@ export const CreditCardMask: React.FC<
   showCardHoldersName,
   enableVaulting,
 }) => {
-  const { handlePurchase, paymentInfo, handleGetVaultedPaymentMethods } =
-    usePayment();
+  const {
+    handlePurchase,
+    paymentInfo,
+    handleGetVaultedPaymentMethods,
+    braintreeCustomerId,
+  } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
@@ -431,7 +435,7 @@ export const CreditCardMask: React.FC<
           </label>
           <div ref={ccCvvRef} id="cvv" className={`${HOSTED_FIELDS} p-3`}></div>
 
-          {enableVaulting && (
+          {enableVaulting && braintreeCustomerId && (
             <>
               <label className={`${HOSTED_FIELDS_LABEL} mb-2`}>
                 <input className="mr-3" ref={ccVaultCheckbox} type="checkbox" />
