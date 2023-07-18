@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Intent } from "paypal-checkout-components";
+
 import { RenderTemplate } from "../RenderTemplate";
 import { isPayButtonDisabled } from "../PayButton";
 
@@ -24,6 +26,14 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   buttonText,
   payLater,
   payLaterButtonColor,
+  locale = "en_GB",
+  intent = "capture" as Intent,
+  commit = true,
+  enableShippingAddress = true,
+  shippingAddressEditable = false,
+  paypalLineItem,
+  billingAgreementDescription = "",
+  shippingAddressOverride,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -44,6 +54,14 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         buttonLabel={buttonLabel}
         payLater={payLater}
         payLaterButtonColor={payLaterButtonColor}
+        locale={locale}
+        intent={intent}
+        commit={commit}
+        enableShippingAddress={enableShippingAddress}
+        paypalLineItem={paypalLineItem}
+        billingAgreementDescription={billingAgreementDescription}
+        shippingAddressEditable={shippingAddressEditable}
+        shippingAddressOverride={shippingAddressOverride}
       />
     </RenderTemplate>
   );

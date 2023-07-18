@@ -321,13 +321,13 @@ export const CreditCardMask: React.FC<
     <>
       <>
         {!!limitedVaultedPayments.length && (
-          <>
-            <div className="grid gap-10 grid-cols-1 md:grid-cols-3">
+          <div className="block w-full">
+            <>
               {limitedVaultedPayments.map((vaultedMethod, index) => {
                 return (
                   <div
                     key={index}
-                    className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded"
+                    className="flex gap-x-5 justify-start content-center border p-2 border-gray-300 rounded mt-4"
                   >
                     <input
                       className="w-3 justify-self-center"
@@ -358,17 +358,19 @@ export const CreditCardMask: React.FC<
                   </div>
                 );
               })}
-            </div>
-            <label className={HOSTED_FIELDS_LABEL}>
+            </>
+
+            <label className={`${HOSTED_FIELDS_LABEL} mt-2 mb-2`}>
               <input
                 type="radio"
                 name="select-credit-card"
                 value="new"
                 onChange={changeCard}
+                className="mr-2"
               />
               new credit card
             </label>
-          </>
+          </div>
         )}
       </>
       <div
@@ -435,7 +437,7 @@ export const CreditCardMask: React.FC<
 
           {enableVaulting && braintreeCustomerId && (
             <>
-              <label className={HOSTED_FIELDS_LABEL}>
+              <label className={`${HOSTED_FIELDS_LABEL} mb-2`}>
                 <input className="mr-3" ref={ccVaultCheckbox} type="checkbox" />
                 Save my card
               </label>
