@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { hostedFields } from "braintree-web";
+import { hostedFields, dataCollector } from "braintree-web";
 import { ThreeDSecureVerifyOptions } from "braintree-web/modules/three-d-secure";
 
 import { useBraintreeClient } from "../../app/useBraintreeClient";
@@ -51,6 +51,7 @@ export const CreditCardMask: React.FC<
   const [showNewCreditCardForm, setShowNewCreditCardForm] = useState(false);
   const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
+  const [deviceData, setDeviceData] = useState("");
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
   >([]);
@@ -198,6 +199,19 @@ export const CreditCardMask: React.FC<
           }
           setInvalidInput(!isValid);
         });
+
+        dataCollector.create(
+          {
+            client: client,
+            paypal: true,
+          },
+          function (dataCollectorErr, dataCollectorInstance) {
+            if (!dataCollectorErr && dataCollectorInstance) {
+              setDeviceData(dataCollectorInstance.deviceData);
+            }
+          }
+        );
+
         var tokenize = function (event: any) {
           event.preventDefault();
 
@@ -238,6 +252,7 @@ export const CreditCardMask: React.FC<
                   if (response.threeDSecureInfo.liabilityShifted) {
                     handlePurchase(response.nonce, {
                       storeInVault: shouldVault,
+                      deviceData: deviceData,
                     });
                   } else if (response.threeDSecureInfo.liabilityShiftPossible) {
                     // @todo liability shift possible - Decide if you want to submit the nonce
@@ -288,7 +303,7 @@ export const CreditCardMask: React.FC<
 
   const submitVaultedCard = async () => {
     isLoading(true);
-    await handlePurchase(selectedCard);
+    await handlePurchase(selectedCard, { deviceData: deviceData });
     isLoading(false);
   };
 
