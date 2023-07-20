@@ -10,8 +10,8 @@ test("CreditCard is shown", () => {
 
 test("PayPal is shown", () => {
   render(<App />);
-  const linkElement = screen.getByText(/PayPal/i);
-  expect(linkElement).toBeInTheDocument();
+  const linkElement = screen.getAllByText(/PayPal/i);
+  expect(linkElement.length).toEqual(2);
 });
 
 test("GooglePay is shown", () => {
