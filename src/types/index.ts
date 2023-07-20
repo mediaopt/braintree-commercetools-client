@@ -27,7 +27,7 @@ export type GeneralComponentsProps = {
   getClientTokenUrl: string;
   sessionKey: string;
   sessionValue: string;
-  purchaseCallback: (result: any) => void;
+  purchaseCallback: (result: any, options?: any) => void;
 } & CartInformationProps &
   GeneralPayButtonProps;
 

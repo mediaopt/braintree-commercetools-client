@@ -20,7 +20,7 @@ import {
 
 const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50Ijp7ImFjY291bnRJZCI6IjgwZWRiOGQyLTBkYjEtNGY3NS1iMzllLWQwNzA3OWE5ZGQyNSIsImVtYWlsIjoibWFqaWQuYWJiYXNpQG1lZGlhb3B0LmRlIiwic2FsdXRhdGlvbiI6Im1yIiwiZmlyc3ROYW1lIjoiTWFqaWQiLCJsYXN0TmFtZSI6IkFiYmFzaSIsImJpcnRoZGF5IjoiMTk4OS0wMy0wNVQwMDowMDowMC4wMDBaIiwiY29uZmlybWVkIjp0cnVlLCJhZGRyZXNzZXMiOlt7ImFkZHJlc3NJZCI6IlhacXNmbmlUIiwiZmlyc3ROYW1lIjoiTWFqaWQiLCJsYXN0TmFtZSI6IkFiYmFzaSIsInN0cmVldE5hbWUiOiJIb2Noc3RyYVx1MDBkZmUgMzciLCJzdHJlZXROdW1iZXIiOiJIb2Noc3RyYVx1MDBkZmUgMzciLCJwb3N0YWxDb2RlIjoiMTMzNTciLCJjaXR5IjoiQmVybGluIiwiY291bnRyeSI6IkRFIiwicGhvbmUiOiIrOTk1NTk5MzU3NTYyIiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOnRydWUsImlzRGVmYXVsdFNoaXBwaW5nQWRkcmVzcyI6dHJ1ZX0seyJhZGRyZXNzSWQiOiI2SDdsR2J5MCIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJzdHJlZXROYW1lIjoiSG9jaHN0cmFcdTAwZGZlIDM3Iiwic3RyZWV0TnVtYmVyIjoiSG9jaHN0cmFcdTAwZGZlIDM3IiwicG9zdGFsQ29kZSI6IjEzMzU3IiwiY2l0eSI6IkZsb3JpZGEiLCJjb3VudHJ5IjoiVVMiLCJwaG9uZSI6Iis5OTU1OTkzNTc1NjIiLCJpc0RlZmF1bHRCaWxsaW5nQWRkcmVzcyI6ZmFsc2UsImlzRGVmYXVsdFNoaXBwaW5nQWRkcmVzcyI6ZmFsc2V9XX0sIndpc2hsaXN0SWQiOiJhOTAxYmQ1Yi1lY2E0LTQ1NWMtOWQyYy0yMzhmMTIxMmE1YjMiLCJjYXJ0SWQiOiI1NmY0ZWJkNi0yOGFjLTRlNGMtYjZiZS05ZWM3ZDJkYWExYmYifQ.b-wfBppq4mAx6YC4fo3rb4K17zyKszWV6rhryX9p_L4";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiMjQ2OWM3ZjYtZTQ4ZC00YjAyLThmMzQtMmNjYjZjZjQ0N2JlIiwiY2FydElkIjoiNDIzMWZlZmItNmZjYS00MGY2LWE1ZGItY2FkNDZlY2IyOWRhIn0.kc9MnC0KAUDEtUbW0bqc05pNfX2t3kOxWPVgsbDlEC0";
 
 function App() {
   const cartInformation = {
@@ -53,8 +53,8 @@ function App() {
     purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
     sessionKey: "frontastic-session",
     sessionValue: COFE_SESSION_VALUE,
-    purchaseCallback: (result: any) => {
-      console.log("Do something", result);
+    purchaseCallback: (result: any, options: any) => {
+      console.log("Do something", result, options);
     },
     fullWidth: true,
     buttonText: "Pay €X",
@@ -106,12 +106,20 @@ function App() {
         payLaterButtonColor={"blue" as ButtonColorOption}
         locale="en_GB"
         intent={"capture" as Intent}
+        {...params}
+      />
+    ),
+    PayPalPayNow: (
+      <PayPal
+        flow={"checkout" as FlowType}
+        buttonColor={"blue" as ButtonColorOption}
+        buttonLabel={"buynow" as ButtonLabelOption}
         commit={true}
+        payLater={false}
+        locale="en_GB"
+        intent={"capture" as Intent}
         enableShippingAddress={true}
         shippingAddressEditable={false}
-        paypalLineItem={paypalLineItem}
-        billingAgreementDescription="Your agreement description"
-        shippingAddressOverride={paypalShippingAddressOverride}
         {...params}
       />
     ),

@@ -164,6 +164,29 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                     function (err: any, payload: any) {
                       handlePurchase(payload.nonce, {
                         deviceData: deviceData,
+                        account: {
+                          email: payload.details.email,
+                        },
+                        billing: {
+                          firstName: payload.details.firstName,
+                          lastName: payload.details.lastName,
+                          streetName: payload.details.shippingAddress.line1,
+                          streetNumber: payload.details.shippingAddress.line1,
+                          city: payload.details.shippingAddress.city,
+                          country: payload.details.countryCode,
+                          postalCode:
+                            payload.details.shippingAddress.postalCode,
+                        },
+                        shipping: {
+                          firstName: payload.details.firstName,
+                          lastName: payload.details.lastName,
+                          streetName: payload.details.shippingAddress.line1,
+                          streetNumber: payload.details.shippingAddress.line1,
+                          city: payload.details.shippingAddress.city,
+                          country: payload.details.shippingAddress.countryCode,
+                          postalCode:
+                            payload.details.shippingAddress.postalCode,
+                        },
                       });
                     }
                   );
