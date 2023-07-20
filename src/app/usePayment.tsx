@@ -21,7 +21,7 @@ import { useLoader } from "./useLoader";
 
 type HandlePurchaseType = (
   paymentNonce: string,
-  options?: { [index: string]: string | boolean }
+  options?: { [index: string]: any }
 ) => void;
 
 type PaymentContextT = {
@@ -210,7 +210,10 @@ export const PaymentProvider: FC<
       setResultMessage(message);
 
       setShowResult(true);
-      if (purchaseCallback && success !== false) purchaseCallback(response);
+      if (purchaseCallback && success !== false) {
+        delete options?.deviceData;
+        purchaseCallback(response, options);
+      }
     };
 
     return {
