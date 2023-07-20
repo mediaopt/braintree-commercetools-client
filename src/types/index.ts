@@ -184,7 +184,7 @@ export type LocalPaymentMethodsType = {
   paymentType: any;
   countryCode: any;
   currencyCode: any;
-  merchantAccountId: string;
+  merchantAccountId?: string;
   shippingAddressRequired?: boolean;
   fallbackUrl: string;
   fallbackButtonText?: string;

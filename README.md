@@ -140,6 +140,18 @@ In addition, each payment component comes with its own specific properties.
 - **ignoreBowserSupport**: `boolean`  
   Venmo does check for browser support and won't load if it fails. You can ignore the check here. Useful for testing purposes, should not be used in production.
 
+
+### Local Payments  
+Local payments group together multiple region specific payment methods. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
+They accept the following props:  
+- **paymentType**: `any`
+- **countryCode**: `any`
+- **currencyCode**: `any`
+- **merchantAccountId**: `string` - optional
+- **shippingAddressRequired**: `boolean` - optional, defaults to false
+- **fallbackUrl**: `string`
+- **fallbackButtonText**: `string` - optional
+
 ## Available Scripts
 
 In the project directory, you can run:

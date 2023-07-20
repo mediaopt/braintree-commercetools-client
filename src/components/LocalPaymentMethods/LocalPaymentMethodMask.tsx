@@ -26,6 +26,7 @@ export const LocalPaymentMethodMask: React.FC<
   merchantAccountId,
   fallbackUrl,
   fallbackButtonText,
+  shippingAddressRequired,
 }: LocalPaymentMethodMaskType) => {
   const [localPaymentInstance, setLocalPaymentInstance] =
     useState<LocalPayment>();
@@ -51,12 +52,9 @@ export const LocalPaymentMethodMask: React.FC<
           url: fallbackUrl,
           buttonText: fallbackButtonText,
         },
-        email: "",
         paymentTypeCountryCode: countryCode,
         currencyCode: currencyCode,
-        address: {
-          countryCode: countryCode,
-        },
+        shippingAddressRequired: shippingAddressRequired,
         onPaymentStart: function (data, start) {
           //@todo we have to store the data.paymentId somewhere (on the server); BT recommends to map it to a cart identifier
           start();
@@ -64,6 +62,7 @@ export const LocalPaymentMethodMask: React.FC<
       },
       function (startPaymentError, payload) {
         if (startPaymentError) {
+          isLoading(false);
           if (startPaymentError.code === "LOCAL_PAYMENT_POPUP_CLOSED") {
             notify("Error", "Customer closed Local Payment popup.");
           } else {
@@ -73,10 +72,10 @@ export const LocalPaymentMethodMask: React.FC<
           if (payload) {
             handlePurchase(payload.nonce);
           } else {
+            isLoading(false);
             notify("Error", "No payload received");
           }
         }
-        isLoading(false);
       }
     );
   };
