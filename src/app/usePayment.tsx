@@ -1,5 +1,9 @@
 import { FC, createContext, useMemo, useContext, useState } from "react";
-
+import {
+  FetchPaymentMethodsPayload,
+  VaultManager,
+  vaultManager,
+} from "braintree-web";
 import { getClientToken, createPayment } from "../services";
 import { Result } from "../components/Result";
 
@@ -17,7 +21,7 @@ import { useLoader } from "./useLoader";
 
 type HandlePurchaseType = (
   paymentNonce: string,
-  options?: { [index: string]: string }
+  options?: { [index: string]: string | boolean }
 ) => void;
 
 type PaymentContextT = {
@@ -26,6 +30,11 @@ type PaymentContextT = {
   handleGetClientToken: () => void;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
+  vaultedPaymentMethods: FetchPaymentMethodsPayload[];
+  handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
+  sessionKey: string;
+  sessionValue: string;
+  braintreeCustomerId: string;
 };
 
 const PaymentInfoInitialObject = {
@@ -36,6 +45,8 @@ const PaymentInfoInitialObject = {
   lineItems: [],
   shippingMethod: {},
   cartInformation: CartInformationInitial,
+  sessionKey: "",
+  sessionValue: "",
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -44,6 +55,14 @@ const PaymentContext = createContext<PaymentContextT>({
   handleGetClientToken: () => {},
   handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
+  vaultedPaymentMethods: [],
+  handleGetVaultedPaymentMethods: () =>
+    new Promise<FetchPaymentMethodsPayload[]>(
+      (resolve) => [] as FetchPaymentMethodsPayload[]
+    ),
+  sessionKey: "",
+  sessionValue: "",
+  braintreeCustomerId: "",
 });
 
 export const PaymentProvider: FC<
@@ -64,9 +83,13 @@ export const PaymentProvider: FC<
   const [resultMessage, setResultMessage] = useState<string>();
 
   const [clientToken, setClientToken] = useState("");
+  const [braintreeCustomerId, setBraintreeCustomerId] = useState("");
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
+  const [vaultedPaymentMethods, setVaultedPaymentMethods] = useState<
+    FetchPaymentMethodsPayload[]
+  >([]);
 
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
@@ -83,6 +106,7 @@ export const PaymentProvider: FC<
           cartInformation
         )) as CreatePaymentResponse;
 
+        setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
         if (
           createPaymentResult &&
           createPaymentResult.id &&
@@ -93,7 +117,8 @@ export const PaymentProvider: FC<
             sessionValue,
             getClientTokenUrl,
             createPaymentResult.id,
-            createPaymentResult.version
+            createPaymentResult.version,
+            createPaymentResult.braintreeCustomerId
           )) as ClientTokenResponse;
 
           if (!clientTokenresult) {
@@ -131,6 +156,41 @@ export const PaymentProvider: FC<
       }
       setGettingClientToken(false);
       isLoading(false);
+    };
+
+    const handleGetVaultedPaymentMethods = () => {
+      if (!clientToken || vaultedPaymentMethods.length)
+        return new Promise<FetchPaymentMethodsPayload[]>(() => {
+          return vaultedPaymentMethods;
+        });
+      isLoading(true);
+      return vaultManager.create({ authorization: clientToken }).then(
+        (vaultInstance: VaultManager | undefined) => {
+          if (vaultInstance === undefined) {
+            notify("Info", "No vault manager");
+            isLoading(false);
+            return vaultedPaymentMethods;
+          }
+          return vaultInstance.fetchPaymentMethods({ defaultFirst: true }).then(
+            (
+              customerPaymentMethods: FetchPaymentMethodsPayload[] | undefined
+            ) => {
+              isLoading(false);
+              if (customerPaymentMethods !== undefined) {
+                setVaultedPaymentMethods(customerPaymentMethods);
+                return customerPaymentMethods;
+              }
+              return vaultedPaymentMethods;
+            },
+            () => {
+              return vaultedPaymentMethods;
+            }
+          );
+        },
+        () => {
+          return vaultedPaymentMethods;
+        }
+      );
     };
 
     const handlePurchase: HandlePurchaseType = async (
@@ -171,6 +231,11 @@ export const PaymentProvider: FC<
       handleGetClientToken,
       handlePurchase,
       paymentInfo,
+      vaultedPaymentMethods,
+      handleGetVaultedPaymentMethods,
+      sessionValue,
+      sessionKey,
+      braintreeCustomerId,
     };
   }, [clientToken, gettingClientToken]);
 

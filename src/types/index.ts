@@ -2,11 +2,18 @@ import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
+  Intent,
+  LineItem,
 } from "paypal-checkout-components";
+import {
+  ThreeDSecureAdditionalInformation,
+  ThreeDSecureBillingAddress,
+} from "braintree-web/modules/three-d-secure";
 
 export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
+  braintreeCustomerId?: string;
 };
 
 export type GeneralPayButtonProps = {
@@ -39,6 +46,7 @@ export type CreatePaymentResponse = {
   };
   lineItems: [object]; // @todo add better types maybe?
   shippingMethod: object; // @todo add better types maybe?
+  braintreeCustomerId: string;
 };
 
 export type TransactionSaleResponse = {
@@ -96,6 +104,25 @@ export type PayPalProps = {
   buttonLabel: ButtonLabelOption;
   payLater?: boolean;
   payLaterButtonColor?: ButtonColorOption;
+  locale?: string;
+  intent?: Intent;
+  commit?: boolean;
+  enableShippingAddress?: boolean;
+  shippingAddressEditable?: boolean;
+  paypalLineItem?: LineItem[];
+  billingAgreementDescription?: string;
+  shippingAddressOverride?: ShippingAddressOverride;
+};
+
+export type ShippingAddressOverride = {
+  recipientName: string;
+  line1?: string;
+  line2?: string;
+  city?: string;
+  countryCode?: string;
+  postalCode?: string;
+  state?: string;
+  phone?: string;
 };
 
 export const CartInformationInitial: CartInformation = {
@@ -162,4 +189,25 @@ export type LoadingOverlayType = {
   textStyles?: string;
 };
 
-export type GeneralACHProps = { mandateText: string };
+export type GeneralACHProps = {
+  mandateText: string;
+  getAchVaultTokenURL: string;
+};
+
+export type GeneralCreditCardProps = {
+  showPostalCode?: boolean;
+  showCardHoldersName?: boolean;
+  threeDSBillingAddress?: ThreeDSecureBillingAddress;
+  threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
+  email?: string;
+  enableVaulting?: boolean;
+};
+
+export type AchVaultRequest = { paymentMethodNonce: string };
+
+export type AchVaultResponse = {
+  status: boolean;
+  token?: string;
+  message?: string;
+  verified?: boolean;
+};
