@@ -142,15 +142,21 @@ In addition, each payment component comes with its own specific properties.
 
 
 ### Local Payments  
-Local payments group together multiple region specific payment methods. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
+Local payments group together multiple region specific payment methods. Each payment method is being exported as its own component wich restricts the possible options for __countryCode__, __currencyCode__ and __paymentType__ props. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
 They accept the following props:  
-- **paymentType**: `any`
-- **countryCode**: `any`
-- **currencyCode**: `any`
+- **paymentType**: `any`  
+ Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+- **countryCode**: `any`  
+ Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+- **currencyCode**: `any`  
+Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **merchantAccountId**: `string` - optional
-- **shippingAddressRequired**: `boolean` - optional, defaults to false
-- **fallbackUrl**: `string`
-- **fallbackButtonText**: `string` - optional
+- **shippingAddressRequired**: `boolean` - optional, defaults to false  
+ If you need a shipping address to ship physical goods, set shippingAddressRequired to true.
+- **fallbackUrl**: `string`  
+ Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
+- **fallbackButtonText**: `string` - optional  
+ The text to appear on the button 
 
 ## Available Scripts
 
