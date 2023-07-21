@@ -176,7 +176,6 @@ export type GeneralCreditCardProps = {
   showCardHoldersName?: boolean;
   threeDSBillingAddress?: ThreeDSecureBillingAddress;
   threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-  email?: string;
   enableVaulting?: boolean;
 };
 

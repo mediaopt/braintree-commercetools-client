@@ -14,7 +14,6 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   buttonText,
   showPostalCode,
   showCardHoldersName,
-  email,
   threeDSAdditionalInformation,
   threeDSBillingAddress,
   enableVaulting,
@@ -29,7 +28,6 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
       buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
       showPostalCode={showPostalCode}
       showCardHoldersName={showCardHoldersName}
-      email={email}
       threeDSAdditionalInformation={threeDSAdditionalInformation}
       threeDSBillingAddress={threeDSBillingAddress}
       enableVaulting={enableVaulting}

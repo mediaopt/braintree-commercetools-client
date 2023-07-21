@@ -21,7 +21,6 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   buttonText,
   showPostalCode = false,
   showCardHoldersName = false,
-  email,
   threeDSBillingAddress,
   threeDSAdditionalInformation,
   enableVaulting,
@@ -42,7 +41,6 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         fullWidth={fullWidth}
         showPostalCode={showPostalCode}
         showCardHoldersName={showCardHoldersName}
-        email={email}
         threeDSBillingAddress={threeDSBillingAddress}
         threeDSAdditionalInformation={threeDSAdditionalInformation}
         enableVaulting={enableVaulting}

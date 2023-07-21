@@ -52,6 +52,18 @@ export const LocalPaymentMethodMask: React.FC<
           url: fallbackUrl,
           buttonText: fallbackButtonText,
         },
+        email: paymentInfo.cartInformation.account.email,
+        givenName: paymentInfo.cartInformation.billing.firstName,
+        surname: paymentInfo.cartInformation.billing.lastName,
+        countryCode: countryCode,
+        address: {
+          streetAddress:
+            paymentInfo.cartInformation.shipping.streetName +
+            " " +
+            paymentInfo.cartInformation.shipping.streetNumber,
+          postalCode: paymentInfo.cartInformation.shipping.postalCode,
+          locality: paymentInfo.cartInformation.shipping.city,
+        },
         paymentTypeCountryCode: countryCode,
         currencyCode: currencyCode,
         shippingAddressRequired: shippingAddressRequired,

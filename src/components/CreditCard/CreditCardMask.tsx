@@ -35,7 +35,6 @@ export const CreditCardMask: React.FC<
   showPostalCode,
   threeDSAdditionalInformation,
   threeDSBillingAddress,
-  email,
   showCardHoldersName,
   enableVaulting,
 }) => {
@@ -230,7 +229,7 @@ export const CreditCardMask: React.FC<
                 amount: paymentInfo.amount,
                 nonce: payload.nonce,
                 bin: payload.details.bin,
-                email: email,
+                email: paymentInfo.cartInformation.account.email,
                 billingAddress: threeDSBillingAddress,
                 additionalInformation: threeDSAdditionalInformation,
               };

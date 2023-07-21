@@ -78,8 +78,6 @@ In addition, each payment component comes with its own specific properties.
    An optional [billingAddress](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~billingAddress) object for verification.
 - **threeDSAdditionalInformation**: `object`  
    An optional [additionalInformation](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~additionalInformation) object for verification.
-- **email**: `string`  
-   Customers email address.
 - **enableVaulting**: `boolean`  
    Displays a checkbox enabling the customer to store their card information in braintree.
 
@@ -142,7 +140,7 @@ In addition, each payment component comes with its own specific properties.
 
 
 ### Local Payments  
-Local payments group together multiple region specific payment methods. Each payment method is being exported as its own component wich restricts the possible options for __countryCode__, __currencyCode__ and __paymentType__ props. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
+Local payments group together multiple region specific payment methods. Each payment method is being exported as its own component wich restricts the possible options for _countryCode_, _currencyCode_ and _paymentType_ props. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
 They accept the following props:  
 - **paymentType**: `any`  
  Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
@@ -157,7 +155,6 @@ Determined by the specific payment method being used. Refer to [this table](http
  Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
 - **fallbackButtonText**: `string` - optional  
  The text to appear on the button 
-
 ## Available Scripts
 
 In the project directory, you can run:
