@@ -1,5 +1,7 @@
 import { getClientToken } from "./getClientToken";
 import { createPayment } from "./createPayment";
+import { CartInformation } from "../types";
+import { makeRequest } from "../api";
 
 jest.mock("../api/request", () => {
   return {
@@ -52,7 +54,7 @@ jest.mock("../api/request", () => {
 
 test("error on make request", () => {
   expect.assertions(1);
-  return getClientToken("", "", "fail", "", 1).then((result) => {
+  return makeRequest("", "", "fail", "", 1).then((result) => {
     expect(result).toBeFalsy();
   });
 });
@@ -69,10 +71,13 @@ describe("Client token", () => {
 
 describe("Create payment", () => {
   test("creating payment", () => {
+    const cartInformation = {} as CartInformation;
     expect.assertions(2);
-    return getClientToken("", "", "createPayment", "", 1).then((result) => {
-      expect(result).toHaveProperty("amountPlanned");
-      expect(result).toHaveProperty("version");
-    });
+    return createPayment("", "", "createPayment", cartInformation).then(
+      (result) => {
+        expect(result).toHaveProperty("amountPlanned");
+        expect(result).toHaveProperty("version");
+      }
+    );
   });
 });
