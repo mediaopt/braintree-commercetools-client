@@ -18,5 +18,6 @@ export const makeTransactionSaleRequest = async (
     return result;
   } catch (error) {
     console.warn(error);
+    return false;
   }
 };

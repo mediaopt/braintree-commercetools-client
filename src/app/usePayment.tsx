@@ -107,7 +107,11 @@ export const PaymentProvider: FC<
         )) as CreatePaymentResponse;
 
         setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
-        if (createPaymentResult.id && createPaymentResult.version) {
+        if (
+          createPaymentResult &&
+          createPaymentResult.id &&
+          createPaymentResult.version
+        ) {
           const clientTokenresult = (await getClientToken(
             sessionKey,
             sessionValue,
@@ -116,6 +120,13 @@ export const PaymentProvider: FC<
             createPaymentResult.version,
             createPaymentResult.braintreeCustomerId
           )) as ClientTokenResponse;
+
+          if (!clientTokenresult) {
+            isLoading(false);
+            setGettingClientToken(false);
+            notify("Error", "There is an error in getting client token!");
+            return;
+          }
 
           const { amountPlanned, lineItems, shippingMethod } =
             createPaymentResult;
@@ -129,6 +140,7 @@ export const PaymentProvider: FC<
             shippingMethod: shippingMethod,
             cartInformation: cartInformation,
           });
+
           if (clientTokenresult.clientToken) {
             setClientToken(clientTokenresult.clientToken);
             setGettingClientToken(false);
@@ -200,8 +212,8 @@ export const PaymentProvider: FC<
         requestBody
       )) as TransactionSaleResponse;
       isLoading(false);
-      if (response.ok === false) {
-        notify("Error", response.message);
+      if (response.ok === false || !response) {
+        notify("Error", response.message ?? "An error occurred");
         return;
       }
 

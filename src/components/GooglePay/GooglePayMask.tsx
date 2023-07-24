@@ -33,7 +33,12 @@ export const GooglePayMask: React.FC<
 
   useEffect(() => {
     isLoading(true);
-    loadScript("https://pay.google.com/gp/p/js/pay.js").then(() => {
+    loadScript("https://pay.google.com/gp/p/js/pay.js").then((resolve) => {
+      if (!resolve) {
+        isLoading(false);
+        notify("Error", "Could not load Google Pay");
+        return;
+      }
       let paymentsClient = new google.payments.api.PaymentsClient({
         environment: environment,
       });
