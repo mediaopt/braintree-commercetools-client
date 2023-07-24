@@ -21,7 +21,7 @@ import { useLoader } from "./useLoader";
 
 type HandlePurchaseType = (
   paymentNonce: string,
-  options?: { [index: string]: string | boolean }
+  options?: { [index: string]: any }
 ) => void;
 
 type PaymentContextT = {
@@ -32,6 +32,9 @@ type PaymentContextT = {
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
   handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
+  sessionKey: string;
+  sessionValue: string;
+  braintreeCustomerId: string;
 };
 
 const PaymentInfoInitialObject = {
@@ -42,6 +45,8 @@ const PaymentInfoInitialObject = {
   lineItems: [],
   shippingMethod: {},
   cartInformation: CartInformationInitial,
+  sessionKey: "",
+  sessionValue: "",
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -55,6 +60,9 @@ const PaymentContext = createContext<PaymentContextT>({
     new Promise<FetchPaymentMethodsPayload[]>(
       (resolve) => [] as FetchPaymentMethodsPayload[]
     ),
+  sessionKey: "",
+  sessionValue: "",
+  braintreeCustomerId: "",
 });
 
 export const PaymentProvider: FC<
@@ -75,6 +83,7 @@ export const PaymentProvider: FC<
   const [resultMessage, setResultMessage] = useState<string>();
 
   const [clientToken, setClientToken] = useState("");
+  const [braintreeCustomerId, setBraintreeCustomerId] = useState("");
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
@@ -97,6 +106,7 @@ export const PaymentProvider: FC<
           cartInformation
         )) as CreatePaymentResponse;
 
+        setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
         if (createPaymentResult.id && createPaymentResult.version) {
           const clientTokenresult = (await getClientToken(
             sessionKey,
@@ -200,7 +210,10 @@ export const PaymentProvider: FC<
       setResultMessage(message);
 
       setShowResult(true);
-      if (purchaseCallback && success !== false) purchaseCallback(response);
+      if (purchaseCallback && success !== false) {
+        delete options?.deviceData;
+        purchaseCallback(response, options);
+      }
     };
 
     return {
@@ -211,6 +224,9 @@ export const PaymentProvider: FC<
       paymentInfo,
       vaultedPaymentMethods,
       handleGetVaultedPaymentMethods,
+      sessionValue,
+      sessionKey,
+      braintreeCustomerId,
     };
   }, [clientToken, gettingClientToken]);
 

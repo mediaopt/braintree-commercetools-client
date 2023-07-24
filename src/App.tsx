@@ -8,14 +8,18 @@ import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
 import { ACH } from "./components/ACH";
 import { Bancontact, P24, Sofort } from "./components/LocalPaymentMethods";
+import { ShippingAddressOverride } from "./types";
 
 import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
+  Intent,
+  LineItem,
+  LineItemKind,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIyOGJhMjQ3Ni0yZDFkLTRhN2MtODY4OC02YTUwZmFjYjdmZjQifQ.BiqU5pMfyhtig8fd3hB6qmNNIguB9obgw85rmJveSeY";
 
@@ -50,8 +54,8 @@ function App() {
     purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
     sessionKey: "frontastic-session",
     sessionValue: COFE_SESSION_VALUE,
-    purchaseCallback: (result: any) => {
-      console.log("Do something", result);
+    purchaseCallback: (result: any, options: any) => {
+      console.log("Do something", result, options);
     },
     fullWidth: true,
     buttonText: "Pay €X",
@@ -64,6 +68,39 @@ function App() {
     merchantAccountId: "kr4txbybddqkgs84",
   };
 
+  const paypalLineItemUndefinedValues = {
+    unitTaxAmount: undefined,
+    description: undefined,
+    productCode: undefined,
+    url: undefined,
+  };
+  const paypalLineItem: LineItem[] = [
+    {
+      quantity: "10",
+      unitAmount: "100.00",
+      name: "test name",
+      kind: "debit" as LineItemKind,
+      ...paypalLineItemUndefinedValues,
+    },
+    {
+      quantity: "10",
+      unitAmount: "100.00",
+      name: "test name",
+      kind: "debit" as LineItemKind,
+      ...paypalLineItemUndefinedValues,
+    },
+  ];
+  const paypalShippingAddressOverride: ShippingAddressOverride = {
+    recipientName: "Scruff McGruff",
+    line1: "1234 Main St.",
+    line2: "Unit 1",
+    city: "Chicago",
+    countryCode: "US",
+    postalCode: "60652",
+    state: "IL",
+    phone: "123.456.7890",
+  };
+
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
     CreditCard: <CreditCard {...params} enableVaulting={true} />,
@@ -74,6 +111,22 @@ function App() {
         buttonLabel={"pay" as ButtonLabelOption}
         payLater={true}
         payLaterButtonColor={"blue" as ButtonColorOption}
+        locale="en_GB"
+        intent={"capture" as Intent}
+        {...params}
+      />
+    ),
+    PayPalBuyNow: (
+      <PayPal
+        flow={"checkout" as FlowType}
+        buttonColor={"blue" as ButtonColorOption}
+        buttonLabel={"buynow" as ButtonLabelOption}
+        commit={true}
+        payLater={false}
+        locale="en_GB"
+        intent={"capture" as Intent}
+        enableShippingAddress={true}
+        shippingAddressEditable={false}
         {...params}
       />
     ),
@@ -101,6 +154,7 @@ function App() {
     ACH: (
       <ACH
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
+        getAchVaultTokenURL={`https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getAchVaultToken`}
         {...params}
       />
     ),
