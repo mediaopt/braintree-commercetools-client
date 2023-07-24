@@ -38,6 +38,8 @@ export const CreditCardMask: React.FC<
   email,
   showCardHoldersName,
   enableVaulting,
+  continueOnLiabilityShiftPossible = false,
+  continueOnNoThreeDS = false,
 }) => {
   const {
     handlePurchase,
@@ -255,9 +257,29 @@ export const CreditCardMask: React.FC<
                       deviceData: deviceData,
                     });
                   } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-                    // @todo liability shift possible - Decide if you want to submit the nonce
+                    if (continueOnLiabilityShiftPossible) {
+                      handlePurchase(response.nonce, {
+                        storeInVault: shouldVault,
+                        deviceData: deviceData,
+                      });
+                    } else {
+                      notify(
+                        "Warning",
+                        "Failed the 3D Secure verification. Please use a different payment method."
+                      );
+                    }
                   } else {
-                    // @todo no liability shift - Decide if you want to submit the nonce
+                    if (continueOnNoThreeDS) {
+                      handlePurchase(response.nonce, {
+                        storeInVault: shouldVault,
+                        deviceData: deviceData,
+                      });
+                    } else {
+                      notify(
+                        "Warning",
+                        "3D Secure is not available for your card. Please use a different payment method."
+                      );
+                    }
                   }
                 })
                 .catch(function (error) {
