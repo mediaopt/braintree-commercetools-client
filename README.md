@@ -164,7 +164,8 @@ They accept the following props:
  Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **currencyCode**: `any`  
 Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
-- **merchantAccountId**: `string` - optional
+- **merchantAccountId**: `string` - optional  
+ If not specified it will use the generated clientToken. Otherwise, it is possible to make the transaction to the merchant specified in here.  
 - **shippingAddressRequired**: `boolean` - optional, defaults to false  
  If you need a shipping address to ship physical goods, set shippingAddressRequired to true.
 - **fallbackUrl**: `string`  

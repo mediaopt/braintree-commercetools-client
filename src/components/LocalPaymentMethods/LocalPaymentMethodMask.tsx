@@ -3,6 +3,7 @@ import {
   client as braintreeClient,
   localPayment,
   LocalPayment,
+  dataCollector,
 } from "braintree-web";
 
 import { usePayment } from "../../app/usePayment";
@@ -30,6 +31,7 @@ export const LocalPaymentMethodMask: React.FC<
 }: LocalPaymentMethodMaskType) => {
   const [localPaymentInstance, setLocalPaymentInstance] =
     useState<LocalPayment>();
+  const [deviceData, setDeviceData] = useState("");
 
   const paymentButton = useRef<HTMLButtonElement>(null);
 
@@ -74,7 +76,7 @@ export const LocalPaymentMethodMask: React.FC<
           }
         } else {
           if (payload) {
-            handlePurchase(payload.nonce);
+            handlePurchase(payload.nonce, { deviceData: deviceData });
           } else {
             isLoading(false);
             notify("Error", "No payload received");
@@ -104,6 +106,16 @@ export const LocalPaymentMethodMask: React.FC<
               notify("Error", localPaymentError.message);
               return;
             }
+            dataCollector.create(
+              {
+                client: clientInstance,
+              },
+              function (dataCollectorErr, dataCollectorInstance) {
+                if (!dataCollectorErr && dataCollectorInstance) {
+                  setDeviceData(dataCollectorInstance.deviceData);
+                }
+              }
+            );
             setLocalPaymentInstance(paymentInstance);
             isLoading(false);
           }
