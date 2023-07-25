@@ -28,5 +28,6 @@ export const getClientToken = async (
     return result;
   } catch (error) {
     console.warn(error);
+    return false;
   }
 };
