@@ -270,7 +270,6 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     buttonColor,
     buttonLabel,
     flow,
-    notify,
     payLater,
     payLaterButtonColor,
     commit,
