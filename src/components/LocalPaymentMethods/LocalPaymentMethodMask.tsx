@@ -98,8 +98,12 @@ export const LocalPaymentMethodMask: React.FC<
           notify("Error", clientError.message);
           return;
         }
+        const localPaymentAuthOption: any = merchantAccountId
+          ? { merchantAccountId: merchantAccountId }
+          : { authorization: clientToken };
+        localPaymentAuthOption.client = clientInstance;
         localPayment.create(
-          { client: clientInstance, authorization: clientToken }, //@todo docs mention using merchant id in case you need different merchants for different currencies
+          localPaymentAuthOption,
           function (localPaymentError, paymentInstance) {
             if (localPaymentError) {
               isLoading(false);
