@@ -7,7 +7,12 @@ import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
 import { ACH } from "./components/ACH";
-import { Bancontact, P24, Sofort } from "./components/LocalPaymentMethods";
+import {
+  Bancontact,
+  P24,
+  Sofort,
+  BLIK,
+} from "./components/LocalPaymentMethods";
 import { ShippingAddressOverride } from "./types";
 
 import {
@@ -19,9 +24,9 @@ import {
   LineItemKind,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIyOGJhMjQ3Ni0yZDFkLTRhN2MtODY4OC02YTUwZmFjYjdmZjQifQ.BiqU5pMfyhtig8fd3hB6qmNNIguB9obgw85rmJveSeY";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI4MDQxYmRjNy0zNDg3LTRlNTMtOGIwYy1lNjk4ZmQ0MDY3ZjgifQ.BhmDwISnYWSzaZkJKwQTDQwkVJRNylt8nxN8EkKfcvA";
 
 function App() {
   const cartInformation = {
@@ -65,7 +70,7 @@ function App() {
   const localPaymentParams = {
     fallbackUrl: "/test",
     fallbackButtonText: "purchase",
-    merchantAccountId: "kr4txbybddqkgs84",
+    merchantAccountId: "pl-merchant",
   };
 
   const paypalLineItemUndefinedValues = {
@@ -183,6 +188,15 @@ function App() {
         currencyCode={"EUR"}
         paymentType={"sofort"}
         countryCode={"DE"}
+      />
+    ),
+    BLIK: (
+      <BLIK
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"PLN"}
+        countryCode={"PL"}
+        paymentType={"blik"}
       />
     ),
   };

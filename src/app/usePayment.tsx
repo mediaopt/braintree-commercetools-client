@@ -27,7 +27,7 @@ type HandlePurchaseType = (
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
-  handleGetClientToken: () => void;
+  handleGetClientToken: (merchantAccountId?: string) => void;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
@@ -95,7 +95,7 @@ export const PaymentProvider: FC<
   const { isLoading } = useLoader();
 
   const value = useMemo(() => {
-    const handleGetClientToken = async () => {
+    const handleGetClientToken = async (merchantAccountId?: string) => {
       setGettingClientToken(true);
       isLoading(true);
       try {
@@ -118,7 +118,8 @@ export const PaymentProvider: FC<
             getClientTokenUrl,
             createPaymentResult.id,
             createPaymentResult.version,
-            createPaymentResult.braintreeCustomerId
+            createPaymentResult.braintreeCustomerId,
+            merchantAccountId
           )) as ClientTokenResponse;
 
           if (!clientTokenresult) {

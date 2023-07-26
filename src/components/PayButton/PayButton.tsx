@@ -24,7 +24,7 @@ export const PayButton: FC<React.PropsWithChildren<PayButtonProps>> = ({
           true,
         "w-full": fullWidth,
       })}
-      onClick={handleGetClientToken}
+      onClick={() => handleGetClientToken()}
       disabled={disabled}
     >
       {buttonText}

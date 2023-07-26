@@ -76,7 +76,12 @@ export const LocalPaymentMethodMask: React.FC<
           }
         } else {
           if (payload) {
-            handlePurchase(payload.nonce, { deviceData: deviceData });
+            const handlePurchaseOptions: { [index: string]: any } = {
+              deviceData: deviceData,
+            };
+            if (merchantAccountId)
+              handlePurchaseOptions.merchantAccountId = merchantAccountId;
+            handlePurchase(payload.nonce, handlePurchaseOptions);
           } else {
             isLoading(false);
             notify("Error", "No payload received");

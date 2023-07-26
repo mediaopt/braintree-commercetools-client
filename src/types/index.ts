@@ -15,6 +15,7 @@ export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
   braintreeCustomerId?: string;
+  merchantAccountId?: string;
 };
 
 export type GeneralPayButtonProps = {

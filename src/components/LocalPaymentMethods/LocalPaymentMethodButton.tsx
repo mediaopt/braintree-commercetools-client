@@ -22,7 +22,7 @@ export const LocalPaymentMethodButton: React.FC<LocalPaymentMethod> = ({
 }: LocalPaymentMethod) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, merchantAccountId);
 
   return clientToken ? (
     <LocalPaymentMethodMask
