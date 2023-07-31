@@ -80,6 +80,10 @@ In addition, each payment component comes with its own specific properties.
    An optional [additionalInformation](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~additionalInformation) object for verification.
 - **enableVaulting**: `boolean`  
    Displays a checkbox enabling the customer to store their card information in braintree.
+- **continueOnLiabilityShiftPossible**: `boolean` - optional, default _false_    
+  Card brands are recommending to ask the user to choose a different form of payment. However, it is still possible to continue. Refer to the [documentation](https://developer.paypal.com/braintree/docs/guides/3d-secure/client-side/javascript/v3/#advanced-client-side-options) for more information.
+- **continueOnNoThreeDS**: `boolean` - optional, default _false_  
+  This card was ineligible for 3D Secure, but you can still continue with this transaction. Refer to the [documentation](https://developer.paypal.com/braintree/docs/guides/3d-secure/client-side/javascript/v3/#advanced-client-side-options) for more information.
 
 ### GooglePay
 

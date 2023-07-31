@@ -202,6 +202,8 @@ export type GeneralCreditCardProps = {
   threeDSBillingAddress?: ThreeDSecureBillingAddress;
   threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
   enableVaulting?: boolean;
+  continueOnLiabilityShiftPossible?: boolean;
+  continueOnNoThreeDS?: boolean;
 };
 
 export type AchVaultRequest = { paymentMethodNonce: string };

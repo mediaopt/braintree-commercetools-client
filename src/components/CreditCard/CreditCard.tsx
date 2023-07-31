@@ -24,6 +24,8 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   threeDSBillingAddress,
   threeDSAdditionalInformation,
   enableVaulting,
+  continueOnLiabilityShiftPossible,
+  continueOnNoThreeDS,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
@@ -44,6 +46,8 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         threeDSBillingAddress={threeDSBillingAddress}
         threeDSAdditionalInformation={threeDSAdditionalInformation}
         enableVaulting={enableVaulting}
+        continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
+        continueOnNoThreeDS={continueOnNoThreeDS}
       />
     </RenderTemplate>
   );
