@@ -21,6 +21,10 @@ export default {
       options: ["checkout", "credit", "pay", "buynow", "paypal"],
       control: { type: "select" },
     },
+    intent: {
+      options: ["capture", "order", "authorize"],
+      control: { type: "select" },
+    },
   },
 };
 
