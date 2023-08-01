@@ -17,5 +17,8 @@ const config = {
   docs: {
     autodocs: "tag",
   },
+  core: {
+    disableTelemetry: true,
+  },
 };
 export default config;

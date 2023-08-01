@@ -36,3 +36,9 @@ export const params = {
   buttonText: "Pay €X",
   cartInformation: cartInformation,
 };
+
+export const localPaymentParams = {
+  fallbackUrl: "/test",
+  fallbackButtonText: "purchase",
+  merchantAccountId: "",
+};

@@ -26,7 +26,7 @@ import {
 
 const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI4MDQxYmRjNy0zNDg3LTRlNTMtOGIwYy1lNjk4ZmQ0MDY3ZjgifQ.BhmDwISnYWSzaZkJKwQTDQwkVJRNylt8nxN8EkKfcvA";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI0NWEwMzgzOC1mMWQxLTRlMmItYWY1MC1mZWU4ZDY2ODMwNjkifQ.puS0BO0W3EcHQ9sSe9GoyNZYeKE4M-t92Es1bZ5ZHdw";
 
 function App() {
   const cartInformation = {

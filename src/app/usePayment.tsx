@@ -18,6 +18,7 @@ import {
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
 import { useLoader } from "./useLoader";
+import { setLocalPaymentIdRequest } from "../services/setLocalPaymentId";
 
 type HandlePurchaseType = (
   paymentNonce: string,
@@ -28,6 +29,7 @@ type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
   handleGetClientToken: (merchantAccountId?: string) => void;
+  setLocalPaymentId: (localPaymentId: string) => void;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
@@ -53,6 +55,7 @@ const PaymentContext = createContext<PaymentContextT>({
   gettingClientToken: false,
   clientToken: "",
   handleGetClientToken: () => {},
+  setLocalPaymentId: () => {},
   handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
   vaultedPaymentMethods: [],
@@ -194,6 +197,17 @@ export const PaymentProvider: FC<
       );
     };
 
+    const setLocalPaymentId = async (localPaymentId: string) => {
+      await setLocalPaymentIdRequest(
+        sessionKey,
+        sessionValue,
+        "https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId",
+        paymentInfo.id,
+        paymentInfo.version,
+        localPaymentId
+      );
+    };
+
     const handlePurchase: HandlePurchaseType = async (
       paymentNonce,
       options?
@@ -233,6 +247,7 @@ export const PaymentProvider: FC<
       gettingClientToken,
       clientToken,
       handleGetClientToken,
+      setLocalPaymentId,
       handlePurchase,
       paymentInfo,
       vaultedPaymentMethods,
