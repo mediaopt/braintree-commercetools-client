@@ -35,11 +35,13 @@ export const LocalPaymentMethodMask: React.FC<
 
   const paymentButton = useRef<HTMLButtonElement>(null);
 
-  const { handlePurchase, paymentInfo, clientToken } = usePayment();
+  const { handlePurchase, paymentInfo, clientToken, setLocalPaymentId } =
+    usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
 
   const invokePayment = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    let overridePaymentVersion: number;
     e.preventDefault();
     if (!localPaymentInstance) {
       notify("Error", "No payment instance");
@@ -62,8 +64,10 @@ export const LocalPaymentMethodMask: React.FC<
         currencyCode: currencyCode,
         shippingAddressRequired: shippingAddressRequired,
         onPaymentStart: function (data, start) {
-          //@todo we have to store the data.paymentId somewhere (on the server); BT recommends to map it to a cart identifier
-          start();
+          setLocalPaymentId(data.paymentId).then((result) => {
+            overridePaymentVersion = result;
+            start();
+          });
         },
       },
       function (startPaymentError, payload) {
@@ -79,9 +83,14 @@ export const LocalPaymentMethodMask: React.FC<
             const handlePurchaseOptions: { [index: string]: any } = {
               deviceData: deviceData,
             };
-            if (merchantAccountId)
+            if (merchantAccountId) {
               handlePurchaseOptions.merchantAccountId = merchantAccountId;
-            handlePurchase(payload.nonce, handlePurchaseOptions);
+            }
+            handlePurchase(
+              payload.nonce,
+              handlePurchaseOptions,
+              overridePaymentVersion
+            );
           } else {
             isLoading(false);
             notify("Error", "No payload received");

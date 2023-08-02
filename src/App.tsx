@@ -26,7 +26,7 @@ import {
 
 const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI0NWEwMzgzOC1mMWQxLTRlMmItYWY1MC1mZWU4ZDY2ODMwNjkifQ.puS0BO0W3EcHQ9sSe9GoyNZYeKE4M-t92Es1bZ5ZHdw";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhYjUyMDkyNS0yZDg5LTQ1YTctOGY5OC04YjRjYmY4MTU2MjEifQ.DNhyARowmyNsdk8xOmhksxLX_iqKgRMEkPkwswOukmM";
 
 function App() {
   const cartInformation = {
@@ -70,7 +70,7 @@ function App() {
   const localPaymentParams = {
     fallbackUrl: "/test",
     fallbackButtonText: "purchase",
-    merchantAccountId: "pl-merchant",
+    merchantAccountId: "",
   };
 
   const paypalLineItemUndefinedValues = {

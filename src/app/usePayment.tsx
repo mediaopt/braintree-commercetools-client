@@ -22,14 +22,15 @@ import { setLocalPaymentIdRequest } from "../services/setLocalPaymentId";
 
 type HandlePurchaseType = (
   paymentNonce: string,
-  options?: { [index: string]: any }
+  options?: { [index: string]: any },
+  overridePaymentVersion?: number
 ) => void;
 
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
   handleGetClientToken: (merchantAccountId?: string) => void;
-  setLocalPaymentId: (localPaymentId: string) => void;
+  setLocalPaymentId: (localPaymentId: string) => Promise<number>;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
@@ -55,7 +56,7 @@ const PaymentContext = createContext<PaymentContextT>({
   gettingClientToken: false,
   clientToken: "",
   handleGetClientToken: () => {},
-  setLocalPaymentId: () => {},
+  setLocalPaymentId: () => new Promise<number>(() => 0),
   handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
   vaultedPaymentMethods: [],
@@ -198,23 +199,28 @@ export const PaymentProvider: FC<
     };
 
     const setLocalPaymentId = async (localPaymentId: string) => {
-      await setLocalPaymentIdRequest(
+      const response = (await setLocalPaymentIdRequest(
         sessionKey,
         sessionValue,
         "https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId",
         paymentInfo.id,
         paymentInfo.version,
         localPaymentId
-      );
+      )) as { paymentVersion: number };
+
+      setPaymentInfo({ ...paymentInfo, version: response.paymentVersion });
+
+      return response.paymentVersion;
     };
 
     const handlePurchase: HandlePurchaseType = async (
       paymentNonce,
-      options?
+      options?,
+      overridePaymentVersion?
     ) => {
       const additional = options ?? {};
       const requestBody = {
-        paymentVersion: paymentInfo.version,
+        paymentVersion: overridePaymentVersion || paymentInfo.version,
         paymentId: paymentInfo.id,
         paymentMethodNonce: paymentNonce,
         ...additional,
