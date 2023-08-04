@@ -13,6 +13,7 @@ export const ACH: React.FC<ACHProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
+  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -26,6 +27,7 @@ export const ACH: React.FC<ACHProps> = ({
     <RenderTemplate
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
+      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       purchaseUrl={purchaseUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}

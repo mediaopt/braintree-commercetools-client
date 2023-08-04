@@ -13,6 +13,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
+  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -32,6 +33,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
+      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}

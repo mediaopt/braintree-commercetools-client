@@ -75,6 +75,7 @@ export const PaymentProvider: FC<
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
+  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -202,7 +203,7 @@ export const PaymentProvider: FC<
       const response = (await setLocalPaymentIdRequest(
         sessionKey,
         sessionValue,
-        "https://poc-jye-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId",
+        saveLocalPaymentIdUrl,
         paymentInfo.id,
         paymentInfo.version,
         localPaymentId

@@ -14,6 +14,7 @@ export const RenderTemplate: FC<
   getClientTokenUrl,
   createPaymentUrl,
   purchaseUrl,
+  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -26,6 +27,7 @@ export const RenderTemplate: FC<
           getClientTokenUrl={getClientTokenUrl}
           createPaymentUrl={createPaymentUrl}
           purchaseUrl={purchaseUrl}
+          saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
           sessionKey={sessionKey}
           sessionValue={sessionValue}
           purchaseCallback={purchaseCallback}

@@ -21,6 +21,10 @@ Each payment component takes a set of props that will be the same for everything
    It is **your** responsibility to develop this API  
    The url that gets called to the endpoint of the connect app to make the purchase at. Communicates with CommerceTools backend
   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+- **saveLocalPaymentIdUrl**: `string`  
+   It is **your** responsibility to develop this API  
+   The url that gets called to the endpoint of the connect app to map the id of local payments to the transaction as recommended in Braintrees documentation. Communicates with CommerceTools backend
+   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **purchaseCallback**: `(result: any) => void`  
    Function to execute after a successful purchase.
 - **sessionValue**: `string`  

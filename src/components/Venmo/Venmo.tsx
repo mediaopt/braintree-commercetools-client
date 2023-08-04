@@ -16,6 +16,7 @@ export const Venmo: React.FC<VenmoProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
+  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -33,6 +34,7 @@ export const Venmo: React.FC<VenmoProps> = ({
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
+      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
