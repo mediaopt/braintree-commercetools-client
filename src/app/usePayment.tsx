@@ -30,7 +30,10 @@ type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
   handleGetClientToken: (merchantAccountId?: string) => void;
-  setLocalPaymentId: (localPaymentId: string) => Promise<number>;
+  setLocalPaymentId: (
+    localPaymentId: string,
+    saveLocalPaymentUrl: string
+  ) => Promise<number>;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
@@ -75,7 +78,6 @@ export const PaymentProvider: FC<
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -199,11 +201,14 @@ export const PaymentProvider: FC<
       );
     };
 
-    const setLocalPaymentId = async (localPaymentId: string) => {
+    const setLocalPaymentId = async (
+      localPaymentId: string,
+      saveLocalPaymentUrl: string
+    ) => {
       const response = (await setLocalPaymentIdRequest(
         sessionKey,
         sessionValue,
-        saveLocalPaymentIdUrl,
+        saveLocalPaymentUrl,
         paymentInfo.id,
         paymentInfo.version,
         localPaymentId

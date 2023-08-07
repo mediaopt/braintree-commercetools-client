@@ -12,6 +12,11 @@ import {
   P24,
   Sofort,
   BLIK,
+  MyBank,
+  EPS,
+  Giropay,
+  Grabpay,
+  IDeal,
 } from "./components/LocalPaymentMethods";
 import { ShippingAddressOverride } from "./types";
 
@@ -57,7 +62,6 @@ function App() {
     createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
     getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
     purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
-    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
     sessionKey: "frontastic-session",
     sessionValue: COFE_SESSION_VALUE,
     purchaseCallback: (result: any, options: any) => {
@@ -69,6 +73,7 @@ function App() {
   };
 
   const localPaymentParams = {
+    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
     fallbackUrl: "/test",
     fallbackButtonText: "purchase",
     merchantAccountId: "",
@@ -198,6 +203,51 @@ function App() {
         currencyCode={"PLN"}
         countryCode={"PL"}
         paymentType={"blik"}
+      />
+    ),
+    MyBank: (
+      <MyBank
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"IT"}
+        paymentType={"mybank"}
+      />
+    ),
+    EPS: (
+      <EPS
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"AT"}
+        paymentType={"eps"}
+      />
+    ),
+    Giropay: (
+      <Giropay
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"DE"}
+        paymentType={"giropay"}
+      />
+    ),
+    Grabpay: (
+      <Grabpay
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"SGD"}
+        countryCode={"SG"}
+        paymentType={"grabpay"}
+      />
+    ),
+    iDeal: (
+      <IDeal
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"NL"}
+        paymentType={"ideal"}
       />
     ),
   };

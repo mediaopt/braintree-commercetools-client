@@ -23,9 +23,9 @@ import {
 export const Bancontact = LocalBancontact as LocalPaymentBancontactType;
 export const P24 = LocalP24 as LocalPaymentP24Type;
 export const Sofort = LocalSofort as LocalPaymentSofortType;
-export const BLIK = LocalSofort as LocalPaymentBLIKType;
-export const EPS = LocalSofort as LocalPaymentEPSType;
-export const Giropay = LocalSofort as LocalPaymentGiropayType;
-export const Grabpay = LocalSofort as LocalPaymentGrabpayType;
-export const IDeal = LocalSofort as LocalPaymentIDealType;
-export const MyBank = LocalSofort as LocalPaymentMyBankType;
+export const BLIK = LocalBLIK as LocalPaymentBLIKType;
+export const EPS = LocalEPS as LocalPaymentEPSType;
+export const Giropay = LocalGiropay as LocalPaymentGiropayType;
+export const Grabpay = LocalGrabpay as LocalPaymentGrabpayType;
+export const IDeal = LocalIdeal as LocalPaymentIDealType;
+export const MyBank = LocalMyBank as LocalPaymentMyBankType;

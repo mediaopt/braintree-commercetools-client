@@ -9,16 +9,22 @@ import {
 import { usePayment } from "../../app/usePayment";
 import { useNotifications } from "../../app/useNotifications";
 
-import { LocalPaymentMethodsType, GeneralPayButtonProps } from "../../types";
+import {
+  LocalPaymentMethodsType,
+  GeneralPayButtonProps,
+  LocalPaymentComponentsProp,
+} from "../../types";
 import { useLoader } from "../../app/useLoader";
 import { renderMaskButtonClasses } from "../../styles";
 
 type LocalPaymentMethodMaskType = LocalPaymentMethodsType &
-  GeneralPayButtonProps;
+  GeneralPayButtonProps &
+  LocalPaymentComponentsProp;
 
 export const LocalPaymentMethodMask: React.FC<
   React.PropsWithChildren<LocalPaymentMethodMaskType>
 > = ({
+  saveLocalPaymentIdUrl,
   paymentType,
   countryCode,
   currencyCode,
@@ -64,10 +70,12 @@ export const LocalPaymentMethodMask: React.FC<
         currencyCode: currencyCode,
         shippingAddressRequired: shippingAddressRequired,
         onPaymentStart: function (data, start) {
-          setLocalPaymentId(data.paymentId).then((result) => {
-            overridePaymentVersion = result;
-            start();
-          });
+          setLocalPaymentId(data.paymentId, saveLocalPaymentIdUrl).then(
+            (result) => {
+              overridePaymentVersion = result;
+              start();
+            }
+          );
         },
       },
       function (startPaymentError, payload) {
@@ -143,18 +151,16 @@ export const LocalPaymentMethodMask: React.FC<
   }, [clientToken, merchantAccountId]);
 
   return (
-    <>
-      <button
-        onClick={invokePayment}
-        ref={paymentButton}
-        className={renderMaskButtonClasses(
-          fullWidth,
-          !!localPaymentInstance,
-          !localPaymentInstance
-        )}
-      >
-        {buttonText}
-      </button>
-    </>
+    <button
+      onClick={invokePayment}
+      ref={paymentButton}
+      className={renderMaskButtonClasses(
+        fullWidth,
+        !!localPaymentInstance,
+        !localPaymentInstance
+      )}
+    >
+      {buttonText}
+    </button>
   );
 };

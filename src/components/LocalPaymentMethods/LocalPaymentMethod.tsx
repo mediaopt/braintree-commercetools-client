@@ -5,9 +5,15 @@ import { isPayButtonDisabled } from "../PayButton";
 
 import { LocalPaymentMethodButton } from "./LocalPaymentMethodButton";
 
-import { GeneralComponentsProps, LocalPaymentMethodsType } from "../../types";
+import {
+  GeneralComponentsProps,
+  LocalPaymentComponentsProp,
+  LocalPaymentMethodsType,
+} from "../../types";
 
-type LocalPaymentMethodType = GeneralComponentsProps & LocalPaymentMethodsType;
+type LocalPaymentMethodType = GeneralComponentsProps &
+  LocalPaymentComponentsProp &
+  LocalPaymentMethodsType;
 
 export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
   createPaymentUrl,
@@ -32,13 +38,13 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
     >
       <LocalPaymentMethodButton
+        saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
         paymentType={paymentType}
         countryCode={countryCode}
         currencyCode={currencyCode}

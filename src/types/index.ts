@@ -27,12 +27,15 @@ export type GeneralComponentsProps = {
   purchaseUrl: string;
   createPaymentUrl: string;
   getClientTokenUrl: string;
-  saveLocalPaymentIdUrl: string;
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: (result: any, options?: any) => void;
 } & CartInformationProps &
   GeneralPayButtonProps;
+
+export type LocalPaymentComponentsProp = {
+  saveLocalPaymentIdUrl: string;
+};
 
 export type ClientTokenResponse = {
   clientToken: string;
