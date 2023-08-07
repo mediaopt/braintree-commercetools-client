@@ -18,7 +18,6 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -41,7 +40,6 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}

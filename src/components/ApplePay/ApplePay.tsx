@@ -13,7 +13,6 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -27,7 +26,6 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}

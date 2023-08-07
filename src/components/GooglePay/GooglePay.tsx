@@ -13,7 +13,6 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  saveLocalPaymentIdUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -35,7 +34,6 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
