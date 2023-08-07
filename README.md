@@ -21,10 +21,6 @@ Each payment component takes a set of props that will be the same for everything
    It is **your** responsibility to develop this API  
    The url that gets called to the endpoint of the connect app to make the purchase at. Communicates with CommerceTools backend
   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
-- **saveLocalPaymentIdUrl**: `string`  
-   It is **your** responsibility to develop this API  
-   The url that gets called to the endpoint of the connect app to map the id of local payments to the transaction as recommended in Braintrees documentation. Communicates with CommerceTools backend
-   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **purchaseCallback**: `(result: any) => void`  
    Function to execute after a successful purchase.
 - **sessionValue**: `string`  
@@ -166,6 +162,10 @@ You see information about all these options in the [PayPal official documents](h
 ### Local Payments  
 Local payments group together multiple region specific payment methods. Each payment method is being exported as its own component wich restricts the possible options for _countryCode_, _currencyCode_ and _paymentType_ props. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
 They accept the following props:  
+- **saveLocalPaymentIdUrl**: `string`  
+  It is **your** responsibility to develop this API  
+  The url that gets called to the endpoint of the connect app to map the id of local payments to the transaction as recommended in Braintrees documentation. Communicates with CommerceTools backend
+  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **paymentType**: `any`  
  Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **countryCode**: `any`  
