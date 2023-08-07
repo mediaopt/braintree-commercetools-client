@@ -78,8 +78,6 @@ In addition, each payment component comes with its own specific properties.
    An optional [billingAddress](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~billingAddress) object for verification.
 - **threeDSAdditionalInformation**: `object`  
    An optional [additionalInformation](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~additionalInformation) object for verification.
-- **email**: `string`  
-   Customers email address.
 - **enableVaulting**: `boolean`  
    Displays a checkbox enabling the customer to store their card information in braintree.
 - **continueOnLiabilityShiftPossible**: `boolean` - optional, default _false_    
@@ -160,6 +158,28 @@ You see information about all these options in the [PayPal official documents](h
 - **ignoreBowserSupport**: `boolean`  
   Venmo does check for browser support and won't load if it fails. You can ignore the check here. Useful for testing purposes, should not be used in production.
 
+
+### Local Payments  
+Local payments group together multiple region specific payment methods. Each payment method is being exported as its own component wich restricts the possible options for _countryCode_, _currencyCode_ and _paymentType_ props. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
+They accept the following props:  
+- **saveLocalPaymentIdUrl**: `string`  
+  It is **your** responsibility to develop this API  
+  The url that gets called to the endpoint of the connect app to map the id of local payments to the transaction as recommended in Braintrees documentation. Communicates with CommerceTools backend
+  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+- **paymentType**: `any`  
+ Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+- **countryCode**: `any`  
+ Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+- **currencyCode**: `any`  
+Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+- **merchantAccountId**: `string` - optional  
+ If not specified it will use the generated clientToken. Otherwise, it is possible to make the transaction to the merchant specified in here.  
+- **shippingAddressRequired**: `boolean` - optional, defaults to false  
+ If you need a shipping address to ship physical goods, set shippingAddressRequired to true.
+- **fallbackUrl**: `string`  
+ Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
+- **fallbackButtonText**: `string` - optional  
+ The text to appear on the button 
 ## Available Scripts
 
 In the project directory, you can run:

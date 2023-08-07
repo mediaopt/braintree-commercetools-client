@@ -7,6 +7,17 @@ import { Venmo } from "./components/Venmo";
 import { PayPal } from "./components/PayPal";
 import { ApplePay } from "./components/ApplePay";
 import { ACH } from "./components/ACH";
+import {
+  Bancontact,
+  P24,
+  Sofort,
+  BLIK,
+  MyBank,
+  EPS,
+  Giropay,
+  Grabpay,
+  IDeal,
+} from "./components/LocalPaymentMethods";
 import { ShippingAddressOverride } from "./types";
 
 import {
@@ -18,9 +29,9 @@ import {
   LineItemKind,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiNzE4ZDkzODUtYTY2Yy00OWFiLWIxMTItOTVhZjhjMTNlN2QzIiwiY2FydElkIjoiMjAxOTA4MTEtZTUyNS00YjNiLTgyYjEtMzZlMWE3Y2FmMzVlIiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiI4MGVkYjhkMi0wZGIxLTRmNzUtYjM5ZS1kMDcwNzlhOWRkMjUiLCJlbWFpbCI6Im1hamlkLmFiYmFzaUBtZWRpYW9wdC5kZSIsInNhbHV0YXRpb24iOiJtciIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJiaXJ0aGRheSI6IjE5ODktMDMtMDVUMDA6MDA6MDAuMDAwWiIsImNvbmZpcm1lZCI6dHJ1ZSwiYWRkcmVzc2VzIjpbeyJhZGRyZXNzSWQiOiJYWnFzZm5pVCIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJzdHJlZXROYW1lIjoiSG9jaHN0cmFcdTAwZGZlIDM3Iiwic3RyZWV0TnVtYmVyIjoiSG9jaHN0cmFcdTAwZGZlIDM3IiwicG9zdGFsQ29kZSI6IjEzMzU3IiwiY2l0eSI6IkJlcmxpbiIsImNvdW50cnkiOiJERSIsInBob25lIjoiKzk5NTU5OTM1NzU2MiIsImlzRGVmYXVsdEJpbGxpbmdBZGRyZXNzIjp0cnVlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOnRydWV9LHsiYWRkcmVzc0lkIjoiNkg3bEdieTAiLCJmaXJzdE5hbWUiOiJNYWppZCIsImxhc3ROYW1lIjoiQWJiYXNpIiwic3RyZWV0TmFtZSI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInN0cmVldE51bWJlciI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInBvc3RhbENvZGUiOiIxMzM1NyIsImNpdHkiOiJGbG9yaWRhIiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrOTk1NTk5MzU3NTYyIiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfV19fQ.J6NlZ5jNwVkvcZ_tXgxYwp3PbjPCMDAkFLYJb_2mmvg";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhYjUyMDkyNS0yZDg5LTQ1YTctOGY5OC04YjRjYmY4MTU2MjEifQ.DNhyARowmyNsdk8xOmhksxLX_iqKgRMEkPkwswOukmM";
 
 function App() {
   const cartInformation = {
@@ -59,6 +70,13 @@ function App() {
     fullWidth: true,
     buttonText: "Pay €X",
     cartInformation: cartInformation,
+  };
+
+  const localPaymentParams = {
+    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
+    fallbackUrl: "/test",
+    fallbackButtonText: "purchase",
+    merchantAccountId: "",
   };
 
   const paypalLineItemUndefinedValues = {
@@ -149,6 +167,87 @@ function App() {
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
         getAchVaultTokenURL={`https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getAchVaultToken`}
         {...params}
+      />
+    ),
+    Bancontact: (
+      <Bancontact
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"BE"}
+        paymentType={"bancontact"}
+      />
+    ),
+    P24: (
+      <P24
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        paymentType={"p24"}
+        countryCode={"PL"}
+      />
+    ),
+    Sofort: (
+      <Sofort
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        paymentType={"sofort"}
+        countryCode={"DE"}
+      />
+    ),
+    BLIK: (
+      <BLIK
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"PLN"}
+        countryCode={"PL"}
+        paymentType={"blik"}
+      />
+    ),
+    MyBank: (
+      <MyBank
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"IT"}
+        paymentType={"mybank"}
+      />
+    ),
+    EPS: (
+      <EPS
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"AT"}
+        paymentType={"eps"}
+      />
+    ),
+    Giropay: (
+      <Giropay
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"DE"}
+        paymentType={"giropay"}
+      />
+    ),
+    Grabpay: (
+      <Grabpay
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"SGD"}
+        countryCode={"SG"}
+        paymentType={"grabpay"}
+      />
+    ),
+    iDeal: (
+      <IDeal
+        {...params}
+        {...localPaymentParams}
+        currencyCode={"EUR"}
+        countryCode={"NL"}
+        paymentType={"ideal"}
       />
     ),
   };

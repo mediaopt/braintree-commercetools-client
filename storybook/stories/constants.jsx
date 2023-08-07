@@ -36,3 +36,10 @@ export const params = {
   buttonText: "Pay €X",
   cartInformation: cartInformation,
 };
+
+export const localPaymentParams = {
+  saveLocalPaymentIdUrl: `https://poc-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
+  fallbackUrl: "/test",
+  fallbackButtonText: "purchase",
+  merchantAccountId: "",
+};

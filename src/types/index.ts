@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ButtonColorOption,
   ButtonLabelOption,
@@ -14,6 +15,7 @@ export type ClientTokenRequest = {
   paymentId: string;
   paymentVersion: number;
   braintreeCustomerId?: string;
+  merchantAccountId?: string;
 };
 
 export type GeneralPayButtonProps = {
@@ -30,6 +32,10 @@ export type GeneralComponentsProps = {
   purchaseCallback: (result: any, options?: any) => void;
 } & CartInformationProps &
   GeneralPayButtonProps;
+
+export type LocalPaymentComponentsProp = {
+  saveLocalPaymentIdUrl: string;
+};
 
 export type ClientTokenResponse = {
   clientToken: string;
@@ -199,7 +205,6 @@ export type GeneralCreditCardProps = {
   showCardHoldersName?: boolean;
   threeDSBillingAddress?: ThreeDSecureBillingAddress;
   threeDSAdditionalInformation?: ThreeDSecureAdditionalInformation;
-  email?: string;
   enableVaulting?: boolean;
   continueOnLiabilityShiftPossible?: boolean;
   continueOnNoThreeDS?: boolean;
@@ -213,3 +218,103 @@ export type AchVaultResponse = {
   message?: string;
   verified?: boolean;
 };
+
+export type LocalPaymentMethodsType = {
+  paymentType: any;
+  countryCode: any;
+  currencyCode: any;
+  merchantAccountId?: string;
+  shippingAddressRequired?: boolean;
+  fallbackUrl: string;
+  fallbackButtonText?: string;
+};
+
+interface LocalPaymentBancontact extends LocalPaymentMethodsType {
+  paymentType: "bancontact";
+  countryCode: "BE";
+  currencyCode: "EUR";
+}
+
+interface LocalPaymentBLIK extends LocalPaymentMethodsType {
+  paymentType: "blik";
+  countryCode: "PL";
+  currencyCode: "PLN";
+}
+
+interface LocalPaymentEPS extends LocalPaymentMethodsType {
+  paymentType: "eps";
+  countryCode: "AT";
+  currencyCode: "EUR";
+}
+
+interface LocalPaymentGiropay extends LocalPaymentMethodsType {
+  paymentType: "giropay";
+  countryCode: "DE";
+  currencyCode: "EUR";
+}
+
+interface LocalPaymentGrabpay extends LocalPaymentMethodsType {
+  paymentType: "grabpay";
+  countryCode: "SG";
+  currencyCode: "SGD";
+}
+
+interface LocalPaymentIdeal extends LocalPaymentMethodsType {
+  paymentType: "ideal";
+  countryCode: "NL";
+  currencyCode: "EUR";
+}
+
+interface LocalPaymentSofort extends LocalPaymentMethodsType {
+  paymentType: "sofort";
+  countryCode: "AT" | "BE" | "DE" | "IT" | "NL" | "ES" | "GB";
+  currencyCode: "EUR" | "GBP";
+}
+
+interface LocalPaymentMyBank extends LocalPaymentMethodsType {
+  paymentType: "mybank";
+  countryCode: "IT";
+  currencyCode: "EUR";
+}
+
+interface LocalPaymentP24 extends LocalPaymentMethodsType {
+  paymentType: "p24";
+  countryCode: "PL";
+  currencyCode: "EUR" | "PL";
+}
+
+export type LocalPaymentBancontactType = React.FC<
+  GeneralComponentsProps & LocalPaymentBancontact
+>;
+
+export type LocalPaymentP24Type = React.FC<
+  GeneralComponentsProps & LocalPaymentP24
+>;
+
+export type LocalPaymentSofortType = React.FC<
+  GeneralComponentsProps & LocalPaymentSofort
+>;
+
+export type LocalPaymentBLIKType = React.FC<
+  GeneralComponentsProps & LocalPaymentBLIK
+>;
+
+export type LocalPaymentEPSType = React.FC<
+  GeneralComponentsProps & LocalPaymentEPS
+>;
+
+export type LocalPaymentGiropayType = React.FC<
+  GeneralComponentsProps & LocalPaymentGiropay
+>;
+
+export type LocalPaymentGrabpayType = React.FC<
+  GeneralComponentsProps & LocalPaymentGrabpay
+>;
+
+export type LocalPaymentIDealType = React.FC<
+  GeneralComponentsProps & LocalPaymentIdeal
+>;
+
+export type LocalPaymentMyBankType = React.FC<
+  GeneralComponentsProps & LocalPaymentMyBank
+>;

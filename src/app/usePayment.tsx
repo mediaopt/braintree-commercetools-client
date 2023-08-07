@@ -18,16 +18,22 @@ import {
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
 import { useLoader } from "./useLoader";
+import { setLocalPaymentIdRequest } from "../services/setLocalPaymentId";
 
 type HandlePurchaseType = (
   paymentNonce: string,
-  options?: { [index: string]: any }
+  options?: { [index: string]: any },
+  overridePaymentVersion?: number
 ) => void;
 
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
-  handleGetClientToken: () => void;
+  handleGetClientToken: (merchantAccountId?: string) => void;
+  setLocalPaymentId: (
+    localPaymentId: string,
+    saveLocalPaymentUrl: string
+  ) => Promise<number>;
   handlePurchase: HandlePurchaseType;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
@@ -53,6 +59,7 @@ const PaymentContext = createContext<PaymentContextT>({
   gettingClientToken: false,
   clientToken: "",
   handleGetClientToken: () => {},
+  setLocalPaymentId: () => new Promise<number>(() => 0),
   handlePurchase: () => {},
   paymentInfo: PaymentInfoInitialObject,
   vaultedPaymentMethods: [],
@@ -95,7 +102,7 @@ export const PaymentProvider: FC<
   const { isLoading } = useLoader();
 
   const value = useMemo(() => {
-    const handleGetClientToken = async () => {
+    const handleGetClientToken = async (merchantAccountId?: string) => {
       setGettingClientToken(true);
       isLoading(true);
       try {
@@ -118,7 +125,8 @@ export const PaymentProvider: FC<
             getClientTokenUrl,
             createPaymentResult.id,
             createPaymentResult.version,
-            createPaymentResult.braintreeCustomerId
+            createPaymentResult.braintreeCustomerId,
+            merchantAccountId
           )) as ClientTokenResponse;
 
           if (!clientTokenresult) {
@@ -193,13 +201,32 @@ export const PaymentProvider: FC<
       );
     };
 
+    const setLocalPaymentId = async (
+      localPaymentId: string,
+      saveLocalPaymentUrl: string
+    ) => {
+      const response = (await setLocalPaymentIdRequest(
+        sessionKey,
+        sessionValue,
+        saveLocalPaymentUrl,
+        paymentInfo.id,
+        paymentInfo.version,
+        localPaymentId
+      )) as { paymentVersion: number };
+
+      setPaymentInfo({ ...paymentInfo, version: response.paymentVersion });
+
+      return response.paymentVersion;
+    };
+
     const handlePurchase: HandlePurchaseType = async (
       paymentNonce,
-      options?
+      options?,
+      overridePaymentVersion?
     ) => {
       const additional = options ?? {};
       const requestBody = {
-        paymentVersion: paymentInfo.version,
+        paymentVersion: overridePaymentVersion || paymentInfo.version,
         paymentId: paymentInfo.id,
         paymentMethodNonce: paymentNonce,
         ...additional,
@@ -232,6 +259,7 @@ export const PaymentProvider: FC<
       gettingClientToken,
       clientToken,
       handleGetClientToken,
+      setLocalPaymentId,
       handlePurchase,
       paymentInfo,
       vaultedPaymentMethods,
