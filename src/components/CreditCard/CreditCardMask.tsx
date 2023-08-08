@@ -27,6 +27,14 @@ type LimitedVaultedPayment = {
   details: HostedFieldsAccountDetails;
 };
 
+type SelectedCardType =
+  | {
+      nonce: string;
+      bin: string;
+    }
+  | "new"
+  | "";
+
 export const CreditCardMask: React.FC<
   React.PropsWithChildren<CreditCardMaskProps>
 > = ({
@@ -56,14 +64,7 @@ export const CreditCardMask: React.FC<
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
   >([]);
-  const [selectedCard, setSelectedCard] = useState<
-    | {
-        nonce: string;
-        bin: string;
-      }
-    | "new"
-    | ""
-  >("");
+  const [selectedCard, setSelectedCard] = useState<SelectedCardType>("");
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -103,7 +104,7 @@ export const CreditCardMask: React.FC<
       .finally(() => setHostedFieldsCreated(true));
   };
 
-  const verifyCardFunction = (
+  const verifyCardAndHandlePurchase = (
     threeDSecureParameters: ThreeDSecureVerifyOptions,
     shouldVault?: boolean
   ) => {
@@ -305,7 +306,7 @@ export const CreditCardMask: React.FC<
                 billingAddress: threeDSBillingAddress,
                 additionalInformation: threeDSAdditionalInformation,
               };
-              verifyCardFunction(threeDSecureParameters, shouldVault);
+              verifyCardAndHandlePurchase(threeDSecureParameters, shouldVault);
             }
           );
         };
@@ -349,7 +350,7 @@ export const CreditCardMask: React.FC<
       billingAddress: threeDSBillingAddress,
       additionalInformation: threeDSAdditionalInformation,
     };
-    verifyCardFunction(threeDSecureParameters);
+    verifyCardAndHandlePurchase(threeDSecureParameters);
     isLoading(false);
   };
 
