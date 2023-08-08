@@ -27,6 +27,7 @@ export const Venmo: React.FC<VenmoProps> = ({
   useTestNonce,
   setVenmoUserName,
   ignoreBowserSupport,
+  shippingMethodId,
 }: VenmoProps) => {
   return (
     <RenderTemplate
@@ -37,6 +38,7 @@ export const Venmo: React.FC<VenmoProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      shippingMethodId={shippingMethodId}
     >
       <VenmoButton
         disabled={isPayButtonDisabled(cartInformation)}

@@ -34,6 +34,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   paypalLineItem,
   billingAgreementDescription = "",
   shippingAddressOverride,
+  shippingMethodId,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -44,6 +45,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      shippingMethodId={shippingMethodId}
     >
       <PayPalButton
         disabled={isPayButtonDisabled(cartInformation)}

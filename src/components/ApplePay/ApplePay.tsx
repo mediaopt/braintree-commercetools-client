@@ -20,6 +20,7 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
   fullWidth,
   buttonText,
   applePayDisplayName,
+  shippingMethodId,
 }: ApplePayComponentProps) => {
   return (
     <RenderTemplate
@@ -30,6 +31,7 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      shippingMethodId={shippingMethodId}
     >
       <ApplePayButton
         disabled={isPayButtonDisabled(cartInformation)}

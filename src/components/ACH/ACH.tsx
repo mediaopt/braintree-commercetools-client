@@ -21,6 +21,7 @@ export const ACH: React.FC<ACHProps> = ({
   buttonText,
   mandateText,
   getAchVaultTokenURL,
+  shippingMethodId,
 }: ACHProps) => {
   return (
     <RenderTemplate
@@ -31,6 +32,7 @@ export const ACH: React.FC<ACHProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      shippingMethodId={shippingMethodId}
     >
       <ACHButton
         disabled={isPayButtonDisabled(cartInformation)}

@@ -30,6 +30,7 @@ export type GeneralComponentsProps = {
   sessionKey: string;
   sessionValue: string;
   purchaseCallback: (result: any, options?: any) => void;
+  shippingMethodId?: string;
 } & CartInformationProps &
   GeneralPayButtonProps;
 

@@ -83,6 +83,7 @@ export const PaymentProvider: FC<
   purchaseCallback,
   children,
   cartInformation,
+  shippingMethodId,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -225,6 +226,9 @@ export const PaymentProvider: FC<
       overridePaymentVersion?
     ) => {
       const additional = options ?? {};
+      if (shippingMethodId) {
+        additional.shippingMethodId = shippingMethodId;
+      }
       const requestBody = {
         paymentVersion: overridePaymentVersion || paymentInfo.version,
         paymentId: paymentInfo.id,
