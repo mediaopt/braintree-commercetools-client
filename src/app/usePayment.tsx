@@ -232,6 +232,7 @@ export const PaymentProvider: FC<
         ...additional,
       };
 
+      isLoading(true);
       const response = (await makeTransactionSaleRequest(
         sessionKey,
         sessionValue,

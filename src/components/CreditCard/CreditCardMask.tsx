@@ -56,7 +56,14 @@ export const CreditCardMask: React.FC<
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
   >([]);
-  const [selectedCard, setSelectedCard] = useState("");
+  const [selectedCard, setSelectedCard] = useState<
+    | {
+        nonce: string;
+        bin: string;
+      }
+    | "new"
+    | ""
+  >("");
 
   const { client, threeDS } = useBraintreeClient();
 
@@ -94,6 +101,65 @@ export const CreditCardMask: React.FC<
         setLimitedVaultedPaymentMethods(filteredPaymentMethods);
       })
       .finally(() => setHostedFieldsCreated(true));
+  };
+
+  const verifyCardFunction = (
+    threeDSecureParameters: ThreeDSecureVerifyOptions,
+    shouldVault?: boolean
+  ) => {
+    const options: { deviceData: string; shouldVault?: boolean } = {
+      deviceData: deviceData,
+    };
+    if (shouldVault) {
+      options.shouldVault = true;
+    }
+    threeDS!
+      .verifyCard(threeDSecureParameters)
+      .then(function (response: any) {
+        if (response.threeDSecureInfo.status !== "authenticate_successful") {
+          isLoading(false);
+          notify("Error", "Could not authenticate");
+          return;
+        }
+        if (response.threeDSecureInfo.liabilityShifted) {
+          handlePurchase(response.nonce, options);
+        } else if (response.threeDSecureInfo.liabilityShiftPossible) {
+          if (continueOnLiabilityShiftPossible) {
+            handlePurchase(response.nonce, options);
+          } else {
+            notify(
+              "Warning",
+              "Failed the 3D Secure verification. Please use a different payment method."
+            );
+          }
+        } else {
+          if (continueOnNoThreeDS) {
+            handlePurchase(response.nonce, options);
+          } else {
+            notify(
+              "Warning",
+              "3D Secure is not available for your card. Please use a different payment method."
+            );
+          }
+        }
+      })
+      .catch(function (error) {
+        isLoading(false);
+        if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
+          if (error.code === "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR") {
+            notify("Error", "Payment nonce does not exist or was already used");
+          } else if (error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0) {
+            notify(
+              "Error",
+              "Validation error - check your input or try a different payment"
+            );
+          } else {
+            notify("Error", "Something went wrong - try again");
+          }
+        } else {
+          notify("Error", "Something went wrong - try again");
+        }
+      });
   };
 
   useEffect(() => {
@@ -239,73 +305,7 @@ export const CreditCardMask: React.FC<
                 billingAddress: threeDSBillingAddress,
                 additionalInformation: threeDSAdditionalInformation,
               };
-              threeDS
-                .verifyCard(threeDSecureParameters)
-                .then(function (response: any) {
-                  if (
-                    response.threeDSecureInfo.status !==
-                    "authenticate_successful"
-                  ) {
-                    isLoading(false);
-                    notify("Error", "Could not authenticate");
-                    return;
-                  }
-                  if (response.threeDSecureInfo.liabilityShifted) {
-                    handlePurchase(response.nonce, {
-                      storeInVault: shouldVault,
-                      deviceData: deviceData,
-                    });
-                  } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-                    if (continueOnLiabilityShiftPossible) {
-                      handlePurchase(response.nonce, {
-                        storeInVault: shouldVault,
-                        deviceData: deviceData,
-                      });
-                    } else {
-                      notify(
-                        "Warning",
-                        "Failed the 3D Secure verification. Please use a different payment method."
-                      );
-                    }
-                  } else {
-                    if (continueOnNoThreeDS) {
-                      handlePurchase(response.nonce, {
-                        storeInVault: shouldVault,
-                        deviceData: deviceData,
-                      });
-                    } else {
-                      notify(
-                        "Warning",
-                        "3D Secure is not available for your card. Please use a different payment method."
-                      );
-                    }
-                  }
-                })
-                .catch(function (error) {
-                  isLoading(false);
-                  if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
-                    if (
-                      error.code ===
-                      "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR"
-                    ) {
-                      notify(
-                        "Error",
-                        "Payment nonce does not exist or was already used"
-                      );
-                    } else if (
-                      error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0
-                    ) {
-                      notify(
-                        "Error",
-                        "Validation error - check your input or try a different payment"
-                      );
-                    } else {
-                      notify("Error", "Something went wrong - try again");
-                    }
-                  } else {
-                    notify("Error", "Something went wrong - try again");
-                  }
-                });
+              verifyCardFunction(threeDSecureParameters, shouldVault);
             }
           );
         };
@@ -317,14 +317,39 @@ export const CreditCardMask: React.FC<
   }, [client, threeDS]);
 
   const changeCard = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSelectedCard(value);
-    setShowNewCreditCardForm(value === "new");
+    const value = parseInt(e.target.value);
+    const checkNew = value === -1;
+    if (checkNew) {
+      setSelectedCard("new");
+    } else {
+      const vaultedPayment = limitedVaultedPayments[value];
+      setSelectedCard({
+        nonce: vaultedPayment.nonce,
+        bin: vaultedPayment.details.bin,
+      });
+    }
+    setShowNewCreditCardForm(checkNew);
   };
 
   const submitVaultedCard = async () => {
+    if (!threeDS) {
+      notify("Error", "3D Secure could not load");
+      return;
+    }
+    if (selectedCard === "" || selectedCard === "new") {
+      notify("Error", "An error occurred");
+      return;
+    }
     isLoading(true);
-    await handlePurchase(selectedCard, { deviceData: deviceData });
+    let threeDSecureParameters: ThreeDSecureVerifyOptions = {
+      amount: paymentInfo.amount,
+      nonce: selectedCard!.nonce,
+      bin: selectedCard!.bin,
+      email: paymentInfo.cartInformation.account.email,
+      billingAddress: threeDSBillingAddress,
+      additionalInformation: threeDSAdditionalInformation,
+    };
+    verifyCardFunction(threeDSecureParameters);
     isLoading(false);
   };
 
@@ -355,7 +380,7 @@ export const CreditCardMask: React.FC<
                       id={`credit-card-${index}`}
                       type="radio"
                       name="select-credit-card"
-                      value={vaultedMethod.nonce}
+                      value={index}
                       onChange={changeCard}
                     />
                     <label
@@ -385,7 +410,7 @@ export const CreditCardMask: React.FC<
               <input
                 type="radio"
                 name="select-credit-card"
-                value="new"
+                value="-1"
                 onChange={changeCard}
                 className="mr-2"
               />
