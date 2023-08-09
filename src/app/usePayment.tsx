@@ -226,9 +226,6 @@ export const PaymentProvider: FC<
       overridePaymentVersion?
     ) => {
       const additional = options ?? {};
-      if (shippingMethodId) {
-        additional.shippingMethodId = shippingMethodId;
-      }
       const requestBody = {
         paymentVersion: overridePaymentVersion || paymentInfo.version,
         paymentId: paymentInfo.id,
