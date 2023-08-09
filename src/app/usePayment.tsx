@@ -111,7 +111,8 @@ export const PaymentProvider: FC<
           sessionKey,
           sessionValue,
           createPaymentUrl,
-          cartInformation
+          cartInformation,
+          shippingMethodId
         )) as CreatePaymentResponse;
 
         setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
