@@ -33,6 +33,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   useTestNonce,
   setVenmoUserName,
   ignoreBowserSupport,
+  useKount,
 }: VenmoMaskType) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -94,6 +95,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
           {
             client: clientInstance,
             paypal: true,
+            kount: useKount ?? undefined,
           },
           function (dataCollectorErr, dataCollectorInstance) {
             if (dataCollectorErr || !dataCollectorInstance) {

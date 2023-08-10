@@ -34,6 +34,7 @@ export const LocalPaymentMethodMask: React.FC<
   fallbackUrl,
   fallbackButtonText,
   shippingAddressRequired,
+  useKount,
 }: LocalPaymentMethodMaskType) => {
   const [localPaymentInstance, setLocalPaymentInstance] =
     useState<LocalPayment>();
@@ -135,6 +136,7 @@ export const LocalPaymentMethodMask: React.FC<
             dataCollector.create(
               {
                 client: clientInstance,
+                kount: useKount ?? undefined,
               },
               function (dataCollectorErr, dataCollectorInstance) {
                 if (!dataCollectorErr && dataCollectorInstance) {

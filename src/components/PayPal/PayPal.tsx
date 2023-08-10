@@ -34,6 +34,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   paypalLineItem,
   billingAgreementDescription = "",
   shippingAddressOverride,
+  useKount,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -62,6 +63,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         billingAgreementDescription={billingAgreementDescription}
         shippingAddressEditable={shippingAddressEditable}
         shippingAddressOverride={shippingAddressOverride}
+        useKount={useKount}
       />
     </RenderTemplate>
   );

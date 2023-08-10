@@ -26,6 +26,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   enableVaulting,
   continueOnLiabilityShiftPossible,
   continueOnNoThreeDS,
+  useKount,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
@@ -48,6 +49,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         enableVaulting={enableVaulting}
         continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
         continueOnNoThreeDS={continueOnNoThreeDS}
+        useKount={useKount}
       />
     </RenderTemplate>
   );

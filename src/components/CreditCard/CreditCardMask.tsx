@@ -47,6 +47,7 @@ export const CreditCardMask: React.FC<
   enableVaulting,
   continueOnLiabilityShiftPossible = false,
   continueOnNoThreeDS = false,
+  useKount,
 }) => {
   const {
     handlePurchase,
@@ -272,6 +273,7 @@ export const CreditCardMask: React.FC<
           {
             client: client,
             paypal: true,
+            kount: useKount ?? undefined,
           },
           function (dataCollectorErr, dataCollectorInstance) {
             if (!dataCollectorErr && dataCollectorInstance) {

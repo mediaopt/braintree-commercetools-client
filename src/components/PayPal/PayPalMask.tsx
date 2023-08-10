@@ -47,6 +47,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   shippingAddressOverride,
   fullWidth,
   buttonText,
+  useKount,
 }) => {
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
@@ -128,6 +129,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
           {
             client: clientInstance,
             paypal: true,
+            kount: useKount ?? undefined,
           },
           function (dataCollectorErr, dataCollectorInstance) {
             if (!dataCollectorErr && dataCollectorInstance) {

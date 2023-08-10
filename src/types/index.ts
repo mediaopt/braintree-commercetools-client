@@ -18,10 +18,12 @@ export type ClientTokenRequest = {
   merchantAccountId?: string;
 };
 
+export type UseKount = { useKount?: boolean };
+
 export type GeneralPayButtonProps = {
   fullWidth?: boolean;
   buttonText?: string;
-};
+} & UseKount;
 
 export type GeneralComponentsProps = {
   purchaseUrl: string;
@@ -31,7 +33,8 @@ export type GeneralComponentsProps = {
   sessionValue: string;
   purchaseCallback: (result: any, options?: any) => void;
 } & CartInformationProps &
-  GeneralPayButtonProps;
+  GeneralPayButtonProps &
+  UseKount;
 
 export type LocalPaymentComponentsProp = {
   saveLocalPaymentIdUrl: string;

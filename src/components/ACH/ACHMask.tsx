@@ -64,6 +64,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   cartInformation,
   mandateText,
   getAchVaultTokenURL,
+  useKount,
 }: ACHMaskProps) => {
   const {
     handlePurchase,
@@ -195,6 +196,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
               {
                 client: clientInstance,
                 paypal: true,
+                kount: useKount ?? undefined,
               },
               function (dataCollectorErr, dataCollectorInstance) {
                 if (!dataCollectorErr && dataCollectorInstance) {
