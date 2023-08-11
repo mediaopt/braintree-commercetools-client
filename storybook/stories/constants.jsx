@@ -35,6 +35,7 @@ export const params = {
   fullWidth: true,
   buttonText: "Pay €X",
   cartInformation: cartInformation,
+  shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
 };
 
 export const localPaymentParams = {
