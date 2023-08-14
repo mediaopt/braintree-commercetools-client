@@ -138,6 +138,8 @@ In addition, each payment component comes with its own specific properties.
   Sets the billingAgreementDescription for PayPal buttons.
 - **shippingAddressOverride**: `ShippingAddressOverride`  
   Sets the shippingAddressOverride for PayPal buttons.
+- **shippingOptions**: `PayPalShippingOptions[]`  
+  If you want to use `onShippingChange` feature of PayPal pass `shippingOptions` to the PayPal component. You can find the structure on [_PayPalShippingOptions_](src/types/index.ts).
 
 You see information about all these options in the [PayPal official documents](https://braintree.github.io/braintree-web/3.34.0/PayPalCheckout.html#createPayment).
 
