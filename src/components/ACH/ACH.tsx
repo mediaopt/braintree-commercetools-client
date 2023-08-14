@@ -22,6 +22,8 @@ export const ACH: React.FC<ACHProps> = ({
   mandateText,
   getAchVaultTokenURL,
   useKount,
+  lineItems,
+  shipping,
 }: ACHProps) => {
   return (
     <RenderTemplate
@@ -41,6 +43,8 @@ export const ACH: React.FC<ACHProps> = ({
         mandateText={mandateText}
         getAchVaultTokenURL={getAchVaultTokenURL}
         useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
       />
     </RenderTemplate>
   );

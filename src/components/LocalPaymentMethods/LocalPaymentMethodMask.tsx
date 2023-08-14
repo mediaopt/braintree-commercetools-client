@@ -35,6 +35,8 @@ export const LocalPaymentMethodMask: React.FC<
   fallbackButtonText,
   shippingAddressRequired,
   useKount,
+  lineItems,
+  shipping,
 }: LocalPaymentMethodMaskType) => {
   const [localPaymentInstance, setLocalPaymentInstance] =
     useState<LocalPayment>();
@@ -91,6 +93,8 @@ export const LocalPaymentMethodMask: React.FC<
           if (payload) {
             const handlePurchaseOptions: { [index: string]: any } = {
               deviceData: deviceData,
+              lineItems: lineItems,
+              shipping: shipping,
             };
             if (merchantAccountId) {
               handlePurchaseOptions.merchantAccountId = merchantAccountId;

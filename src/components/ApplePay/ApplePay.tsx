@@ -20,6 +20,8 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
   fullWidth,
   buttonText,
   applePayDisplayName,
+  lineItems,
+  shipping,
 }: ApplePayComponentProps) => {
   return (
     <RenderTemplate
@@ -36,6 +38,8 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
         buttonText={buttonText}
         fullWidth={fullWidth}
         applePayDisplayName={applePayDisplayName}
+        lineItems={lineItems}
+        shipping={shipping}
       />
     </RenderTemplate>
   );

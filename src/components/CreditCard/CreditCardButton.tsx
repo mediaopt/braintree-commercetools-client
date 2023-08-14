@@ -20,6 +20,8 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   continueOnLiabilityShiftPossible,
   continueOnNoThreeDS,
   useKount,
+  lineItems,
+  shipping,
 }: CreditCardButton) => {
   const { clientToken } = usePayment();
 
@@ -37,6 +39,8 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
       continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
       continueOnNoThreeDS={continueOnNoThreeDS}
       useKount={useKount}
+      lineItems={lineItems}
+      shipping={shipping}
     />
   ) : (
     <></>

@@ -41,13 +41,14 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   intent,
   commit,
   enableShippingAddress,
-  paypalLineItem,
   billingAgreementDescription,
   shippingAddressEditable,
   shippingAddressOverride,
   fullWidth,
   buttonText,
   useKount,
+  lineItems,
+  shipping,
 }) => {
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
@@ -166,6 +167,8 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                     function (err: any, payload: any) {
                       handlePurchase(payload.nonce, {
                         deviceData: deviceData,
+                        lineItems: lineItems,
+                        shipping: shipping,
                         account: {
                           email: payload.details.email,
                         },
@@ -176,16 +179,6 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                           streetNumber: payload.details.shippingAddress.line1,
                           city: payload.details.shippingAddress.city,
                           country: payload.details.countryCode,
-                          postalCode:
-                            payload.details.shippingAddress.postalCode,
-                        },
-                        shipping: {
-                          firstName: payload.details.firstName,
-                          lastName: payload.details.lastName,
-                          streetName: payload.details.shippingAddress.line1,
-                          streetNumber: payload.details.shippingAddress.line1,
-                          city: payload.details.shippingAddress.city,
-                          country: payload.details.shippingAddress.countryCode,
                           postalCode:
                             payload.details.shippingAddress.postalCode,
                         },
@@ -245,7 +238,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                             commit: commit,
                             enableShippingAddress: enableShippingAddress,
                             shippingAddressEditable: shippingAddressEditable,
-                            paypalLineItem: paypalLineItem,
+                            paypalLineItem: lineItems,
                             billingAgreementDescription:
                               billingAgreementDescription,
                             shippingAddressOverride: shippingAddressOverride,
@@ -279,7 +272,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     intent,
     isLoading,
     locale,
-    paypalLineItem,
+    lineItems,
     billingAgreementDescription,
     shippingAddressEditable,
     shippingAddressOverride,
@@ -294,6 +287,8 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     isLoading(true);
     await handlePurchase(selectedAccount, {
       deviceData: deviceData,
+      lineItems: lineItems,
+      shipping: shipping,
     });
     isLoading(false);
   };

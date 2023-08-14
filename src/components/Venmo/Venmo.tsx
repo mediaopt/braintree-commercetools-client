@@ -28,6 +28,8 @@ export const Venmo: React.FC<VenmoProps> = ({
   setVenmoUserName,
   ignoreBowserSupport,
   useKount,
+  lineItems,
+  shipping,
 }: VenmoProps) => {
   return (
     <RenderTemplate
@@ -52,6 +54,8 @@ export const Venmo: React.FC<VenmoProps> = ({
         setVenmoUserName={setVenmoUserName}
         ignoreBowserSupport={ignoreBowserSupport}
         useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
       />
     </RenderTemplate>
   );

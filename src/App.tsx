@@ -18,7 +18,7 @@ import {
   Grabpay,
   IDeal,
 } from "./components/LocalPaymentMethods";
-import { ShippingAddressOverride } from "./types";
+import { ShippingAddressOverride, Shipping } from "./types";
 
 import {
   ButtonColorOption,
@@ -29,9 +29,9 @@ import {
   LineItemKind,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50Ijp7ImFjY291bnRJZCI6IjgwZWRiOGQyLTBkYjEtNGY3NS1iMzllLWQwNzA3OWE5ZGQyNSIsImVtYWlsIjoibWFqaWQuYWJiYXNpQG1lZGlhb3B0LmRlIiwic2FsdXRhdGlvbiI6Im1yIiwiZmlyc3ROYW1lIjoiTWFqaWQiLCJsYXN0TmFtZSI6IkFiYmFzaSIsImJpcnRoZGF5IjoiMTk4OS0wMy0wNVQwMDowMDowMC4wMDBaIiwiY29uZmlybWVkIjp0cnVlLCJhZGRyZXNzZXMiOlt7ImFkZHJlc3NJZCI6IlhacXNmbmlUIiwiZmlyc3ROYW1lIjoiTWFqaWQiLCJsYXN0TmFtZSI6IkFiYmFzaSIsInN0cmVldE5hbWUiOiJIb2Noc3RyYVx1MDBkZmUgMzciLCJzdHJlZXROdW1iZXIiOiJIb2Noc3RyYVx1MDBkZmUgMzciLCJwb3N0YWxDb2RlIjoiMTMzNTciLCJjaXR5IjoiQmVybGluIiwiY291bnRyeSI6IkRFIiwicGhvbmUiOiIrOTk1NTk5MzU3NTYyIiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOnRydWUsImlzRGVmYXVsdFNoaXBwaW5nQWRkcmVzcyI6dHJ1ZX0seyJhZGRyZXNzSWQiOiI2SDdsR2J5MCIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJzdHJlZXROYW1lIjoiSG9jaHN0cmFcdTAwZGZlIDM3Iiwic3RyZWV0TnVtYmVyIjoiSG9jaHN0cmFcdTAwZGZlIDM3IiwicG9zdGFsQ29kZSI6IjEzMzU3IiwiY2l0eSI6IkZsb3JpZGEiLCJjb3VudHJ5IjoiVVMiLCJwaG9uZSI6Iis5OTU1OTkzNTc1NjIiLCJpc0RlZmF1bHRCaWxsaW5nQWRkcmVzcyI6ZmFsc2UsImlzRGVmYXVsdFNoaXBwaW5nQWRkcmVzcyI6ZmFsc2V9XX0sIndpc2hsaXN0SWQiOiJhOTAxYmQ1Yi1lY2E0LTQ1NWMtOWQyYy0yMzhmMTIxMmE1YjMiLCJjYXJ0SWQiOiIxOThlYmY5My1hNmM0LTRhNGUtYmNkZi0zMjBkOTA0MDk4YWIifQ.8bJ56pDqrIh3a_mWpYSdWI7p9fqm1ihItGfEMO8nhw4";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiOGU3ZDNkNDctNDE4NC00MWY2LWI5ZTMtNmYyMzhkNDY2YWM0IiwiY2FydElkIjoiMTk4ZWJmOTMtYTZjNC00YTRlLWJjZGYtMzIwZDkwNDA5OGFiIiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiI4MGVkYjhkMi0wZGIxLTRmNzUtYjM5ZS1kMDcwNzlhOWRkMjUiLCJlbWFpbCI6Im1hamlkLmFiYmFzaUBtZWRpYW9wdC5kZSIsInNhbHV0YXRpb24iOiJtciIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJiaXJ0aGRheSI6IjE5ODktMDMtMDVUMDA6MDA6MDAuMDAwWiIsImNvbmZpcm1lZCI6dHJ1ZSwiYWRkcmVzc2VzIjpbeyJhZGRyZXNzSWQiOiJYWnFzZm5pVCIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJzdHJlZXROYW1lIjoiSG9jaHN0cmFcdTAwZGZlIDM3Iiwic3RyZWV0TnVtYmVyIjoiSG9jaHN0cmFcdTAwZGZlIDM3IiwicG9zdGFsQ29kZSI6IjEzMzU3IiwiY2l0eSI6IkJlcmxpbiIsImNvdW50cnkiOiJERSIsInBob25lIjoiKzk5NTU5OTM1NzU2MiIsImlzRGVmYXVsdEJpbGxpbmdBZGRyZXNzIjp0cnVlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOnRydWV9LHsiYWRkcmVzc0lkIjoiNkg3bEdieTAiLCJmaXJzdE5hbWUiOiJNYWppZCIsImxhc3ROYW1lIjoiQWJiYXNpIiwic3RyZWV0TmFtZSI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInN0cmVldE51bWJlciI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInBvc3RhbENvZGUiOiIxMzM1NyIsImNpdHkiOiJGbG9yaWRhIiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrOTk1NTk5MzU3NTYyIiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfV19fQ.QM-mY-oY4YDy8O0p8AQA8g1f7EKr6N6KSUMfmb3CaYQ";
 
 function App() {
   const cartInformation = {
@@ -58,34 +58,14 @@ function App() {
     },
   };
 
-  const params = {
-    createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
-    getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
-    purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
-    sessionKey: "frontastic-session",
-    sessionValue: COFE_SESSION_VALUE,
-    purchaseCallback: (result: any, options: any) => {
-      console.log("Do something", result, options);
-    },
-    fullWidth: true,
-    buttonText: "Pay €X",
-    cartInformation: cartInformation,
-  };
-
-  const localPaymentParams = {
-    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
-    fallbackUrl: "/test",
-    fallbackButtonText: "purchase",
-    merchantAccountId: "",
-  };
-
   const paypalLineItemUndefinedValues = {
     unitTaxAmount: undefined,
     description: undefined,
     productCode: undefined,
     url: undefined,
   };
-  const paypalLineItem: LineItem[] = [
+
+  const lineItems: LineItem[] = [
     {
       quantity: "10",
       unitAmount: "100.00",
@@ -101,6 +81,35 @@ function App() {
       ...paypalLineItemUndefinedValues,
     },
   ];
+
+  const shipping: Shipping = {
+    firstName: "majid",
+    lastName: "abbasi",
+  };
+
+  const params = {
+    createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
+    getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
+    purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
+    sessionKey: "frontastic-session",
+    sessionValue: COFE_SESSION_VALUE,
+    purchaseCallback: (result: any, options: any) => {
+      console.log("Do something", result, options);
+    },
+    fullWidth: true,
+    buttonText: "Pay €X",
+    cartInformation: cartInformation,
+    lineItems: lineItems,
+    shipping: shipping,
+  };
+
+  const localPaymentParams = {
+    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
+    fallbackUrl: "/test",
+    fallbackButtonText: "purchase",
+    merchantAccountId: "",
+  };
+
   const paypalShippingAddressOverride: ShippingAddressOverride = {
     recipientName: "Scruff McGruff",
     line1: "1234 Main St.",

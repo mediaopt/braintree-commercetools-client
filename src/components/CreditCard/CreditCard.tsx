@@ -27,6 +27,8 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   continueOnLiabilityShiftPossible,
   continueOnNoThreeDS,
   useKount,
+  lineItems,
+  shipping,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
@@ -50,6 +52,8 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
         continueOnNoThreeDS={continueOnNoThreeDS}
         useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
       />
     </RenderTemplate>
   );

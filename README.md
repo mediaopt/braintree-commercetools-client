@@ -34,6 +34,10 @@ Each payment component takes a set of props that will be the same for everything
 - **cartInformation**: `object`  
   Information about the customers cart to crate payments with.
   Structure:
+- **lineItems**: `object`  
+   Line Items that will send as payload to createPaymentUrl. You can find the structure on [_LineItems_](src/types/index.ts).
+- **shipping**: `object`  
+   Shipping that will send as payload to createPaymentUrl. You can find the structure on [_Shipping_](src/types/index.ts).
 
 ```
 account: {
@@ -80,7 +84,7 @@ In addition, each payment component comes with its own specific properties.
    An optional [additionalInformation](https://braintree.github.io/braintree-web/current/ThreeDSecure.html#~additionalInformation) object for verification.
 - **enableVaulting**: `boolean`  
    Displays a checkbox enabling the customer to store their card information in braintree.
-- **continueOnLiabilityShiftPossible**: `boolean` - optional, default _false_    
+- **continueOnLiabilityShiftPossible**: `boolean` - optional, default _false_  
   Card brands are recommending to ask the user to choose a different form of payment. However, it is still possible to continue. Refer to the [documentation](https://developer.paypal.com/braintree/docs/guides/3d-secure/client-side/javascript/v3/#advanced-client-side-options) for more information.
 - **continueOnNoThreeDS**: `boolean` - optional, default _false_  
   This card was ineligible for 3D Secure, but you can still continue with this transaction. Refer to the [documentation](https://developer.paypal.com/braintree/docs/guides/3d-secure/client-side/javascript/v3/#advanced-client-side-options) for more information.
@@ -158,28 +162,30 @@ You see information about all these options in the [PayPal official documents](h
 - **ignoreBowserSupport**: `boolean`  
   Venmo does check for browser support and won't load if it fails. You can ignore the check here. Useful for testing purposes, should not be used in production.
 
+### Local Payments
 
-### Local Payments  
 Local payments group together multiple region specific payment methods. Each payment method is being exported as its own component wich restricts the possible options for _countryCode_, _currencyCode_ and _paymentType_ props. Please refer to the [braintree guidelines](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/overview) for payment specific restrictions.  
-They accept the following props:  
+They accept the following props:
+
 - **saveLocalPaymentIdUrl**: `string`  
   It is **your** responsibility to develop this API  
   The url that gets called to the endpoint of the connect app to map the id of local payments to the transaction as recommended in Braintrees documentation. Communicates with CommerceTools backend
   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
 - **paymentType**: `any`  
- Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+  Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **countryCode**: `any`  
- Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+  Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **currencyCode**: `any`  
-Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
+  Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **merchantAccountId**: `string` - optional  
- If not specified it will use the generated clientToken. Otherwise, it is possible to make the transaction to the merchant specified in here.  
+  If not specified it will use the generated clientToken. Otherwise, it is possible to make the transaction to the merchant specified in here.
 - **shippingAddressRequired**: `boolean` - optional, defaults to false  
- If you need a shipping address to ship physical goods, set shippingAddressRequired to true.
+  If you need a shipping address to ship physical goods, set shippingAddressRequired to true.
 - **fallbackUrl**: `string`  
- Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
+  Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
 - **fallbackButtonText**: `string` - optional  
- The text to appear on the button 
+  The text to appear on the button
+
 ## Available Scripts
 
 In the project directory, you can run:
