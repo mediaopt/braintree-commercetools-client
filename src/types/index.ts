@@ -118,6 +118,11 @@ export type PayPalFundingSourcesProp = {
   };
 };
 
+export type PayPalShippingOptions = {
+  amount: number;
+  countryCode: string;
+};
+
 export type PayPalProps = {
   flow: FlowType;
   buttonColor: ButtonColorOption;
@@ -136,6 +141,7 @@ export type PayPalProps = {
   size?: ButtonSizeOption;
   tagline?: boolean;
   height?: number;
+  shippingOptions?: PayPalShippingOptions[];
 };
 
 export type ShippingAddressOverride = {

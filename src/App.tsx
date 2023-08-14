@@ -18,7 +18,11 @@ import {
   Grabpay,
   IDeal,
 } from "./components/LocalPaymentMethods";
-import { ShippingAddressOverride, Shipping } from "./types";
+import {
+  ShippingAddressOverride,
+  Shipping,
+  PayPalShippingOptions,
+} from "./types";
 
 import {
   ButtonColorOption,
@@ -33,7 +37,7 @@ import {
 
 const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiOGU3ZDNkNDctNDE4NC00MWY2LWI5ZTMtNmYyMzhkNDY2YWM0IiwiY2FydElkIjoiMTk4ZWJmOTMtYTZjNC00YTRlLWJjZGYtMzIwZDkwNDA5OGFiIiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiI4MGVkYjhkMi0wZGIxLTRmNzUtYjM5ZS1kMDcwNzlhOWRkMjUiLCJlbWFpbCI6Im1hamlkLmFiYmFzaUBtZWRpYW9wdC5kZSIsInNhbHV0YXRpb24iOiJtciIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJiaXJ0aGRheSI6IjE5ODktMDMtMDVUMDA6MDA6MDAuMDAwWiIsImNvbmZpcm1lZCI6dHJ1ZSwiYWRkcmVzc2VzIjpbeyJhZGRyZXNzSWQiOiJYWnFzZm5pVCIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJzdHJlZXROYW1lIjoiSG9jaHN0cmFcdTAwZGZlIDM3Iiwic3RyZWV0TnVtYmVyIjoiSG9jaHN0cmFcdTAwZGZlIDM3IiwicG9zdGFsQ29kZSI6IjEzMzU3IiwiY2l0eSI6IkJlcmxpbiIsImNvdW50cnkiOiJERSIsInBob25lIjoiKzk5NTU5OTM1NzU2MiIsImlzRGVmYXVsdEJpbGxpbmdBZGRyZXNzIjp0cnVlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOnRydWV9LHsiYWRkcmVzc0lkIjoiNkg3bEdieTAiLCJmaXJzdE5hbWUiOiJNYWppZCIsImxhc3ROYW1lIjoiQWJiYXNpIiwic3RyZWV0TmFtZSI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInN0cmVldE51bWJlciI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInBvc3RhbENvZGUiOiIxMzM1NyIsImNpdHkiOiJGbG9yaWRhIiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrOTk1NTk5MzU3NTYyIiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfV19fQ.QM-mY-oY4YDy8O0p8AQA8g1f7EKr6N6KSUMfmb3CaYQ";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJkYjQ5ZjEzZi0wNjM4LTQzNGQtYmFjYi1mN2M5MWY4ZjcxZWQiLCJ3aXNobGlzdElkIjoiMzEwZGIzNTItZTQzNS00YzI1LWJiYzUtYWFmMmYzZDAyNDU3In0.RHs1tAjeTNudQBLMULnvI5bYkx0z0XJBqAS7LN0T5fU";
 
 function App() {
   const cartInformation = {
@@ -69,15 +73,15 @@ function App() {
 
   const lineItems: LineItem[] = [
     {
-      quantity: "10",
-      unitAmount: "100.00",
+      quantity: "1",
+      unitAmount: "2.50",
       name: "test name",
       kind: "debit" as LineItemKind,
       ...paypalLineItemUndefinedValues,
     },
     {
-      quantity: "10",
-      unitAmount: "100.00",
+      quantity: "1",
+      unitAmount: "2.50",
       name: "test name",
       kind: "debit" as LineItemKind,
       ...paypalLineItemUndefinedValues,
@@ -88,6 +92,17 @@ function App() {
     firstName: "majid",
     lastName: "abbasi",
   };
+
+  const shippingOptions: PayPalShippingOptions[] = [
+    {
+      amount: 1.0,
+      countryCode: "DE",
+    },
+    {
+      amount: 3.0,
+      countryCode: "US",
+    },
+  ];
 
   const params = {
     createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
@@ -142,6 +157,7 @@ function App() {
         size={"small" as ButtonSizeOption}
         tagline={true}
         height={55}
+        shippingOptions={shippingOptions}
         {...params}
       />
     ),

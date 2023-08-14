@@ -40,6 +40,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   size,
   tagline,
   height,
+  shippingOptions,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -74,6 +75,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         size={size}
         tagline={tagline}
         height={height}
+        shippingOptions={shippingOptions}
       />
     </RenderTemplate>
   );

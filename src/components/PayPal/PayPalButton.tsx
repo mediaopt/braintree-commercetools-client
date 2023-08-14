@@ -33,6 +33,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
   size,
   tagline,
   height,
+  shippingOptions,
 }) => {
   const { clientToken } = usePayment();
 
@@ -61,6 +62,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
       size={size}
       tagline={tagline}
       height={height}
+      shippingOptions={shippingOptions}
     />
   ) : (
     <></>
