@@ -1,6 +1,6 @@
 {
   "name": "braintree-commercetools-client",
-  "version": "0.01.20",
+  "version": "0.01.21",
   "private": false,
   "type": "module",
   "license": "MIT",
