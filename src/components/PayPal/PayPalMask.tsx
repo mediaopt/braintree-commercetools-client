@@ -49,6 +49,10 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   useKount,
   lineItems,
   shipping,
+  shape,
+  size,
+  tagline,
+  height,
 }) => {
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
@@ -199,6 +203,10 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                       style: {
                         label: buttonLabel,
                         color: buttonColor,
+                        shape,
+                        size,
+                        tagline,
+                        height,
                       },
                       fundingSource: "paypal",
                       createBillingAgreement: function () {
@@ -226,6 +234,10 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                             fundingButtonConfigs[fundingSource].buttonLabel,
                           color:
                             fundingButtonConfigs[fundingSource].buttonColor,
+                          shape,
+                          size,
+                          tagline,
+                          height,
                         },
                         fundingSource: fundingSource,
                         createOrder: () => {
@@ -276,6 +288,10 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     billingAgreementDescription,
     shippingAddressEditable,
     shippingAddressOverride,
+    shape,
+    size,
+    tagline,
+    height,
   ]);
 
   const changeAccount = (e: React.ChangeEvent<HTMLInputElement>) => {

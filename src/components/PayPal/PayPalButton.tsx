@@ -29,6 +29,10 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
   useKount,
   lineItems,
   shipping,
+  shape,
+  size,
+  tagline,
+  height,
 }) => {
   const { clientToken } = usePayment();
 
@@ -53,6 +57,10 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
       useKount={useKount}
       lineItems={lineItems}
       shipping={shipping}
+      shape={shape}
+      size={size}
+      tagline={tagline}
+      height={height}
     />
   ) : (
     <></>

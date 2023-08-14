@@ -27,6 +27,8 @@ import {
   Intent,
   LineItem,
   LineItemKind,
+  ButtonShapeOption,
+  ButtonSizeOption,
 } from "paypal-checkout-components";
 
 const COFE_IDENTIFIER: string = "majid";
@@ -136,6 +138,10 @@ function App() {
         locale="en_GB"
         intent={"capture" as Intent}
         useKount={true}
+        shape={"pill" as ButtonShapeOption}
+        size={"small" as ButtonSizeOption}
+        tagline={true}
+        height={55}
         {...params}
       />
     ),

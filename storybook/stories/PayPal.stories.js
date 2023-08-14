@@ -25,6 +25,14 @@ export default {
       options: ["capture", "order", "authorize"],
       control: { type: "select" },
     },
+    shape: {
+      options: ["pill", "rect"],
+      control: { type: "select" },
+    },
+    size: {
+      options: ["small", "medium", "large", "responsive"],
+      control: { type: "select" },
+    },
   },
 };
 
@@ -37,6 +45,10 @@ export const Main = {
     payLater: false,
     locale: "en_GB",
     intent: "capture",
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
   },
 };
 
@@ -50,6 +62,10 @@ export const PayLater = {
     payLater: true,
     locale: "en_GB",
     intent: "capture",
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
   },
 };
 
@@ -65,5 +81,9 @@ export const Vaulting = {
     intent: "capture",
     enableShippingAddress: true,
     shippingAddressEditable: false,
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
   },
 };

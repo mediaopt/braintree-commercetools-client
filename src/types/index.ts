@@ -5,6 +5,8 @@ import {
   FlowType,
   Intent,
   LineItem,
+  ButtonShapeOption,
+  ButtonSizeOption,
 } from "paypal-checkout-components";
 import {
   ThreeDSecureAdditionalInformation,
@@ -129,6 +131,11 @@ export type PayPalProps = {
   shippingAddressEditable?: boolean;
   billingAgreementDescription?: string;
   shippingAddressOverride?: ShippingAddressOverride;
+
+  shape?: ButtonShapeOption;
+  size?: ButtonSizeOption;
+  tagline?: boolean;
+  height?: number;
 };
 
 export type ShippingAddressOverride = {
