@@ -5,6 +5,8 @@ import {
   FlowType,
   Intent,
   LineItem,
+  ButtonShapeOption,
+  ButtonSizeOption,
 } from "paypal-checkout-components";
 import {
   ThreeDSecureAdditionalInformation,
@@ -18,10 +20,20 @@ export type ClientTokenRequest = {
   merchantAccountId?: string;
 };
 
+export type LineItems = LineItem[];
+
+export type UseKount = { useKount?: boolean };
+
+type LineItemsShipping = {
+  lineItems?: LineItems;
+  shipping?: Shipping;
+};
+
 export type GeneralPayButtonProps = {
   fullWidth?: boolean;
   buttonText?: string;
-};
+} & UseKount &
+  LineItemsShipping;
 
 export type GeneralComponentsProps = {
   purchaseUrl: string;
@@ -31,7 +43,9 @@ export type GeneralComponentsProps = {
   sessionValue: string;
   purchaseCallback: (result: any, options?: any) => void;
 } & CartInformationProps &
-  GeneralPayButtonProps;
+  GeneralPayButtonProps &
+  UseKount &
+  LineItemsShipping;
 
 export type LocalPaymentComponentsProp = {
   saveLocalPaymentIdUrl: string;
@@ -115,9 +129,13 @@ export type PayPalProps = {
   commit?: boolean;
   enableShippingAddress?: boolean;
   shippingAddressEditable?: boolean;
-  paypalLineItem?: LineItem[];
   billingAgreementDescription?: string;
   shippingAddressOverride?: ShippingAddressOverride;
+
+  shape?: ButtonShapeOption;
+  size?: ButtonSizeOption;
+  tagline?: boolean;
+  height?: number;
 };
 
 export type ShippingAddressOverride = {
@@ -168,7 +186,7 @@ export type GooglePayTypes = {
   billingAddressRequired?: boolean;
   acquirerCountryCode: string;
   fullWidth: boolean;
-};
+} & LineItemsShipping;
 
 export type VenmoTypes = {
   mobileWebFallBack: boolean;
@@ -282,6 +300,21 @@ interface LocalPaymentP24 extends LocalPaymentMethodsType {
   countryCode: "PL";
   currencyCode: "EUR" | "PL";
 }
+
+export type Shipping = {
+  company?: string;
+  countryCodeAlpha2?: string;
+  countryCodeAlpha3?: string;
+  countryCodeNumeric?: string;
+  countryName?: string;
+  extendedAddress?: string;
+  firstName?: string;
+  lastName?: string;
+  locality?: string;
+  postalCode?: string;
+  region?: string;
+  streetAddress?: string;
+};
 
 export type LocalPaymentBancontactType = React.FC<
   GeneralComponentsProps & LocalPaymentBancontact

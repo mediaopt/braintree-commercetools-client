@@ -18,7 +18,12 @@ type ApplePayMaskProps = ApplePayTypes & GeneralPayButtonProps;
 
 export const ApplePayMask: React.FC<
   React.PropsWithChildren<ApplePayMaskProps>
-> = ({ fullWidth, applePayDisplayName }: ApplePayMaskProps) => {
+> = ({
+  fullWidth,
+  applePayDisplayName,
+  lineItems,
+  shipping,
+}: ApplePayMaskProps) => {
   const [applePayInstanceState, setApplePayInstanceState] =
     useState<ApplePay>();
 
@@ -113,7 +118,11 @@ export const ApplePayMask: React.FC<
                       return;
                     }
 
-                    if (payload) handlePurchase(payload.nonce);
+                    if (payload)
+                      handlePurchase(payload.nonce, {
+                        lineItems: lineItems,
+                        shipping: shipping,
+                      });
 
                     session.completePayment(
                       window.ApplePaySession.STATUS_SUCCESS

@@ -18,7 +18,7 @@ import {
   Grabpay,
   IDeal,
 } from "./components/LocalPaymentMethods";
-import { ShippingAddressOverride } from "./types";
+import { ShippingAddressOverride, Shipping } from "./types";
 
 import {
   ButtonColorOption,
@@ -27,11 +27,13 @@ import {
   Intent,
   LineItem,
   LineItemKind,
+  ButtonShapeOption,
+  ButtonSizeOption,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
+const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJmODRlNWI3Ni05ODE5LTQ1MTMtOTcxNC05NWE3ZDI2YzRhZTgiLCJ3aXNobGlzdElkIjoiYTcwM2IyYTUtZGM5MS00MWM5LTlkYTQtYWIxMTI3NTJjMDExIiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiIyZDgzZjQ3MC1mYjU5LTRmOWUtYWI3MS1kZDI3YjMwZWYyNjYiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwiZmlyc3ROYW1lIjoiSmFuZSIsImxhc3ROYW1lIjoiRG9lIiwiYmlydGhkYXkiOiIxOTc0LTA5LTIwVDAwOjAwOjAwLjAwMFoiLCJjb25maXJtZWQiOnRydWUsImFkZHJlc3NlcyI6W3siYWRkcmVzc0lkIjoiSWdkZzZrbnYiLCJmaXJzdE5hbWUiOiJKYW5lIiwibGFzdE5hbWUiOiJEb2UiLCJzdHJlZXROYW1lIjoiRmlyc3QgU3RyZWV0Iiwic3RyZWV0TnVtYmVyIjoiMTIiLCJwb3N0YWxDb2RlIjoiMTIzNDUiLCJjaXR5IjoiRXhhbXBsZSBDaXR5IiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrMzEyMzQ1Njc4IiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOnRydWUsImlzRGVmYXVsdFNoaXBwaW5nQWRkcmVzcyI6ZmFsc2V9LHsiYWRkcmVzc0lkIjoiaW13blJQUkYiLCJmaXJzdE5hbWUiOiJKYW5lIiwibGFzdE5hbWUiOiJEb2UiLCJzdHJlZXROYW1lIjoiVGhpcmQgU3RyZWV0Iiwic3RyZWV0TnVtYmVyIjoiMzQiLCJwb3N0YWxDb2RlIjoiMTIzNDUiLCJjaXR5IjoiRXhhbXBsZSBDaXR5IiwiY291bnRyeSI6Ik5MIiwicGhvbmUiOiIrMzExMjM0NTY3OCIsImlzRGVmYXVsdEJpbGxpbmdBZGRyZXNzIjpmYWxzZSwiaXNEZWZhdWx0U2hpcHBpbmdBZGRyZXNzIjpmYWxzZX0seyJhZGRyZXNzSWQiOiJaZWEzME11aSIsImZpcnN0TmFtZSI6IlNpbWVvbmUiLCJsYXN0TmFtZSI6IkVsc2UiLCJzdHJlZXROYW1lIjoiVW5uYW1lZHN0ciIsInN0cmVldE51bWJlciI6IjIzNCIsInBvc3RhbENvZGUiOiIxMjM0NSIsImNpdHkiOiJUb3duIiwiY291bnRyeSI6IkRFIiwicGhvbmUiOiIxMjQzMjUzNjU0NjQyMzE0MzU2NyIsImlzRGVmYXVsdEJpbGxpbmdBZGRyZXNzIjpmYWxzZSwiaXNEZWZhdWx0U2hpcHBpbmdBZGRyZXNzIjpmYWxzZX1dfX0.mSr-Tvf1nOJ4CrS3AjVSjS69i77vwFvKennaZ3Xw98o";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiOGU3ZDNkNDctNDE4NC00MWY2LWI5ZTMtNmYyMzhkNDY2YWM0IiwiY2FydElkIjoiMTk4ZWJmOTMtYTZjNC00YTRlLWJjZGYtMzIwZDkwNDA5OGFiIiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiI4MGVkYjhkMi0wZGIxLTRmNzUtYjM5ZS1kMDcwNzlhOWRkMjUiLCJlbWFpbCI6Im1hamlkLmFiYmFzaUBtZWRpYW9wdC5kZSIsInNhbHV0YXRpb24iOiJtciIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJiaXJ0aGRheSI6IjE5ODktMDMtMDVUMDA6MDA6MDAuMDAwWiIsImNvbmZpcm1lZCI6dHJ1ZSwiYWRkcmVzc2VzIjpbeyJhZGRyZXNzSWQiOiJYWnFzZm5pVCIsImZpcnN0TmFtZSI6Ik1hamlkIiwibGFzdE5hbWUiOiJBYmJhc2kiLCJzdHJlZXROYW1lIjoiSG9jaHN0cmFcdTAwZGZlIDM3Iiwic3RyZWV0TnVtYmVyIjoiSG9jaHN0cmFcdTAwZGZlIDM3IiwicG9zdGFsQ29kZSI6IjEzMzU3IiwiY2l0eSI6IkJlcmxpbiIsImNvdW50cnkiOiJERSIsInBob25lIjoiKzk5NTU5OTM1NzU2MiIsImlzRGVmYXVsdEJpbGxpbmdBZGRyZXNzIjp0cnVlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOnRydWV9LHsiYWRkcmVzc0lkIjoiNkg3bEdieTAiLCJmaXJzdE5hbWUiOiJNYWppZCIsImxhc3ROYW1lIjoiQWJiYXNpIiwic3RyZWV0TmFtZSI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInN0cmVldE51bWJlciI6IkhvY2hzdHJhXHUwMGRmZSAzNyIsInBvc3RhbENvZGUiOiIxMzM1NyIsImNpdHkiOiJGbG9yaWRhIiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrOTk1NTk5MzU3NTYyIiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfV19fQ.QM-mY-oY4YDy8O0p8AQA8g1f7EKr6N6KSUMfmb3CaYQ";
 
 function App() {
   const cartInformation = {
@@ -58,34 +60,14 @@ function App() {
     },
   };
 
-  const params = {
-    createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
-    getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
-    purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
-    sessionKey: "frontastic-session",
-    sessionValue: COFE_SESSION_VALUE,
-    purchaseCallback: (result: any, options: any) => {
-      console.log("Do something", result, options);
-    },
-    fullWidth: true,
-    buttonText: "Pay €X",
-    cartInformation: cartInformation,
-  };
-
-  const localPaymentParams = {
-    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
-    fallbackUrl: "/test",
-    fallbackButtonText: "purchase",
-    merchantAccountId: "",
-  };
-
   const paypalLineItemUndefinedValues = {
     unitTaxAmount: undefined,
     description: undefined,
     productCode: undefined,
     url: undefined,
   };
-  const paypalLineItem: LineItem[] = [
+
+  const lineItems: LineItem[] = [
     {
       quantity: "10",
       unitAmount: "100.00",
@@ -101,6 +83,35 @@ function App() {
       ...paypalLineItemUndefinedValues,
     },
   ];
+
+  const shipping: Shipping = {
+    firstName: "majid",
+    lastName: "abbasi",
+  };
+
+  const params = {
+    createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
+    getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
+    purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
+    sessionKey: "frontastic-session",
+    sessionValue: COFE_SESSION_VALUE,
+    purchaseCallback: (result: any, options: any) => {
+      console.log("Do something", result, options);
+    },
+    fullWidth: true,
+    buttonText: "Pay €X",
+    cartInformation: cartInformation,
+    lineItems: lineItems,
+    shipping: shipping,
+  };
+
+  const localPaymentParams = {
+    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
+    fallbackUrl: "/test",
+    fallbackButtonText: "purchase",
+    merchantAccountId: "",
+  };
+
   const paypalShippingAddressOverride: ShippingAddressOverride = {
     recipientName: "Scruff McGruff",
     line1: "1234 Main St.",
@@ -114,7 +125,9 @@ function App() {
 
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
-    CreditCard: <CreditCard {...params} enableVaulting={true} />,
+    CreditCard: (
+      <CreditCard {...params} enableVaulting={true} useKount={true} />
+    ),
     PayPal: (
       <PayPal
         flow={"checkout" as FlowType}
@@ -124,6 +137,11 @@ function App() {
         payLaterButtonColor={"blue" as ButtonColorOption}
         locale="en_GB"
         intent={"capture" as Intent}
+        useKount={true}
+        shape={"pill" as ButtonShapeOption}
+        size={"small" as ButtonSizeOption}
+        tagline={true}
+        height={55}
         {...params}
       />
     ),
@@ -158,6 +176,7 @@ function App() {
         useTestNonce={true}
         setVenmoUserName={(venmoName) => console.log(venmoName)}
         ignoreBowserSupport={true}
+        useKount={true}
         {...params}
       />
     ),
@@ -166,6 +185,7 @@ function App() {
       <ACH
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
         getAchVaultTokenURL={`https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getAchVaultToken`}
+        useKount={true}
         {...params}
       />
     ),
@@ -176,6 +196,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"BE"}
         paymentType={"bancontact"}
+        useKount={true}
       />
     ),
     P24: (
@@ -185,6 +206,7 @@ function App() {
         currencyCode={"EUR"}
         paymentType={"p24"}
         countryCode={"PL"}
+        useKount={true}
       />
     ),
     Sofort: (
@@ -194,6 +216,7 @@ function App() {
         currencyCode={"EUR"}
         paymentType={"sofort"}
         countryCode={"DE"}
+        useKount={true}
       />
     ),
     BLIK: (
@@ -203,6 +226,7 @@ function App() {
         currencyCode={"PLN"}
         countryCode={"PL"}
         paymentType={"blik"}
+        useKount={true}
       />
     ),
     MyBank: (
@@ -212,6 +236,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"IT"}
         paymentType={"mybank"}
+        useKount={true}
       />
     ),
     EPS: (
@@ -221,6 +246,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"AT"}
         paymentType={"eps"}
+        useKount={true}
       />
     ),
     Giropay: (
@@ -230,6 +256,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"DE"}
         paymentType={"giropay"}
+        useKount={true}
       />
     ),
     Grabpay: (
@@ -239,6 +266,7 @@ function App() {
         currencyCode={"SGD"}
         countryCode={"SG"}
         paymentType={"grabpay"}
+        useKount={true}
       />
     ),
     iDeal: (
@@ -248,6 +276,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"NL"}
         paymentType={"ideal"}
+        useKount={true}
       />
     ),
   };

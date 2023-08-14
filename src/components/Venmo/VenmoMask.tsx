@@ -33,6 +33,9 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   useTestNonce,
   setVenmoUserName,
   ignoreBowserSupport,
+  useKount,
+  lineItems,
+  shipping,
 }: VenmoMaskType) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -54,7 +57,11 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
   };
 
   const handleVenmoSuccess = (payload: VenmoTokenizePayload) => {
-    handlePurchase(payload.nonce, { deviceData: deviceData });
+    handlePurchase(payload.nonce, {
+      deviceData: deviceData,
+      lineItems: lineItems,
+      shipping: shipping,
+    });
     setVenmoUserName(payload.details.username);
   };
 
@@ -94,6 +101,7 @@ export const VenmoMask: React.FC<React.PropsWithChildren<VenmoMaskType>> = ({
           {
             client: clientInstance,
             paypal: true,
+            kount: useKount ?? undefined,
           },
           function (dataCollectorErr, dataCollectorInstance) {
             if (dataCollectorErr || !dataCollectorInstance) {

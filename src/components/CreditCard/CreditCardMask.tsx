@@ -12,7 +12,12 @@ import {
   HostedFieldsHostedFieldsFieldName,
 } from "braintree-web/modules/hosted-fields";
 
-import { GeneralPayButtonProps, GeneralCreditCardProps } from "../../types";
+import {
+  GeneralPayButtonProps,
+  GeneralCreditCardProps,
+  LineItems,
+  Shipping,
+} from "../../types";
 
 import {
   HOSTED_FIELDS_LABEL,
@@ -47,6 +52,9 @@ export const CreditCardMask: React.FC<
   enableVaulting,
   continueOnLiabilityShiftPossible = false,
   continueOnNoThreeDS = false,
+  useKount,
+  lineItems,
+  shipping,
 }) => {
   const {
     handlePurchase,
@@ -108,11 +116,22 @@ export const CreditCardMask: React.FC<
     threeDSecureParameters: ThreeDSecureVerifyOptions,
     shouldVault?: boolean
   ) => {
-    const options: { deviceData: string; shouldVault?: boolean } = {
+    const options: {
+      deviceData: string;
+      shouldVault?: boolean;
+      lineItems?: LineItems;
+      shipping?: Shipping;
+    } = {
       deviceData: deviceData,
     };
     if (shouldVault) {
       options.shouldVault = true;
+    }
+    if (lineItems) {
+      options.lineItems = lineItems;
+    }
+    if (shipping) {
+      options.shipping = shipping;
     }
     threeDS!
       .verifyCard(threeDSecureParameters)
@@ -272,6 +291,7 @@ export const CreditCardMask: React.FC<
           {
             client: client,
             paypal: true,
+            kount: useKount ?? undefined,
           },
           function (dataCollectorErr, dataCollectorInstance) {
             if (!dataCollectorErr && dataCollectorInstance) {

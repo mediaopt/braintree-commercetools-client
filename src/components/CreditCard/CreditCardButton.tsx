@@ -19,6 +19,9 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   enableVaulting,
   continueOnLiabilityShiftPossible,
   continueOnNoThreeDS,
+  useKount,
+  lineItems,
+  shipping,
 }: CreditCardButton) => {
   const { clientToken } = usePayment();
 
@@ -35,6 +38,9 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
       enableVaulting={enableVaulting}
       continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
       continueOnNoThreeDS={continueOnNoThreeDS}
+      useKount={useKount}
+      lineItems={lineItems}
+      shipping={shipping}
     />
   ) : (
     <></>

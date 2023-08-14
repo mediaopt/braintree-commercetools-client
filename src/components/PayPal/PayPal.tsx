@@ -31,9 +31,15 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   commit = true,
   enableShippingAddress = true,
   shippingAddressEditable = false,
-  paypalLineItem,
   billingAgreementDescription = "",
   shippingAddressOverride,
+  useKount,
+  lineItems,
+  shipping,
+  shape,
+  size,
+  tagline,
+  height,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -58,10 +64,16 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         intent={intent}
         commit={commit}
         enableShippingAddress={enableShippingAddress}
-        paypalLineItem={paypalLineItem}
         billingAgreementDescription={billingAgreementDescription}
         shippingAddressEditable={shippingAddressEditable}
         shippingAddressOverride={shippingAddressOverride}
+        useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
+        shape={shape}
+        size={size}
+        tagline={tagline}
+        height={height}
       />
     </RenderTemplate>
   );
