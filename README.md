@@ -38,6 +38,8 @@ Each payment component takes a set of props that will be the same for everything
    Line Items that will send as payload to createPaymentUrl. You can find the structure on [_LineItems_](src/types/index.ts).
 - **shipping**: `object`  
    Shipping that will send as payload to createPaymentUrl. You can find the structure on [_Shipping_](src/types/index.ts).
+- **useKount**: `boolean`  
+   if you set useKount to true it will send the kount request to Braintree on the client side.
 
 ```
 account: {
