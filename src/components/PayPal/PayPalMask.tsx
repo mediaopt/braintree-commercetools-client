@@ -255,6 +255,34 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                           );
 
                           if (shippingOption) {
+                            if (lineItems) {
+                              const shippingLineItemIndex =
+                                lineItems?.findIndex(
+                                  (lineItem) => lineItem.name === "Shipping"
+                                );
+
+                              const shippingAmountString =
+                                shippingOption.amount.toString();
+
+                              if (
+                                shippingLineItemIndex &&
+                                shippingLineItemIndex > -1
+                              ) {
+                                lineItems[shippingLineItemIndex].unitAmount =
+                                  shippingAmountString;
+                                lineItems[shippingLineItemIndex].totalAmount =
+                                  shippingAmountString;
+                              } else {
+                                lineItems.push({
+                                  name: "Shipping",
+                                  kind: "debit",
+                                  quantity: "1",
+                                  totalAmount: shippingAmountString,
+                                  unitAmount: shippingAmountString,
+                                });
+                              }
+                            }
+
                             return paypalCheckoutInstance.updatePayment({
                               amount:
                                 paymentInfo.amount + shippingOption.amount,
