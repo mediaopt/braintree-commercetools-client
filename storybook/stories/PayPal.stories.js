@@ -36,6 +36,17 @@ export default {
   },
 };
 
+const shippingOptions = [
+  {
+    amount: 1.0,
+    countryCode: "DE",
+  },
+  {
+    amount: 3.0,
+    countryCode: "US",
+  },
+];
+
 export const Main = {
   args: {
     ...params,
@@ -49,6 +60,7 @@ export const Main = {
     size: "small",
     tagline: true,
     height: 55,
+    shippingOptions: shippingOptions,
   },
 };
 
@@ -66,6 +78,7 @@ export const PayLater = {
     size: "small",
     tagline: true,
     height: 55,
+    shippingOptions: shippingOptions,
   },
 };
 
@@ -85,5 +98,6 @@ export const Vaulting = {
     size: "small",
     tagline: true,
     height: 55,
+    shippingOptions: shippingOptions,
   },
 };
