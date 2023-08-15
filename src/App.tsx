@@ -34,6 +34,7 @@ import {
   ButtonShapeOption,
   ButtonSizeOption,
 } from "paypal-checkout-components";
+import { CreditCardVault } from "./components/PureVaulting/CreditCard";
 
 const COFE_IDENTIFIER: string = "majid";
 const COFE_SESSION_VALUE: string =
@@ -296,9 +297,18 @@ function App() {
       />
     ),
   };
+
+  const [choosenVaultMethod, setChoosenVaultMethod] = useState("");
+  const vaultMethods: { [index: string]: JSX.Element } = {
+    CreditCard: <CreditCardVault {...params} />,
+  };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
     setChoosenPaymentMethod(e.target.value);
+  };
+  const changeVaultMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.checked) return;
+    setChoosenVaultMethod(e.target.value);
   };
 
   return (
@@ -317,6 +327,22 @@ function App() {
         </div>
       ))}
       <div>{paymentMethods[choosenPaymentMethod] ?? <></>}</div>
+      <hr />
+      <h2>Pure Vaults</h2>
+      {Object.keys(vaultMethods).map((entry, index) => (
+        <div key={index}>
+          <label>
+            <input
+              onChange={changeVaultMethod}
+              type="radio"
+              name="vaultmethod"
+              value={entry}
+            />
+            {entry}
+          </label>
+        </div>
+      ))}
+      <div>{vaultMethods[choosenVaultMethod] ?? <></>}</div>
     </div>
   );
 }
