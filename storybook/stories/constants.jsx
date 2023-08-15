@@ -57,7 +57,7 @@ export const params = {
   purchaseUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPurchase`,
   sessionKey: "frontastic-session",
   sessionValue:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJlNjdmZDg2MC0yZTUxLTQ4M2EtYTZjMi1jNTc5ODBiNDM1NTYiLCJ3aXNobGlzdElkIjoiYWUxM2FjYmMtYmQ1MS00MDY4LTliMTItMmE2MjU3YmY1NTllIn0._nnQxxbwXR9DrXkIov_2azePP80TxBrEMH-Z4DuV790",
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhODhiYzhmZS1iNzA2LTQzM2YtYTBkMS1kODUwMzk1MTg4MGYiLCJ3aXNobGlzdElkIjoiNmM5MmU4MDItYWU2Yi00MDgxLTllNzItNzAxM2YyZTljYjQ5In0.cRzoVt9pqimSGaPh_jC7_bULzHODah8FEcLQdKFEK34",
   purchaseCallback: (result, options) => {
     console.log("purchaseCallback", result, options);
   },

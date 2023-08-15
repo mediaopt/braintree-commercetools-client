@@ -53,6 +53,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   size,
   tagline,
   height,
+  shippingOptions,
 }) => {
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
@@ -240,6 +241,32 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                           height,
                         },
                         fundingSource: fundingSource,
+
+                        onShippingChange: function (data: any, actions: any) {
+                          if (!shippingOptions) return;
+
+                          const countryCode =
+                            data.shipping_address.country_code;
+                          if (!countryCode) return actions.reject();
+
+                          const shippingOption = shippingOptions.find(
+                            (shippingOption) =>
+                              shippingOption.countryCode === countryCode
+                          );
+
+                          if (shippingOption) {
+                            return paypalCheckoutInstance.updatePayment({
+                              amount:
+                                paymentInfo.amount + shippingOption.amount,
+                              currency: paymentInfo.currency,
+                              lineItems: lineItems,
+                              paymentId: data.paymentId,
+                            });
+                          } else {
+                            return actions.reject();
+                          }
+                        },
+
                         createOrder: () => {
                           return paypalCheckoutInstance.createPayment({
                             flow: flow,
@@ -260,7 +287,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                         onApprove: handleOnApprove,
                         onCancel: handleOnClose,
                         onError: handleOnError,
-                      })
+                      } as any)
                       .render("#paypal-button");
                   });
                 }
