@@ -40,6 +40,12 @@ Each payment component takes a set of props that will be the same for everything
    Shipping that will send as payload to createPaymentUrl. You can find the structure on [_Shipping_](src/types/index.ts).
 - **useKount**: `boolean`  
    if you set useKount to true it will send the kount request to Braintree on the client side.
+- **taxAmount**: `string`  
+   `Tax amount` that will send as payload to createPaymentUrl.
+- **shippingAmount**: `string`  
+   `Shipping amount` that will send as payload to createPaymentUrl.
+- **discountAmount**: `string`  
+   `Discount amount` that will send as payload to createPaymentUrl.
 
 ```
 account: {

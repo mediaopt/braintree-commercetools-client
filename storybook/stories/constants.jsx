@@ -31,18 +31,16 @@ const paypalLineItemUndefinedValues = {
 
 const lineItems = [
   {
-    quantity: "10",
-    unitAmount: "100.00",
-    name: "test name",
+    name: "Product",
     kind: "debit",
-    ...paypalLineItemUndefinedValues,
-  },
-  {
-    quantity: "10",
-    unitAmount: "100.00",
-    name: "test name",
-    kind: "debit",
-    ...paypalLineItemUndefinedValues,
+    quantity: "6",
+    unitAmount: "1.00",
+    unitOfMeasure: "unit",
+    totalAmount: "6.00",
+    taxAmount: "0.00",
+    discountAmount: "0.00",
+    productCode: "54321",
+    commodityCode: "98765",
   },
 ];
 
@@ -67,6 +65,9 @@ export const params = {
   useKount: false,
   lineItems: lineItems,
   shipping: shipping,
+  taxAmount: "0.00",
+  shippingAmount: "0.00",
+  discountAmount: "0.00",
 };
 
 export const localPaymentParams = {
