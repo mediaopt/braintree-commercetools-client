@@ -82,7 +82,7 @@ export const PaymentProvider: FC<
   React.PropsWithChildren<GeneralComponentsProps>
 > = ({
   createPaymentUrl,
-  createFakePaymentUrl,
+  createPaymentForVault,
   getClientTokenUrl,
   purchaseUrl,
   vaultPaymentMethodUrl,
@@ -118,8 +118,8 @@ export const PaymentProvider: FC<
       isLoading(true);
       try {
         const createPaymentEndpoint =
-          fakePayment && createFakePaymentUrl
-            ? createFakePaymentUrl
+          fakePayment && createPaymentForVault
+            ? createPaymentForVault
             : createPaymentUrl;
         const createPaymentResult = (await createPayment(
           sessionKey,

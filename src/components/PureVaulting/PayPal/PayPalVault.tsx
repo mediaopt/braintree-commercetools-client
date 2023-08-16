@@ -9,7 +9,7 @@ type PayPalComponentProps = PayPalProps & GeneralComponentsProps;
 export const PayPalVault: React.FC<PayPalComponentProps> = ({
   getClientTokenUrl,
   createPaymentUrl,
-  createFakePaymentUrl,
+  createPaymentForVault,
   purchaseUrl,
   vaultPaymentMethodUrl,
   sessionKey,
@@ -37,7 +37,7 @@ export const PayPalVault: React.FC<PayPalComponentProps> = ({
     <RenderTemplate
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
-      createFakePaymentUrl={createFakePaymentUrl}
+      createPaymentForVault={createPaymentForVault}
       purchaseUrl={purchaseUrl}
       vaultPaymentMethodUrl={vaultPaymentMethodUrl}
       sessionKey={sessionKey}
