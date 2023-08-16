@@ -33,6 +33,7 @@ export const Venmo: React.FC<VenmoProps> = ({
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }: VenmoProps) => {
   return (
     <RenderTemplate
@@ -46,6 +47,7 @@ export const Venmo: React.FC<VenmoProps> = ({
       taxAmount={taxAmount}
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
+      shippingMethodId={shippingMethodId}
     >
       <VenmoButton
         disabled={isPayButtonDisabled(cartInformation)}
@@ -62,6 +64,7 @@ export const Venmo: React.FC<VenmoProps> = ({
         useKount={useKount}
         lineItems={lineItems}
         shipping={shipping}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

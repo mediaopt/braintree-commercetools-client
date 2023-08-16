@@ -4,7 +4,8 @@ import { usePayment } from "./usePayment";
 export const useHandleGetClientToken = (
   disabled: boolean,
   merchantAccountId?: string,
-  fakePayment?: boolean
+  shippingMethodId?: string,
+  fakePayment?: boolean,
 ) => {
   const { handleGetClientToken } = usePayment();
 
@@ -12,5 +13,5 @@ export const useHandleGetClientToken = (
     if (disabled) return;
 
     handleGetClientToken(merchantAccountId, fakePayment);
-  }, [disabled]);
+  }, [disabled, shippingMethodId]);
 };

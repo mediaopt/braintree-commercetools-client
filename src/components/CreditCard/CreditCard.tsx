@@ -32,6 +32,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
@@ -45,6 +46,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
       taxAmount={taxAmount}
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
+      shippingMethodId={shippingMethodId}
     >
       <CreditCardButton
         disabled={isPayButtonDisabled(cartInformation)}
@@ -60,6 +62,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         useKount={useKount}
         lineItems={lineItems}
         shipping={shipping}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

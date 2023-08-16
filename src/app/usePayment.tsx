@@ -94,6 +94,7 @@ export const PaymentProvider: FC<
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -129,7 +130,8 @@ export const PaymentProvider: FC<
           sessionKey,
           sessionValue,
           createPaymentEndpoint,
-          cartInformation
+          cartInformation,
+          shippingMethodId
         )) as CreatePaymentResponse;
 
         if (!createPaymentResult.braintreeCustomerId && fakePayment) {

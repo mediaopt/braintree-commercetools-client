@@ -20,10 +20,11 @@ export const ACHButton: React.FC<ACHButtonProps> = ({
   useKount,
   lineItems,
   shipping,
+  shippingMethodId,
 }: ACHButtonProps) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <ACHMask

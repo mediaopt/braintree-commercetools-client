@@ -115,6 +115,7 @@ function App() {
     taxAmount: "0.00",
     shippingAmount: "0.00",
     discountAmount: "0.00",
+    shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
   };
 
   const localPaymentParams = {

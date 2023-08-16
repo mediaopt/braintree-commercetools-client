@@ -23,6 +23,7 @@ export const RenderTemplate: FC<
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }) => {
   return (
     <NotificationsProvider>
@@ -40,6 +41,7 @@ export const RenderTemplate: FC<
           taxAmount={taxAmount}
           shippingAmount={shippingAmount}
           discountAmount={discountAmount}
+          shippingMethodId={shippingMethodId}
         >
           <RenderPurchase>{children}</RenderPurchase>
         </PaymentProvider>

@@ -27,6 +27,7 @@ export const ACH: React.FC<ACHProps> = ({
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }: ACHProps) => {
   return (
     <RenderTemplate
@@ -40,6 +41,7 @@ export const ACH: React.FC<ACHProps> = ({
       taxAmount={taxAmount}
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
+      shippingMethodId={shippingMethodId}
     >
       <ACHButton
         disabled={isPayButtonDisabled(cartInformation)}
@@ -51,6 +53,7 @@ export const ACH: React.FC<ACHProps> = ({
         useKount={useKount}
         lineItems={lineItems}
         shipping={shipping}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

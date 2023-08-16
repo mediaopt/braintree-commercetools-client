@@ -33,6 +33,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }: GooglePayComponentProps) => {
   return (
     <RenderTemplate
@@ -46,6 +47,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
       taxAmount={taxAmount}
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
+      shippingMethodId={shippingMethodId}
     >
       <GooglePayButton
         disabled={isPayButtonDisabled(cartInformation)}
@@ -62,6 +64,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
         acquirerCountryCode={acquirerCountryCode}
         lineItems={lineItems}
         shipping={shipping}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

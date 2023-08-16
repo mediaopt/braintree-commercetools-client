@@ -44,6 +44,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -57,6 +58,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
       taxAmount={taxAmount}
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
+      shippingMethodId={shippingMethodId}
     >
       <PayPalButton
         disabled={isPayButtonDisabled(cartInformation)}
@@ -82,6 +84,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         tagline={tagline}
         height={height}
         shippingOptions={shippingOptions}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );
