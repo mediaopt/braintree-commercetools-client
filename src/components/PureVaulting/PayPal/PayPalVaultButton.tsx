@@ -27,7 +27,7 @@ export const PayPalVaultButton: React.FC<PayPalButtonProps> = ({
 }) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(false, undefined, true);
+  useHandleGetClientToken(false, undefined, undefined, true);
 
   return clientToken ? (
     <PayPalVaultMask
