@@ -4,7 +4,6 @@ import {
   ButtonLabelOption,
   FlowType,
   Intent,
-  LineItem,
   ButtonShapeOption,
   ButtonSizeOption,
 } from "paypal-checkout-components";
@@ -18,6 +17,19 @@ export type ClientTokenRequest = {
   paymentVersion: number;
   braintreeCustomerId?: string;
   merchantAccountId?: string;
+};
+
+export type LineItem = {
+  name?: string;
+  kind: string;
+  quantity: string;
+  unitAmount: string;
+  unitOfMeasure?: string;
+  totalAmount: string;
+  taxAmount?: string;
+  discountAmount?: string;
+  productCode?: string;
+  commodityCode?: string;
 };
 
 export type LineItems = LineItem[];
@@ -43,6 +55,9 @@ export type GeneralComponentsProps = {
   getClientTokenUrl: string;
   sessionKey: string;
   sessionValue: string;
+  taxAmount?: string;
+  shippingAmount?: string;
+  discountAmount?: string;
   purchaseCallback: (result: any, options?: any) => void;
 } & CartInformationProps &
   GeneralPayButtonProps &

@@ -35,6 +35,9 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
   useKount,
   lineItems,
   shipping,
+  taxAmount,
+  shippingAmount,
+  discountAmount,
 }: LocalPaymentMethodType) => {
   return (
     <RenderTemplate
@@ -45,6 +48,9 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      taxAmount={taxAmount}
+      shippingAmount={shippingAmount}
+      discountAmount={discountAmount}
     >
       <LocalPaymentMethodButton
         saveLocalPaymentIdUrl={saveLocalPaymentIdUrl}

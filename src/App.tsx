@@ -22,6 +22,7 @@ import {
   ShippingAddressOverride,
   Shipping,
   PayPalShippingOptions,
+  LineItem,
 } from "./types";
 
 import {
@@ -29,8 +30,6 @@ import {
   ButtonLabelOption,
   FlowType,
   Intent,
-  LineItem,
-  LineItemKind,
   ButtonShapeOption,
   ButtonSizeOption,
 } from "paypal-checkout-components";
@@ -66,42 +65,33 @@ function App() {
     },
   };
 
-  const paypalLineItemUndefinedValues = {
-    unitTaxAmount: undefined,
-    description: undefined,
-    productCode: undefined,
-    url: undefined,
-  };
-
   const lineItems: LineItem[] = [
     {
-      quantity: "1",
-      unitAmount: "2.50",
-      name: "test name",
-      kind: "debit" as LineItemKind,
-      ...paypalLineItemUndefinedValues,
-    },
-    {
-      quantity: "1",
-      unitAmount: "2.50",
-      name: "test name",
-      kind: "debit" as LineItemKind,
-      ...paypalLineItemUndefinedValues,
+      name: "Product",
+      kind: "debit",
+      quantity: "6",
+      unitAmount: "1.00",
+      unitOfMeasure: "unit",
+      totalAmount: "6.00",
+      taxAmount: "0.00",
+      discountAmount: "0.00",
+      productCode: "54321",
+      commodityCode: "98765",
     },
   ];
 
   const shipping: Shipping = {
-    firstName: "majid",
-    lastName: "abbasi",
+    firstName: "Majid",
+    lastName: "Abbasi",
   };
 
   const shippingOptions: PayPalShippingOptions[] = [
     {
-      amount: 1.0,
+      amount: 3.0,
       countryCode: "DE",
     },
     {
-      amount: 3.0,
+      amount: 4.0,
       countryCode: "US",
     },
   ];
@@ -122,6 +112,9 @@ function App() {
     cartInformation: cartInformation,
     lineItems: lineItems,
     shipping: shipping,
+    taxAmount: "0.00",
+    shippingAmount: "0.00",
+    discountAmount: "0.00",
   };
 
   const localPaymentParams = {
@@ -161,7 +154,7 @@ function App() {
         size={"small" as ButtonSizeOption}
         tagline={true}
         height={55}
-        shippingOptions={shippingOptions}
+        //shippingOptions={shippingOptions}
         {...params}
       />
     ),
