@@ -16,6 +16,7 @@ export const ApplePayButton: React.FC<ApplePayButtonProps> = ({
   disabled,
   fullWidth = true,
   applePayDisplayName,
+  shippingMethodId,
 }: ApplePayButtonProps) => {
   const [applyPaySupport, setApplyPaySupport] = useState(false);
   const { clientToken } = usePayment();
@@ -36,7 +37,7 @@ export const ApplePayButton: React.FC<ApplePayButtonProps> = ({
     }
   }, []);
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
   return clientToken && applyPaySupport ? (
     <ApplePayMask
       fullWidth={fullWidth}

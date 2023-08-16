@@ -54,6 +54,7 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
         billingAddressRequired={billingAddressRequired}
         phoneNumberRequired={phoneNumberRequired}
         acquirerCountryCode={acquirerCountryCode}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

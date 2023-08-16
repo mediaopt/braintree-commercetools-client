@@ -17,10 +17,11 @@ export const ACHButton: React.FC<ACHButtonProps> = ({
   cartInformation,
   mandateText,
   getAchVaultTokenURL,
+  shippingMethodId,
 }: ACHButtonProps) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <ACHMask

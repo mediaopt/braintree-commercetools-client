@@ -21,10 +21,11 @@ export const GooglePayButton: React.FC<GooglePayButtonProps> = ({
   billingAddressRequired,
   phoneNumberRequired,
   acquirerCountryCode,
+  shippingMethodId,
 }: GooglePayButtonProps) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <GooglePayMask

@@ -27,10 +27,11 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
   billingAgreementDescription,
   shippingAddressEditable,
   shippingAddressOverride,
+  shippingMethodId,
 }) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <PayPalMask

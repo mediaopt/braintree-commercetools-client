@@ -52,6 +52,7 @@ export const Venmo: React.FC<VenmoProps> = ({
         useTestNonce={useTestNonce}
         setVenmoUserName={setVenmoUserName}
         ignoreBowserSupport={ignoreBowserSupport}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

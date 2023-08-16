@@ -64,6 +64,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         billingAgreementDescription={billingAgreementDescription}
         shippingAddressEditable={shippingAddressEditable}
         shippingAddressOverride={shippingAddressOverride}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

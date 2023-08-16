@@ -38,6 +38,7 @@ export const ApplePay: React.FC<ApplePayComponentProps> = ({
         buttonText={buttonText}
         fullWidth={fullWidth}
         applePayDisplayName={applePayDisplayName}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

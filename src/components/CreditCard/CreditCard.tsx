@@ -50,6 +50,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         enableVaulting={enableVaulting}
         continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
         continueOnNoThreeDS={continueOnNoThreeDS}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

@@ -19,10 +19,11 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   enableVaulting,
   continueOnLiabilityShiftPossible,
   continueOnNoThreeDS,
+  shippingMethodId,
 }: CreditCardButton) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <CreditCardMask

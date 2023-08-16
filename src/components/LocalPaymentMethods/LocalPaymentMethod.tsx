@@ -56,6 +56,7 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
         fallbackUrl={fallbackUrl}
         fallbackButtonText={fallbackButtonText}
         shippingAddressRequired={shippingAddressRequired}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );

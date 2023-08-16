@@ -41,6 +41,7 @@ export const ACH: React.FC<ACHProps> = ({
         cartInformation={cartInformation}
         mandateText={mandateText}
         getAchVaultTokenURL={getAchVaultTokenURL}
+        shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>
   );
