@@ -98,9 +98,7 @@ function App() {
 
   const params = {
     createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
-    createPaymentForVault: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPaymentForVault`,
     getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
-    vaultPaymentMethodUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/vaultPaymentMethod`,
     purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
     sessionKey: "frontastic-session",
     sessionValue: COFE_SESSION_VALUE,
@@ -116,6 +114,11 @@ function App() {
     shippingAmount: "0.00",
     discountAmount: "0.00",
     shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
+  };
+
+  const vaultingParams = {
+    createPaymentForVault: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPaymentForVault`,
+    vaultPaymentMethodUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/vaultPaymentMethod`,
   };
 
   const localPaymentParams = {
@@ -297,7 +300,7 @@ function App() {
 
   const [choosenVaultMethod, setChoosenVaultMethod] = useState("");
   const vaultMethods: { [index: string]: JSX.Element } = {
-    CreditCardVault: <CreditCardVault {...params} />,
+    CreditCardVault: <CreditCardVault {...params} {...vaultingParams} />,
     PayPalVault: (
       <PayPalVault
         flow={"vault" as FlowType}
@@ -308,6 +311,7 @@ function App() {
         locale="en_GB"
         intent={"capture" as Intent}
         {...params}
+        {...vaultingParams}
       />
     ),
   };

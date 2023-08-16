@@ -32,7 +32,7 @@ type PaymentContextT = {
   clientToken: string;
   handleGetClientToken: (
     merchantAccountId?: string,
-    fakePayment?: boolean
+    vaultPayment?: boolean
   ) => void;
   setLocalPaymentId: (
     localPaymentId: string,
@@ -117,13 +117,13 @@ export const PaymentProvider: FC<
   const value = useMemo(() => {
     const handleGetClientToken = async (
       merchantAccountId?: string,
-      fakePayment?: boolean
+      vaultPayment?: boolean
     ) => {
       setGettingClientToken(true);
       isLoading(true);
       try {
         const createPaymentEndpoint =
-          fakePayment && createPaymentForVault
+          vaultPayment && createPaymentForVault
             ? createPaymentForVault
             : createPaymentUrl;
         const createPaymentResult = (await createPayment(
@@ -134,7 +134,7 @@ export const PaymentProvider: FC<
           shippingMethodId
         )) as CreatePaymentResponse;
 
-        if (!createPaymentResult.braintreeCustomerId && fakePayment) {
+        if (!createPaymentResult.braintreeCustomerId && vaultPayment) {
           isLoading(false);
           setGettingClientToken(false);
           notify("Error", "User not found");
