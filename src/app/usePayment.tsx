@@ -99,6 +99,7 @@ export const PaymentProvider: FC<
 
   const [clientToken, setClientToken] = useState("");
   const [braintreeCustomerId, setBraintreeCustomerId] = useState("");
+  const [customerVersion, setCustomerVersion] = useState<number>();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
@@ -135,6 +136,7 @@ export const PaymentProvider: FC<
           return;
         }
 
+        setCustomerVersion(createPaymentResult.customerVersion);
         setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
         if (
           createPaymentResult &&
@@ -280,8 +282,8 @@ export const PaymentProvider: FC<
 
     const handlePureVault = async (paymentNonce: string) => {
       const requestBody = {
-        paymentVersion: paymentInfo.version,
-        paymentId: paymentInfo.id,
+        customerVersion: customerVersion,
+        customerId: braintreeCustomerId,
         paymentMethodNonce: paymentNonce,
       };
 

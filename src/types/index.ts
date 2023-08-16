@@ -69,6 +69,7 @@ export type CreatePaymentResponse = {
   lineItems: [object]; // @todo add better types maybe?
   shippingMethod: object; // @todo add better types maybe?
   braintreeCustomerId: string;
+  customerVersion?: number;
 };
 
 export type TransactionSaleResponse = {
