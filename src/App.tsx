@@ -34,9 +34,9 @@ import {
   ButtonSizeOption,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJlYjg4MGIwNi02ZDI3LTRjMzMtYjYyYi0wNzM5ZTViYzFkNmIifQ.SJQEWkJl1lkkx6ReVQgAJbl57jKV6e6SsW7FeSYp9Gc";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI3NmE3YjA4MS0xMDBmLTRiZmMtYjM1Zi1mMThlMWIyN2QwYTciLCJ3aXNobGlzdElkIjoiNGY1NzE2ZDItOTRlMi00MjY3LTk3NzUtZDcwZGIyNjA3ZWJkIn0.eSqZhXmHVtNRU-P_L_4Qe2NrhP-6Tr-yTxvP-OURQPA";
 
 function App() {
   const cartInformation = {
@@ -111,6 +111,7 @@ function App() {
     taxAmount: "0.00",
     shippingAmount: "0.00",
     discountAmount: "0.00",
+    shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
   };
 
   const localPaymentParams = {

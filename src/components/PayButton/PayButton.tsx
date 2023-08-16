@@ -6,6 +6,7 @@ import { GeneralPayButtonProps } from "../../types";
 
 export type PayButtonProps = {
   disabled: boolean;
+  shippingMethodId?: string;
 } & GeneralPayButtonProps;
 
 export const PAY_BUTTON_TEXT_FALLBACK = "Purchase";

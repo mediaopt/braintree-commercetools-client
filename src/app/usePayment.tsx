@@ -86,6 +86,7 @@ export const PaymentProvider: FC<
   taxAmount,
   shippingAmount,
   discountAmount,
+  shippingMethodId,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -113,7 +114,8 @@ export const PaymentProvider: FC<
           sessionKey,
           sessionValue,
           createPaymentUrl,
-          cartInformation
+          cartInformation,
+          shippingMethodId
         )) as CreatePaymentResponse;
 
         setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);

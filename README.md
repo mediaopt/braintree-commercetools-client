@@ -31,6 +31,8 @@ Each payment component takes a set of props that will be the same for everything
    Makes the pay button use the full amount of width available (defaults to true).
 - **buttonText**: `string`  
    The text to be shown on the pay button. Could be the final amount the customer has to pay.
+- **shippingMethodId**: `string`  
+  The id of the selected shipping. It will be sent back in the create purchase call to calculate the correct shipping costs.  
 - **cartInformation**: `object`  
   Information about the customers cart to crate payments with.
   Structure:

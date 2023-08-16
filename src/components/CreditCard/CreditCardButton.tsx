@@ -22,10 +22,11 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   useKount,
   lineItems,
   shipping,
+  shippingMethodId,
 }: CreditCardButton) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <CreditCardMask

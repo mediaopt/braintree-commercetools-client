@@ -6,7 +6,8 @@ export const createPayment = async (
   sessionKey: string,
   sessionValue: string,
   url: string,
-  cartInformation: CartInformation
+  cartInformation: CartInformation,
+  shippingMethodId?: string
 ) => {
   try {
     const result = await makeRequest<CreatePaymentResponse, {}>(
@@ -14,7 +15,7 @@ export const createPayment = async (
       sessionValue,
       url,
       "POST",
-      cartInformation
+      { ...cartInformation, shippingMethodId: shippingMethodId }
     );
 
     return result;

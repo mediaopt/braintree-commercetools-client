@@ -57,6 +57,7 @@ export type GeneralComponentsProps = {
   shippingAmount?: string;
   discountAmount?: string;
   purchaseCallback: (result: any, options?: any) => void;
+  shippingMethodId?: string;
 } & CartInformationProps &
   GeneralPayButtonProps &
   UseKount &

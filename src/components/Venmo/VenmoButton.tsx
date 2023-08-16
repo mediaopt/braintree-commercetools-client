@@ -23,10 +23,11 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   useKount,
   lineItems,
   shipping,
+  shippingMethodId,
 }: VenmoButton) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId);
 
   return clientToken ? (
     <VenmoMask
