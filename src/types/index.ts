@@ -4,7 +4,8 @@ import {
   ButtonLabelOption,
   FlowType,
   Intent,
-  LineItem,
+  ButtonShapeOption,
+  ButtonSizeOption,
 } from "paypal-checkout-components";
 import {
   ThreeDSecureAdditionalInformation,
@@ -18,10 +19,33 @@ export type ClientTokenRequest = {
   merchantAccountId?: string;
 };
 
+export type LineItem = {
+  name?: string;
+  kind: string;
+  quantity: string;
+  unitAmount: string;
+  unitOfMeasure?: string;
+  totalAmount: string;
+  taxAmount?: string;
+  discountAmount?: string;
+  productCode?: string;
+  commodityCode?: string;
+};
+
+export type LineItems = LineItem[];
+
+export type UseKount = { useKount?: boolean };
+
+type LineItemsShipping = {
+  lineItems?: LineItems;
+  shipping?: Shipping;
+};
+
 export type GeneralPayButtonProps = {
   fullWidth?: boolean;
   buttonText?: string;
-};
+} & UseKount &
+  LineItemsShipping;
 
 export type GeneralComponentsProps = {
   purchaseUrl: string;
@@ -29,10 +53,15 @@ export type GeneralComponentsProps = {
   getClientTokenUrl: string;
   sessionKey: string;
   sessionValue: string;
+  taxAmount?: string;
+  shippingAmount?: string;
+  discountAmount?: string;
   purchaseCallback: (result: any, options?: any) => void;
   shippingMethodId?: string;
 } & CartInformationProps &
-  GeneralPayButtonProps;
+  GeneralPayButtonProps &
+  UseKount &
+  LineItemsShipping;
 
 export type LocalPaymentComponentsProp = {
   saveLocalPaymentIdUrl: string;
@@ -105,6 +134,11 @@ export type PayPalFundingSourcesProp = {
   };
 };
 
+export type PayPalShippingOptions = {
+  amount: number;
+  countryCode: string;
+};
+
 export type PayPalProps = {
   flow: FlowType;
   buttonColor: ButtonColorOption;
@@ -116,9 +150,14 @@ export type PayPalProps = {
   commit?: boolean;
   enableShippingAddress?: boolean;
   shippingAddressEditable?: boolean;
-  paypalLineItem?: LineItem[];
   billingAgreementDescription?: string;
   shippingAddressOverride?: ShippingAddressOverride;
+
+  shape?: ButtonShapeOption;
+  size?: ButtonSizeOption;
+  tagline?: boolean;
+  height?: number;
+  shippingOptions?: PayPalShippingOptions[];
 };
 
 export type ShippingAddressOverride = {
@@ -169,7 +208,7 @@ export type GooglePayTypes = {
   billingAddressRequired?: boolean;
   acquirerCountryCode: string;
   fullWidth: boolean;
-};
+} & LineItemsShipping;
 
 export type VenmoTypes = {
   mobileWebFallBack: boolean;
@@ -283,6 +322,21 @@ interface LocalPaymentP24 extends LocalPaymentMethodsType {
   countryCode: "PL";
   currencyCode: "EUR" | "PL";
 }
+
+export type Shipping = {
+  company?: string;
+  countryCodeAlpha2?: string;
+  countryCodeAlpha3?: string;
+  countryCodeNumeric?: string;
+  countryName?: string;
+  extendedAddress?: string;
+  firstName?: string;
+  lastName?: string;
+  locality?: string;
+  postalCode?: string;
+  region?: string;
+  streetAddress?: string;
+};
 
 export type LocalPaymentBancontactType = React.FC<
   GeneralComponentsProps & LocalPaymentBancontact

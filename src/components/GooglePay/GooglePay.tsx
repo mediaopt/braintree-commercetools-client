@@ -28,6 +28,11 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
   billingAddressRequired,
   phoneNumberRequired,
   acquirerCountryCode,
+  lineItems,
+  shipping,
+  taxAmount,
+  shippingAmount,
+  discountAmount,
   shippingMethodId,
 }: GooglePayComponentProps) => {
   return (
@@ -39,6 +44,9 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      taxAmount={taxAmount}
+      shippingAmount={shippingAmount}
+      discountAmount={discountAmount}
       shippingMethodId={shippingMethodId}
     >
       <GooglePayButton
@@ -54,6 +62,8 @@ export const GooglePay: React.FC<GooglePayComponentProps> = ({
         billingAddressRequired={billingAddressRequired}
         phoneNumberRequired={phoneNumberRequired}
         acquirerCountryCode={acquirerCountryCode}
+        lineItems={lineItems}
+        shipping={shipping}
         shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>

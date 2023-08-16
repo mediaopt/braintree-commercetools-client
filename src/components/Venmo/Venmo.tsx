@@ -27,6 +27,12 @@ export const Venmo: React.FC<VenmoProps> = ({
   useTestNonce,
   setVenmoUserName,
   ignoreBowserSupport,
+  useKount,
+  lineItems,
+  shipping,
+  taxAmount,
+  shippingAmount,
+  discountAmount,
   shippingMethodId,
 }: VenmoProps) => {
   return (
@@ -38,6 +44,9 @@ export const Venmo: React.FC<VenmoProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      taxAmount={taxAmount}
+      shippingAmount={shippingAmount}
+      discountAmount={discountAmount}
       shippingMethodId={shippingMethodId}
     >
       <VenmoButton
@@ -52,6 +61,9 @@ export const Venmo: React.FC<VenmoProps> = ({
         useTestNonce={useTestNonce}
         setVenmoUserName={setVenmoUserName}
         ignoreBowserSupport={ignoreBowserSupport}
+        useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
         shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>

@@ -23,10 +23,17 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
   intent,
   commit,
   enableShippingAddress,
-  paypalLineItem,
   billingAgreementDescription,
   shippingAddressEditable,
   shippingAddressOverride,
+  useKount,
+  lineItems,
+  shipping,
+  shape,
+  size,
+  tagline,
+  height,
+  shippingOptions,
   shippingMethodId,
 }) => {
   const { clientToken } = usePayment();
@@ -46,10 +53,17 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
       intent={intent}
       commit={commit}
       enableShippingAddress={enableShippingAddress}
-      paypalLineItem={paypalLineItem}
       billingAgreementDescription={billingAgreementDescription}
       shippingAddressEditable={shippingAddressEditable}
       shippingAddressOverride={shippingAddressOverride}
+      useKount={useKount}
+      lineItems={lineItems}
+      shipping={shipping}
+      shape={shape}
+      size={size}
+      tagline={tagline}
+      height={height}
+      shippingOptions={shippingOptions}
     />
   ) : (
     <></>

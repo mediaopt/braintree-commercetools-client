@@ -18,6 +18,9 @@ export const RenderTemplate: FC<
   sessionValue,
   purchaseCallback,
   cartInformation,
+  taxAmount,
+  shippingAmount,
+  discountAmount,
   shippingMethodId,
 }) => {
   return (
@@ -31,6 +34,9 @@ export const RenderTemplate: FC<
           sessionValue={sessionValue}
           purchaseCallback={purchaseCallback}
           cartInformation={cartInformation}
+          taxAmount={taxAmount}
+          shippingAmount={shippingAmount}
+          discountAmount={discountAmount}
           shippingMethodId={shippingMethodId}
         >
           <RenderPurchase>{children}</RenderPurchase>

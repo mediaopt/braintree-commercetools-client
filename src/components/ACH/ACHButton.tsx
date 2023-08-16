@@ -17,6 +17,9 @@ export const ACHButton: React.FC<ACHButtonProps> = ({
   cartInformation,
   mandateText,
   getAchVaultTokenURL,
+  useKount,
+  lineItems,
+  shipping,
   shippingMethodId,
 }: ACHButtonProps) => {
   const { clientToken } = usePayment();
@@ -30,6 +33,9 @@ export const ACHButton: React.FC<ACHButtonProps> = ({
       cartInformation={cartInformation}
       mandateText={mandateText}
       getAchVaultTokenURL={getAchVaultTokenURL}
+      useKount={useKount}
+      lineItems={lineItems}
+      shipping={shipping}
     />
   ) : (
     <></>

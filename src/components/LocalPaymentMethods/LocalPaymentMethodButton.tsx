@@ -25,6 +25,9 @@ export const LocalPaymentMethodButton: React.FC<LocalPaymentMethod> = ({
   fallbackUrl,
   fallbackButtonText = PAY_BUTTON_TEXT_FALLBACK,
   shippingAddressRequired,
+  useKount,
+  lineItems,
+  shipping,
   shippingMethodId,
 }: LocalPaymentMethod) => {
   const { clientToken } = usePayment();
@@ -43,6 +46,9 @@ export const LocalPaymentMethodButton: React.FC<LocalPaymentMethod> = ({
       fallbackUrl={fallbackUrl}
       fallbackButtonText={fallbackButtonText}
       shippingAddressRequired={shippingAddressRequired}
+      useKount={useKount}
+      lineItems={lineItems}
+      shipping={shipping}
     />
   ) : (
     <></>

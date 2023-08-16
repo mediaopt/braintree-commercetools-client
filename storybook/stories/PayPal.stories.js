@@ -25,8 +25,27 @@ export default {
       options: ["capture", "order", "authorize"],
       control: { type: "select" },
     },
+    shape: {
+      options: ["pill", "rect"],
+      control: { type: "select" },
+    },
+    size: {
+      options: ["small", "medium", "large", "responsive"],
+      control: { type: "select" },
+    },
   },
 };
+
+const shippingOptions = [
+  {
+    amount: 1.0,
+    countryCode: "DE",
+  },
+  {
+    amount: 3.0,
+    countryCode: "US",
+  },
+];
 
 export const Main = {
   args: {
@@ -37,6 +56,11 @@ export const Main = {
     payLater: false,
     locale: "en_GB",
     intent: "capture",
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
+    shippingOptions: shippingOptions,
   },
 };
 
@@ -50,6 +74,11 @@ export const PayLater = {
     payLater: true,
     locale: "en_GB",
     intent: "capture",
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
+    shippingOptions: shippingOptions,
   },
 };
 
@@ -65,5 +94,10 @@ export const Vaulting = {
     intent: "capture",
     enableShippingAddress: true,
     shippingAddressEditable: false,
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
+    shippingOptions: shippingOptions,
   },
 };

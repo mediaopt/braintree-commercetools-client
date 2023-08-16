@@ -21,6 +21,8 @@ export const GooglePayMask: React.FC<
   billingAddressRequired = false,
   acquirerCountryCode,
   fullWidth,
+  lineItems,
+  shipping,
 }: GooglePayTypes) => {
   const { handlePurchase, paymentInfo, clientToken } = usePayment();
   const { notify } = useNotifications();
@@ -104,7 +106,10 @@ export const GooglePayMask: React.FC<
                                   notify("Error", err.message);
                                   return;
                                 }
-                                handlePurchase(result.nonce);
+                                handlePurchase(result.nonce, {
+                                  lineItems: lineItems,
+                                  shipping: shipping,
+                                });
                               }
                             );
                           })

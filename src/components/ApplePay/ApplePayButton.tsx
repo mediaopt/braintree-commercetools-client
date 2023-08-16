@@ -16,6 +16,8 @@ export const ApplePayButton: React.FC<ApplePayButtonProps> = ({
   disabled,
   fullWidth = true,
   applePayDisplayName,
+  lineItems,
+  shipping,
   shippingMethodId,
 }: ApplePayButtonProps) => {
   const [applyPaySupport, setApplyPaySupport] = useState(false);
@@ -42,6 +44,8 @@ export const ApplePayButton: React.FC<ApplePayButtonProps> = ({
     <ApplePayMask
       fullWidth={fullWidth}
       applePayDisplayName={applePayDisplayName}
+      lineItems={lineItems}
+      shipping={shipping}
     />
   ) : (
     <></>

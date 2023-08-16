@@ -31,9 +31,19 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   commit = true,
   enableShippingAddress = true,
   shippingAddressEditable = false,
-  paypalLineItem,
   billingAgreementDescription = "",
   shippingAddressOverride,
+  useKount,
+  lineItems,
+  shipping,
+  shape,
+  size,
+  tagline,
+  height,
+  shippingOptions,
+  taxAmount,
+  shippingAmount,
+  discountAmount,
   shippingMethodId,
 }: PayPalComponentProps) => {
   return (
@@ -45,6 +55,9 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      taxAmount={taxAmount}
+      shippingAmount={shippingAmount}
+      discountAmount={discountAmount}
       shippingMethodId={shippingMethodId}
     >
       <PayPalButton
@@ -60,10 +73,17 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         intent={intent}
         commit={commit}
         enableShippingAddress={enableShippingAddress}
-        paypalLineItem={paypalLineItem}
         billingAgreementDescription={billingAgreementDescription}
         shippingAddressEditable={shippingAddressEditable}
         shippingAddressOverride={shippingAddressOverride}
+        useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
+        shape={shape}
+        size={size}
+        tagline={tagline}
+        height={height}
+        shippingOptions={shippingOptions}
         shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>

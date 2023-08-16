@@ -18,15 +18,20 @@ import {
   Grabpay,
   IDeal,
 } from "./components/LocalPaymentMethods";
-import { ShippingAddressOverride } from "./types";
+import {
+  ShippingAddressOverride,
+  Shipping,
+  PayPalShippingOptions,
+  LineItem,
+} from "./types";
 
 import {
   ButtonColorOption,
   ButtonLabelOption,
   FlowType,
   Intent,
-  LineItem,
-  LineItemKind,
+  ButtonShapeOption,
+  ButtonSizeOption,
 } from "paypal-checkout-components";
 
 const COFE_IDENTIFIER: string = "jye";
@@ -58,6 +63,37 @@ function App() {
     },
   };
 
+  const lineItems: LineItem[] = [
+    {
+      name: "Product",
+      kind: "debit",
+      quantity: "6",
+      unitAmount: "1.00",
+      unitOfMeasure: "unit",
+      totalAmount: "6.00",
+      taxAmount: "0.00",
+      discountAmount: "0.00",
+      productCode: "54321",
+      commodityCode: "98765",
+    },
+  ];
+
+  const shipping: Shipping = {
+    firstName: "Majid",
+    lastName: "Abbasi",
+  };
+
+  const shippingOptions: PayPalShippingOptions[] = [
+    {
+      amount: 3.0,
+      countryCode: "DE",
+    },
+    {
+      amount: 4.0,
+      countryCode: "US",
+    },
+  ];
+
   const params = {
     createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
     getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
@@ -70,6 +106,11 @@ function App() {
     fullWidth: true,
     buttonText: "Pay €X",
     cartInformation: cartInformation,
+    lineItems: lineItems,
+    shipping: shipping,
+    taxAmount: "0.00",
+    shippingAmount: "0.00",
+    discountAmount: "0.00",
     shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
   };
 
@@ -80,28 +121,6 @@ function App() {
     merchantAccountId: "",
   };
 
-  const paypalLineItemUndefinedValues = {
-    unitTaxAmount: undefined,
-    description: undefined,
-    productCode: undefined,
-    url: undefined,
-  };
-  const paypalLineItem: LineItem[] = [
-    {
-      quantity: "10",
-      unitAmount: "100.00",
-      name: "test name",
-      kind: "debit" as LineItemKind,
-      ...paypalLineItemUndefinedValues,
-    },
-    {
-      quantity: "10",
-      unitAmount: "100.00",
-      name: "test name",
-      kind: "debit" as LineItemKind,
-      ...paypalLineItemUndefinedValues,
-    },
-  ];
   const paypalShippingAddressOverride: ShippingAddressOverride = {
     recipientName: "Scruff McGruff",
     line1: "1234 Main St.",
@@ -115,7 +134,9 @@ function App() {
 
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
-    CreditCard: <CreditCard {...params} enableVaulting={true} />,
+    CreditCard: (
+      <CreditCard {...params} enableVaulting={true} useKount={true} />
+    ),
     PayPal: (
       <PayPal
         flow={"checkout" as FlowType}
@@ -125,6 +146,12 @@ function App() {
         payLaterButtonColor={"blue" as ButtonColorOption}
         locale="en_GB"
         intent={"capture" as Intent}
+        useKount={true}
+        shape={"pill" as ButtonShapeOption}
+        size={"small" as ButtonSizeOption}
+        tagline={true}
+        height={55}
+        //shippingOptions={shippingOptions}
         {...params}
       />
     ),
@@ -159,6 +186,7 @@ function App() {
         useTestNonce={true}
         setVenmoUserName={(venmoName) => console.log(venmoName)}
         ignoreBowserSupport={true}
+        useKount={true}
         {...params}
       />
     ),
@@ -167,6 +195,7 @@ function App() {
       <ACH
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
         getAchVaultTokenURL={`https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getAchVaultToken`}
+        useKount={true}
         {...params}
       />
     ),
@@ -177,6 +206,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"BE"}
         paymentType={"bancontact"}
+        useKount={true}
       />
     ),
     P24: (
@@ -186,6 +216,7 @@ function App() {
         currencyCode={"EUR"}
         paymentType={"p24"}
         countryCode={"PL"}
+        useKount={true}
       />
     ),
     Sofort: (
@@ -195,6 +226,7 @@ function App() {
         currencyCode={"EUR"}
         paymentType={"sofort"}
         countryCode={"DE"}
+        useKount={true}
       />
     ),
     BLIK: (
@@ -204,6 +236,7 @@ function App() {
         currencyCode={"PLN"}
         countryCode={"PL"}
         paymentType={"blik"}
+        useKount={true}
       />
     ),
     MyBank: (
@@ -213,6 +246,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"IT"}
         paymentType={"mybank"}
+        useKount={true}
       />
     ),
     EPS: (
@@ -222,6 +256,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"AT"}
         paymentType={"eps"}
+        useKount={true}
       />
     ),
     Giropay: (
@@ -231,6 +266,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"DE"}
         paymentType={"giropay"}
+        useKount={true}
       />
     ),
     Grabpay: (
@@ -240,6 +276,7 @@ function App() {
         currencyCode={"SGD"}
         countryCode={"SG"}
         paymentType={"grabpay"}
+        useKount={true}
       />
     ),
     iDeal: (
@@ -249,6 +286,7 @@ function App() {
         currencyCode={"EUR"}
         countryCode={"NL"}
         paymentType={"ideal"}
+        useKount={true}
       />
     ),
   };

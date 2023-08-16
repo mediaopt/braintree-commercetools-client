@@ -26,6 +26,12 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   enableVaulting,
   continueOnLiabilityShiftPossible,
   continueOnNoThreeDS,
+  useKount,
+  lineItems,
+  shipping,
+  taxAmount,
+  shippingAmount,
+  discountAmount,
   shippingMethodId,
 }: CreditCardProps) => {
   return (
@@ -37,6 +43,9 @@ export const CreditCard: React.FC<CreditCardProps> = ({
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
+      taxAmount={taxAmount}
+      shippingAmount={shippingAmount}
+      discountAmount={discountAmount}
       shippingMethodId={shippingMethodId}
     >
       <CreditCardButton
@@ -50,6 +59,9 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         enableVaulting={enableVaulting}
         continueOnLiabilityShiftPossible={continueOnLiabilityShiftPossible}
         continueOnNoThreeDS={continueOnNoThreeDS}
+        useKount={useKount}
+        lineItems={lineItems}
+        shipping={shipping}
         shippingMethodId={shippingMethodId}
       />
     </RenderTemplate>

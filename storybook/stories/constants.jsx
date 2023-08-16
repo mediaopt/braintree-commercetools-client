@@ -22,19 +22,52 @@ const cartInformation = {
   },
 };
 
+const paypalLineItemUndefinedValues = {
+  unitTaxAmount: undefined,
+  description: undefined,
+  productCode: undefined,
+  url: undefined,
+};
+
+const lineItems = [
+  {
+    name: "Product",
+    kind: "debit",
+    quantity: "6",
+    unitAmount: "1.00",
+    unitOfMeasure: "unit",
+    totalAmount: "6.00",
+    taxAmount: "0.00",
+    discountAmount: "0.00",
+    productCode: "54321",
+    commodityCode: "98765",
+  },
+];
+
+const shipping = {
+  firstName: "Jane",
+  lastName: "Doe",
+};
+
 export const params = {
   createPaymentUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPayment`,
   getClientTokenUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/getClientToken`,
   purchaseUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPurchase`,
   sessionKey: "frontastic-session",
   sessionValue:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI3OTVhNzkzMC1mZjQ3LTRiZGQtODJhYS03ZDdkNjhmYWZiYjciLCJ3aXNobGlzdElkIjoiNzBlOTliZjMtZDE4My00NmU2LTk4YjUtNjIzNTEyNGNiODRmIn0.CoD0oygSe3ioUE9y0D3KF-f9CAUVSieQ99fBPFcL0r0",
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhODhiYzhmZS1iNzA2LTQzM2YtYTBkMS1kODUwMzk1MTg4MGYiLCJ3aXNobGlzdElkIjoiNmM5MmU4MDItYWU2Yi00MDgxLTllNzItNzAxM2YyZTljYjQ5In0.cRzoVt9pqimSGaPh_jC7_bULzHODah8FEcLQdKFEK34",
   purchaseCallback: (result, options) => {
     console.log("purchaseCallback", result, options);
   },
   fullWidth: true,
   buttonText: "Pay €X",
   cartInformation: cartInformation,
+  useKount: false,
+  lineItems: lineItems,
+  shipping: shipping,
+  taxAmount: "0.00",
+  shippingAmount: "0.00",
+  discountAmount: "0.00",
   shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
 };
 

@@ -20,6 +20,9 @@ export const VenmoButton: React.FC<VenmoButton> = ({
   useTestNonce,
   setVenmoUserName,
   ignoreBowserSupport,
+  useKount,
+  lineItems,
+  shipping,
   shippingMethodId,
 }: VenmoButton) => {
   const { clientToken } = usePayment();
@@ -38,6 +41,9 @@ export const VenmoButton: React.FC<VenmoButton> = ({
       useTestNonce={useTestNonce}
       setVenmoUserName={setVenmoUserName}
       ignoreBowserSupport={ignoreBowserSupport}
+      useKount={useKount}
+      lineItems={lineItems}
+      shipping={shipping}
     />
   ) : (
     <></>
