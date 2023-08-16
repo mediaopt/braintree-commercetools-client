@@ -35,10 +35,11 @@ import {
   ButtonSizeOption,
 } from "paypal-checkout-components";
 import { CreditCardVault } from "./components/PureVaulting/CreditCard";
+import { PayPalVault } from "./components/PureVaulting/PayPal";
 
-const COFE_IDENTIFIER: string = "majid";
+const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJkYjQ5ZjEzZi0wNjM4LTQzNGQtYmFjYi1mN2M5MWY4ZjcxZWQiLCJ3aXNobGlzdElkIjoiMzEwZGIzNTItZTQzNS00YzI1LWJiYzUtYWFmMmYzZDAyNDU3In0.RHs1tAjeTNudQBLMULnvI5bYkx0z0XJBqAS7LN0T5fU";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI4ZjlhYWQ5Ny1iNmMzLTQ3OWItOGE2Yy1lNzY2ZTc2OWZlODYifQ.krwGTT9kRU53OAk5s2IRV68--ZWpkf5yTHs7ptfyuKw";
 
 function App() {
   const cartInformation = {
@@ -107,7 +108,9 @@ function App() {
 
   const params = {
     createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
+    createFakePaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createFakePayment`,
     getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
+    vaultPaymentMethodUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/vaultPaymentMethod`,
     purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
     sessionKey: "frontastic-session",
     sessionValue: COFE_SESSION_VALUE,
@@ -300,7 +303,19 @@ function App() {
 
   const [choosenVaultMethod, setChoosenVaultMethod] = useState("");
   const vaultMethods: { [index: string]: JSX.Element } = {
-    CreditCard: <CreditCardVault {...params} />,
+    CreditCardVault: <CreditCardVault {...params} />,
+    PayPalVault: (
+      <PayPalVault
+        flow={"vault" as FlowType}
+        buttonColor={"blue" as ButtonColorOption}
+        buttonLabel={"paypal" as ButtonLabelOption}
+        commit={true}
+        payLater={false}
+        locale="en_GB"
+        intent={"capture" as Intent}
+        {...params}
+      />
+    ),
   };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;

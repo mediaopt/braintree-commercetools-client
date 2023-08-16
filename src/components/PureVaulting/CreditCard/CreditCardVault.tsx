@@ -7,7 +7,9 @@ type CreditCardProps = GeneralComponentsProps & GeneralCreditCardProps;
 
 export const CreditCardVault: React.FC<CreditCardProps> = ({
   getClientTokenUrl,
+  createFakePaymentUrl,
   createPaymentUrl,
+  vaultPaymentMethodUrl,
   purchaseUrl,
   sessionValue,
   sessionKey,
@@ -18,7 +20,9 @@ export const CreditCardVault: React.FC<CreditCardProps> = ({
     <RenderTemplate
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
+      createFakePaymentUrl={createFakePaymentUrl}
       purchaseUrl={purchaseUrl}
+      vaultPaymentMethodUrl={vaultPaymentMethodUrl}
       sessionKey={sessionKey}
       sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}

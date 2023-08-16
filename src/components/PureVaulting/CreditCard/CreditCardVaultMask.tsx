@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { hostedFields, dataCollector } from "braintree-web";
-import { ThreeDSecureVerifyOptions } from "braintree-web/modules/three-d-secure";
+import { hostedFields } from "braintree-web";
 
 import { useBraintreeClient } from "../../../app/useBraintreeClient";
 import { usePayment } from "../../../app/usePayment";
 import { useNotifications } from "../../../app/useNotifications";
 import { useLoader } from "../../../app/useLoader";
-import {
-  HostedFieldsAccountDetails,
-  HostedFieldsHostedFieldsFieldName,
-} from "braintree-web/modules/hosted-fields";
+import { HostedFieldsHostedFieldsFieldName } from "braintree-web/modules/hosted-fields";
 
 import { GeneralPayButtonProps, GeneralCreditCardProps } from "../../../types";
 
@@ -24,26 +20,15 @@ type CreditCardMaskProps = GeneralPayButtonProps & GeneralCreditCardProps;
 
 export const CreditCardVaultMask: React.FC<
   React.PropsWithChildren<CreditCardMaskProps>
-> = ({
-  fullWidth = true,
-  buttonText,
-  showPostalCode,
-  threeDSAdditionalInformation,
-  threeDSBillingAddress,
-  showCardHoldersName,
-  continueOnLiabilityShiftPossible = false,
-  continueOnNoThreeDS = false,
-  useKount,
-}) => {
-  const { handlePurchase, paymentInfo, braintreeCustomerId } = usePayment();
+> = ({ fullWidth = true, buttonText, showPostalCode, showCardHoldersName }) => {
+  const { handlePureVault } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
   const [hostedFieldsCreated, setHostedFieldsCreated] = useState(false);
   const [emptyInputs, setEmptyInputs] = useState<boolean>(true);
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
-  const [deviceData, setDeviceData] = useState("");
 
-  const { client, threeDS } = useBraintreeClient();
+  const { client } = useBraintreeClient();
 
   const ccFormRef = React.useRef<HTMLFormElement>(null);
   const ccNumberRef = React.useRef<HTMLDivElement>(null);
@@ -64,68 +49,8 @@ export const CreditCardVaultMask: React.FC<
     postalCode: ccPostalRef,
   };
 
-  const verifyCardAndHandlePurchase = (
-    threeDSecureParameters: ThreeDSecureVerifyOptions
-  ) => {
-    const options: {
-      deviceData: string;
-      shouldVault: true;
-    } = {
-      deviceData: deviceData,
-      shouldVault: true,
-    };
-
-    threeDS!
-      .verifyCard(threeDSecureParameters)
-      .then(function (response: any) {
-        if (response.threeDSecureInfo.status !== "authenticate_successful") {
-          isLoading(false);
-          notify("Error", "Could not authenticate");
-          return;
-        }
-        if (response.threeDSecureInfo.liabilityShifted) {
-          handlePurchase(response.nonce, options);
-        } else if (response.threeDSecureInfo.liabilityShiftPossible) {
-          if (continueOnLiabilityShiftPossible) {
-            handlePurchase(response.nonce, options);
-          } else {
-            notify(
-              "Warning",
-              "Failed the 3D Secure verification. Please use a different payment method."
-            );
-          }
-        } else {
-          if (continueOnNoThreeDS) {
-            handlePurchase(response.nonce, options);
-          } else {
-            notify(
-              "Warning",
-              "3D Secure is not available for your card. Please use a different payment method."
-            );
-          }
-        }
-      })
-      .catch(function (error) {
-        isLoading(false);
-        if (error?.code.indexOf("THREEDS_LOOKUP") === 0) {
-          if (error.code === "THREEDS_LOOKUP_TOKENIZED_CARD_NOT_FOUND_ERROR") {
-            notify("Error", "Payment nonce does not exist or was already used");
-          } else if (error.code.indexOf("THREEDS_LOOKUP_VALIDATION") === 0) {
-            notify(
-              "Error",
-              "Validation error - check your input or try a different payment"
-            );
-          } else {
-            notify("Error", "Something went wrong - try again");
-          }
-        } else {
-          notify("Error", "Something went wrong - try again");
-        }
-      });
-  };
-
   useEffect(() => {
-    if (!client || !threeDS) return;
+    if (!client) return;
     isLoading(true);
     const form = ccFormRef.current;
 
@@ -230,53 +155,30 @@ export const CreditCardVaultMask: React.FC<
           setInvalidInput(!isValid);
         });
 
-        dataCollector.create(
-          {
-            client: client,
-            paypal: true,
-            kount: useKount ?? undefined,
-          },
-          function (dataCollectorErr, dataCollectorInstance) {
-            if (!dataCollectorErr && dataCollectorInstance) {
-              setDeviceData(dataCollectorInstance.deviceData);
-            }
-          }
-        );
-
         var tokenize = function (event: any) {
           event.preventDefault();
 
           isLoading(true);
 
-          hostedFieldsInstance.tokenize(
-            { vault: true },
-            function (err, payload) {
-              if (err || !payload) {
-                isLoading(false);
-                notify(
-                  "Error",
-                  "Something went wrong. Check your card details and try again."
-                );
-                return;
-              }
-
-              let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-                amount: paymentInfo.amount,
-                nonce: payload.nonce,
-                bin: payload.details.bin,
-                email: paymentInfo.cartInformation.account.email,
-                billingAddress: threeDSBillingAddress,
-                additionalInformation: threeDSAdditionalInformation,
-              };
-              verifyCardAndHandlePurchase(threeDSecureParameters);
+          hostedFieldsInstance.tokenize(function (err, payload) {
+            if (err || !payload) {
+              console.log(err);
+              isLoading(false);
+              notify(
+                "Error",
+                "Something went wrong. Check your card details and try again."
+              );
+              return;
             }
-          );
+
+            handlePureVault(payload.nonce);
+          });
         };
         form.addEventListener("submit", tokenize, false);
         isLoading(false);
       }
     );
-  }, [client, threeDS]);
+  }, [client]);
 
   return (
     <>

@@ -38,6 +38,8 @@ export type GeneralPayButtonProps = {
 export type GeneralComponentsProps = {
   purchaseUrl: string;
   createPaymentUrl: string;
+  createFakePaymentUrl?: string;
+  vaultPaymentMethodUrl?: string;
   getClientTokenUrl: string;
   sessionKey: string;
   sessionValue: string;

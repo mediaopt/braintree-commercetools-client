@@ -6,7 +6,7 @@ import { CreditCardVaultMask } from "./CreditCardVaultMask";
 export const CreditCardVaultButton: React.FC = ({}) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(false);
+  useHandleGetClientToken(false, undefined, true);
 
-  return clientToken ? <CreditCardVaultMask /> : <span>nothing</span>;
+  return clientToken ? <CreditCardVaultMask /> : <></>;
 };
