@@ -10,6 +10,7 @@ export type PayButtonProps = {
 } & GeneralPayButtonProps;
 
 export const PAY_BUTTON_TEXT_FALLBACK = "Purchase";
+export const VAULT_BUTTON_TEXT_FALLBACK = "Save for future use";
 
 export const PayButton: FC<React.PropsWithChildren<PayButtonProps>> = ({
   disabled,

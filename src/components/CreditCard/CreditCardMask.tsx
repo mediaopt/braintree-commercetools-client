@@ -55,9 +55,11 @@ export const CreditCardMask: React.FC<
   useKount,
   lineItems,
   shipping,
+  isPureVault = false,
 }) => {
   const {
     handlePurchase,
+    handlePureVault,
     paymentInfo,
     handleGetVaultedPaymentMethods,
     braintreeCustomerId,
@@ -96,6 +98,10 @@ export const CreditCardMask: React.FC<
     postalCode: ccPostalRef,
   };
   const handleGetVaultedPaymentMethodsByType = (type: string) => {
+    if (isPureVault) {
+      setHostedFieldsCreated(true);
+      return;
+    }
     const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
     handleGetVaultedPaymentMethods()
       .then((paymentMethods) => {
@@ -318,15 +324,22 @@ export const CreditCardMask: React.FC<
                 return;
               }
 
-              let threeDSecureParameters: ThreeDSecureVerifyOptions = {
-                amount: paymentInfo.amount,
-                nonce: payload.nonce,
-                bin: payload.details.bin,
-                email: paymentInfo.cartInformation.account.email,
-                billingAddress: threeDSBillingAddress,
-                additionalInformation: threeDSAdditionalInformation,
-              };
-              verifyCardAndHandlePurchase(threeDSecureParameters, shouldVault);
+              if (isPureVault) {
+                handlePureVault(payload.nonce);
+              } else {
+                let threeDSecureParameters: ThreeDSecureVerifyOptions = {
+                  amount: paymentInfo.amount,
+                  nonce: payload.nonce,
+                  bin: payload.details.bin,
+                  email: paymentInfo.cartInformation.account.email,
+                  billingAddress: threeDSBillingAddress,
+                  additionalInformation: threeDSAdditionalInformation,
+                };
+                verifyCardAndHandlePurchase(
+                  threeDSecureParameters,
+                  shouldVault
+                );
+              }
             }
           );
         };

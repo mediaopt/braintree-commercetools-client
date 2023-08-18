@@ -15,6 +15,10 @@ export const CreditCardVault: React.FC<CreditCardProps> = ({
   sessionKey,
   purchaseCallback,
   cartInformation,
+  fullWidth = true,
+  buttonText,
+  showPostalCode,
+  showCardHoldersName,
 }) => {
   return (
     <RenderTemplate
@@ -28,7 +32,13 @@ export const CreditCardVault: React.FC<CreditCardProps> = ({
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
     >
-      <CreditCardVaultButton />
+      <CreditCardVaultButton
+        disabled={false}
+        buttonText={buttonText}
+        fullWidth={fullWidth}
+        showPostalCode={showPostalCode}
+        showCardHoldersName={showCardHoldersName}
+      />
     </RenderTemplate>
   );
 };
