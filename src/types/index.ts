@@ -161,6 +161,7 @@ export type PayPalProps = {
   tagline?: boolean;
   height?: number;
   shippingOptions?: PayPalShippingOptions[];
+  isPureVault?: boolean;
 };
 
 export type ShippingAddressOverride = {
@@ -251,6 +252,7 @@ export type GeneralCreditCardProps = {
   enableVaulting?: boolean;
   continueOnLiabilityShiftPossible?: boolean;
   continueOnNoThreeDS?: boolean;
+  isPureVault?: boolean;
 };
 
 export type AchVaultRequest = { paymentMethodNonce: string };

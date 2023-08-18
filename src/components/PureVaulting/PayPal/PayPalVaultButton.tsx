@@ -1,7 +1,7 @@
 import React from "react";
 import { usePayment } from "../../../app/usePayment";
 import { useHandleGetClientToken } from "../../../app/useHandleGetClientToken";
-import { PayPalVaultMask } from "./PayPalVaultMask";
+import { PayPalMask } from "../../PayPal/PayPalMask";
 import { PayPalProps } from "../../../types";
 import { PAY_BUTTON_TEXT_FALLBACK, PayButtonProps } from "../../PayButton";
 
@@ -30,7 +30,7 @@ export const PayPalVaultButton: React.FC<PayPalButtonProps> = ({
   useHandleGetClientToken(false, undefined, undefined, true);
 
   return clientToken ? (
-    <PayPalVaultMask
+    <PayPalMask
       fullWidth={fullWidth}
       buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
       flow={flow}
@@ -47,6 +47,7 @@ export const PayPalVaultButton: React.FC<PayPalButtonProps> = ({
       enableShippingAddress={enableShippingAddress}
       shippingAddressEditable={shippingAddressEditable}
       shippingAddressOverride={shippingAddressOverride}
+      isPureVault={true}
     />
   ) : (
     <></>

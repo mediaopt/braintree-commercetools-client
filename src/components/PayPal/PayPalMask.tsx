@@ -54,6 +54,7 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
   tagline,
   height,
   shippingOptions,
+  isPureVault = false,
 }) => {
   const [limitedVaultedPayments, setLimitedVaultedPaymentMethods] = useState<
     LimitedVaultedPayment[]
@@ -65,12 +66,16 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
     handlePurchase,
     paymentInfo,
     clientToken,
+    handlePureVault,
     handleGetVaultedPaymentMethods,
   } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
 
   useEffect(() => {
+    if (isPureVault) {
+      return;
+    }
     const filteredPaymentMethods: Array<LimitedVaultedPayment> = [];
     handleGetVaultedPaymentMethods().then((paymentMethods) => {
       paymentMethods.forEach((paymentMethod) => {
@@ -170,24 +175,28 @@ export const PayPalMask: React.FC<React.PropsWithChildren<PayPalMaskProps>> = ({
                   return paypalCheckoutInstance.tokenizePayment(
                     data,
                     function (err: any, payload: any) {
-                      handlePurchase(payload.nonce, {
-                        deviceData: deviceData,
-                        lineItems: lineItems,
-                        shipping: shipping,
-                        account: {
-                          email: payload.details.email,
-                        },
-                        billing: {
-                          firstName: payload.details.firstName,
-                          lastName: payload.details.lastName,
-                          streetName: payload.details.shippingAddress.line1,
-                          streetNumber: payload.details.shippingAddress.line1,
-                          city: payload.details.shippingAddress.city,
-                          country: payload.details.countryCode,
-                          postalCode:
-                            payload.details.shippingAddress.postalCode,
-                        },
-                      });
+                      if (isPureVault) {
+                        handlePureVault(payload.nonce);
+                      } else {
+                        handlePurchase(payload.nonce, {
+                          deviceData: deviceData,
+                          lineItems: lineItems,
+                          shipping: shipping,
+                          account: {
+                            email: payload.details.email,
+                          },
+                          billing: {
+                            firstName: payload.details.firstName,
+                            lastName: payload.details.lastName,
+                            streetName: payload.details.shippingAddress.line1,
+                            streetNumber: payload.details.shippingAddress.line1,
+                            city: payload.details.shippingAddress.city,
+                            country: payload.details.countryCode,
+                            postalCode:
+                              payload.details.shippingAddress.postalCode,
+                          },
+                        });
+                      }
                     }
                   );
                 };
