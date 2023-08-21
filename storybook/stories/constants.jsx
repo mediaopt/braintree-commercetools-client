@@ -71,6 +71,11 @@ export const params = {
   shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
 };
 
+export const vaultingParams = {
+  createPaymentForVault: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPaymentForVault`,
+  vaultPaymentMethodUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/vaultPaymentMethod`,
+};
+
 export const localPaymentParams = {
   saveLocalPaymentIdUrl: `https://poc-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
   fallbackUrl: "/test",
