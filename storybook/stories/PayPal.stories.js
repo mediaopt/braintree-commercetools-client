@@ -104,7 +104,6 @@ export const Vaulting = {
 };
 
 export const PureVaulting = {
-  component: PayPalVault,
   args: {
     ...params,
     ...vaultingParams,

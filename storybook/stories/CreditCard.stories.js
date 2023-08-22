@@ -22,7 +22,6 @@ export const Vaulting = {
 };
 
 export const PureVaulting = {
-  component: CreditCardVault,
   args: {
     ...params,
     ...vaultingParams,

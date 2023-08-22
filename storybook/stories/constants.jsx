@@ -74,6 +74,7 @@ export const params = {
 export const vaultingParams = {
   createPaymentForVault: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPaymentForVault`,
   vaultPaymentMethodUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/vaultPaymentMethod`,
+  isPureVault: true,
 };
 
 export const localPaymentParams = {

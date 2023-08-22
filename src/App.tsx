@@ -119,6 +119,7 @@ function App() {
   const vaultingParams = {
     createPaymentForVault: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPaymentForVault`,
     vaultPaymentMethodUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/vaultPaymentMethod`,
+    isPureVault: true,
   };
 
   const localPaymentParams = {
@@ -300,9 +301,9 @@ function App() {
 
   const [choosenVaultMethod, setChoosenVaultMethod] = useState("");
   const vaultMethods: { [index: string]: JSX.Element } = {
-    CreditCardVault: <CreditCardVault {...params} {...vaultingParams} />,
+    CreditCardVault: <CreditCard {...params} {...vaultingParams} />,
     PayPalVault: (
-      <PayPalVault
+      <PayPal
         flow={"vault" as FlowType}
         buttonColor={"blue" as ButtonColorOption}
         buttonLabel={"paypal" as ButtonLabelOption}

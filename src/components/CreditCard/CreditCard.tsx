@@ -33,6 +33,9 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   shippingAmount,
   discountAmount,
   shippingMethodId,
+  isPureVault,
+  createPaymentForVault,
+  vaultPaymentMethodUrl,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
@@ -47,9 +50,11 @@ export const CreditCard: React.FC<CreditCardProps> = ({
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
       shippingMethodId={shippingMethodId}
+      createPaymentForVault={createPaymentForVault}
+      vaultPaymentMethodUrl={vaultPaymentMethodUrl}
     >
       <CreditCardButton
-        disabled={isPayButtonDisabled(cartInformation)}
+        disabled={isPayButtonDisabled(cartInformation) && !isPureVault}
         buttonText={buttonText}
         fullWidth={fullWidth}
         showPostalCode={showPostalCode}
@@ -63,6 +68,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
         lineItems={lineItems}
         shipping={shipping}
         shippingMethodId={shippingMethodId}
+        isPureVault={isPureVault}
       />
     </RenderTemplate>
   );

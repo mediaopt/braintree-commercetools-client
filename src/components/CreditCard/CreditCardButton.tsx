@@ -2,7 +2,11 @@ import React from "react";
 
 import { usePayment } from "../../app/usePayment";
 import { CreditCardMask } from "./CreditCardMask";
-import { PAY_BUTTON_TEXT_FALLBACK, PayButtonProps } from "../PayButton";
+import {
+  PAY_BUTTON_TEXT_FALLBACK,
+  VAULT_BUTTON_TEXT_FALLBACK,
+  PayButtonProps,
+} from "../PayButton";
 import { GeneralCreditCardProps } from "../../types";
 import { useHandleGetClientToken } from "../../app/useHandleGetClientToken";
 
@@ -23,15 +27,20 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
   lineItems,
   shipping,
   shippingMethodId,
+  isPureVault,
 }: CreditCardButton) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled, undefined, shippingMethodId);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId, isPureVault);
+
+  const FALLBACK_TEXT = isPureVault
+    ? VAULT_BUTTON_TEXT_FALLBACK
+    : PAY_BUTTON_TEXT_FALLBACK;
 
   return clientToken ? (
     <CreditCardMask
       fullWidth={fullWidth}
-      buttonText={buttonText ?? PAY_BUTTON_TEXT_FALLBACK}
+      buttonText={buttonText ?? FALLBACK_TEXT}
       showPostalCode={showPostalCode}
       showCardHoldersName={showCardHoldersName}
       threeDSAdditionalInformation={threeDSAdditionalInformation}
@@ -42,6 +51,7 @@ export const CreditCardButton: React.FC<CreditCardButton> = ({
       useKount={useKount}
       lineItems={lineItems}
       shipping={shipping}
+      isPureVault={isPureVault}
     />
   ) : (
     <></>

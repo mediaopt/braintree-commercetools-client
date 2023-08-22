@@ -200,7 +200,7 @@ They accept the following props:
 
 
 ## Pure Vaulting  
-We offer Credit-Card and PayPal components which are doing vaulting only for registered customers, so they can go through checkouts faster in the future.  
+The Credit-Card and PayPal components can offer pure vaulting for registered customers, so they can go through checkouts faster in the future.  
 In addition to the general payment properties mentioned earlier, both of them need:
 - createPaymentForVault: `string`  
   _POST_-Request - we get a [_CreatePaymentResponse_](src/types/index.ts)  with an amount of 0.  
@@ -212,6 +212,8 @@ In addition to the general payment properties mentioned earlier, both of them ne
   It is **your** responsibility to develop this API  
   The url that gets called to the endpoint of the connect app to vault the payment method for the current customer. Communicates with CommerceTools backend  
   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+- isPureVault: `boolean`
+  Must be true to enable pure vaulting.
 
 ## Available Scripts
 
