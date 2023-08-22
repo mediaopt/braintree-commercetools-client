@@ -15,5 +15,3 @@ export {
   MyBank,
   BLIK,
 } from "./src/components/LocalPaymentMethods";
-export { CreditCardVault } from "./src/components/PureVaulting/CreditCard";
-export { PayPalVault } from "./src/components/PureVaulting/PayPal";

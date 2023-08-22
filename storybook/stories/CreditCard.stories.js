@@ -1,6 +1,5 @@
 import { CreditCard } from "../../src/components/CreditCard";
 import { params, vaultingParams } from "./constants";
-import { CreditCardVault } from "../../src/components/PureVaulting/CreditCard";
 
 export default {
   title: "Components/CreditCard",

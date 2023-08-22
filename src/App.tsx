@@ -33,8 +33,6 @@ import {
   ButtonShapeOption,
   ButtonSizeOption,
 } from "paypal-checkout-components";
-import { CreditCardVault } from "./components/PureVaulting/CreditCard";
-import { PayPalVault } from "./components/PureVaulting/PayPal";
 
 const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =

@@ -1,6 +1,5 @@
 import { PayPal } from "../../src/components/PayPal";
 import { params, vaultingParams } from "./constants";
-import { PayPalVault } from "../../src/components/PureVaulting/PayPal";
 
 export default {
   title: "Components/PayPal",
