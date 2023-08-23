@@ -43,7 +43,7 @@ export const PayPalButton: React.FC<PayPalButtonProps> = ({
 }) => {
   const { clientToken } = usePayment();
 
-  useHandleGetClientToken(disabled, undefined, shippingMethodId);
+  useHandleGetClientToken(disabled, undefined, shippingMethodId, isPureVault);
 
   const FALLBACK_TEXT = isPureVault
     ? VAULT_BUTTON_TEXT_FALLBACK
