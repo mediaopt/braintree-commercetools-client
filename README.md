@@ -196,7 +196,24 @@ They accept the following props:
 - **fallbackUrl**: `string`  
   Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
 - **fallbackButtonText**: `string` - optional  
-  The text to appear on the button
+  The text to appear on the button  
+
+
+## Pure Vaulting  
+The Credit-Card and PayPal components can offer pure vaulting for registered customers, so they can go through checkouts faster in the future.  
+In addition to the general payment properties mentioned earlier, both of them need:
+- createPaymentForVault: `string`  
+  _POST_-Request - we get a [_CreatePaymentResponse_](src/types/index.ts)  with an amount of 0.  
+  It is **your** responsibility to develop this API  
+  The url that gets called to the endpoint of the connect app to create a payment in commerce tools. Communicates with CommerceTools backend  
+  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+- vaultPaymentMethodUrl: `string`  
+  _POST_-Request - we get a success/fail that will be returned from the Braintree integration module  
+  It is **your** responsibility to develop this API  
+  The url that gets called to the endpoint of the connect app to vault the payment method for the current customer. Communicates with CommerceTools backend  
+  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+- isPureVault: `boolean`
+  Must be true to enable pure vaulting.
 
 ## Available Scripts
 

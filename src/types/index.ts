@@ -50,6 +50,8 @@ export type GeneralPayButtonProps = {
 export type GeneralComponentsProps = {
   purchaseUrl: string;
   createPaymentUrl: string;
+  createPaymentForVault?: string;
+  vaultPaymentMethodUrl?: string;
   getClientTokenUrl: string;
   sessionKey: string;
   sessionValue: string;
@@ -83,6 +85,7 @@ export type CreatePaymentResponse = {
   lineItems: [object]; // @todo add better types maybe?
   shippingMethod: object; // @todo add better types maybe?
   braintreeCustomerId: string;
+  customerVersion?: number;
 };
 
 export type TransactionSaleResponse = {
@@ -158,6 +161,7 @@ export type PayPalProps = {
   tagline?: boolean;
   height?: number;
   shippingOptions?: PayPalShippingOptions[];
+  isPureVault?: boolean;
 };
 
 export type ShippingAddressOverride = {
@@ -248,6 +252,7 @@ export type GeneralCreditCardProps = {
   enableVaulting?: boolean;
   continueOnLiabilityShiftPossible?: boolean;
   continueOnNoThreeDS?: boolean;
+  isPureVault?: boolean;
 };
 
 export type AchVaultRequest = { paymentMethodNonce: string };

@@ -19,6 +19,7 @@ import { makeTransactionSaleRequest } from "../services/makeTransactionSaleReque
 import { useNotifications } from "./useNotifications";
 import { useLoader } from "./useLoader";
 import { setLocalPaymentIdRequest } from "../services/setLocalPaymentId";
+import { makeVaultRequest } from "../services/makeVaultRequest";
 
 type HandlePurchaseType = (
   paymentNonce: string,
@@ -29,12 +30,16 @@ type HandlePurchaseType = (
 type PaymentContextT = {
   gettingClientToken: boolean;
   clientToken: string;
-  handleGetClientToken: (merchantAccountId?: string) => void;
+  handleGetClientToken: (
+    merchantAccountId?: string,
+    vaultPayment?: boolean
+  ) => void;
   setLocalPaymentId: (
     localPaymentId: string,
     saveLocalPaymentUrl: string
   ) => Promise<number>;
   handlePurchase: HandlePurchaseType;
+  handlePureVault: (paymentNonce: string) => void;
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
   handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
@@ -61,6 +66,7 @@ const PaymentContext = createContext<PaymentContextT>({
   handleGetClientToken: () => {},
   setLocalPaymentId: () => new Promise<number>(() => 0),
   handlePurchase: () => {},
+  handlePureVault: () => {},
   paymentInfo: PaymentInfoInitialObject,
   vaultedPaymentMethods: [],
   handleGetVaultedPaymentMethods: () =>
@@ -76,8 +82,10 @@ export const PaymentProvider: FC<
   React.PropsWithChildren<GeneralComponentsProps>
 > = ({
   createPaymentUrl,
+  createPaymentForVault,
   getClientTokenUrl,
   purchaseUrl,
+  vaultPaymentMethodUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -95,6 +103,7 @@ export const PaymentProvider: FC<
 
   const [clientToken, setClientToken] = useState("");
   const [braintreeCustomerId, setBraintreeCustomerId] = useState("");
+  const [customerVersion, setCustomerVersion] = useState<number>();
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>(
     PaymentInfoInitialObject
   );
@@ -106,18 +115,33 @@ export const PaymentProvider: FC<
   const { isLoading } = useLoader();
 
   const value = useMemo(() => {
-    const handleGetClientToken = async (merchantAccountId?: string) => {
+    const handleGetClientToken = async (
+      merchantAccountId?: string,
+      vaultPayment?: boolean
+    ) => {
       setGettingClientToken(true);
       isLoading(true);
       try {
+        const createPaymentEndpoint =
+          vaultPayment && createPaymentForVault
+            ? createPaymentForVault
+            : createPaymentUrl;
         const createPaymentResult = (await createPayment(
           sessionKey,
           sessionValue,
-          createPaymentUrl,
+          createPaymentEndpoint,
           cartInformation,
           shippingMethodId
         )) as CreatePaymentResponse;
 
+        if (!createPaymentResult.braintreeCustomerId && vaultPayment) {
+          isLoading(false);
+          setGettingClientToken(false);
+          notify("Error", "User not found");
+          return;
+        }
+
+        setCustomerVersion(createPaymentResult.customerVersion);
         setBraintreeCustomerId(createPaymentResult.braintreeCustomerId);
         if (
           createPaymentResult &&
@@ -274,12 +298,43 @@ export const PaymentProvider: FC<
       }
     };
 
+    const handlePureVault = async (paymentNonce: string) => {
+      const requestBody = {
+        customerVersion: customerVersion,
+        customerId: braintreeCustomerId,
+        paymentMethodNonce: paymentNonce,
+      };
+
+      if (!vaultPaymentMethodUrl) return;
+
+      isLoading(true);
+      const response = await makeVaultRequest(
+        sessionKey,
+        sessionValue,
+        vaultPaymentMethodUrl,
+        requestBody
+      );
+      isLoading(false);
+      if (response.ok === false || !response) {
+        notify("Error", response.message ?? "An error occurred");
+        return;
+      }
+
+      setResultMessage("Payment vaulted");
+
+      setShowResult(true);
+      if (purchaseCallback) {
+        purchaseCallback(response);
+      }
+    };
+
     return {
       gettingClientToken,
       clientToken,
       handleGetClientToken,
       setLocalPaymentId,
       handlePurchase,
+      handlePureVault,
       paymentInfo,
       vaultedPaymentMethods,
       handleGetVaultedPaymentMethods,

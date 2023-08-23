@@ -13,7 +13,9 @@ export const RenderTemplate: FC<
   children,
   getClientTokenUrl,
   createPaymentUrl,
+  createPaymentForVault,
   purchaseUrl,
+  vaultPaymentMethodUrl,
   sessionKey,
   sessionValue,
   purchaseCallback,
@@ -29,7 +31,9 @@ export const RenderTemplate: FC<
         <PaymentProvider
           getClientTokenUrl={getClientTokenUrl}
           createPaymentUrl={createPaymentUrl}
+          createPaymentForVault={createPaymentForVault}
           purchaseUrl={purchaseUrl}
+          vaultPaymentMethodUrl={vaultPaymentMethodUrl}
           sessionKey={sessionKey}
           sessionValue={sessionValue}
           purchaseCallback={purchaseCallback}

@@ -45,6 +45,9 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   shippingAmount,
   discountAmount,
   shippingMethodId,
+  isPureVault,
+  createPaymentForVault,
+  vaultPaymentMethodUrl,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
@@ -59,9 +62,11 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
       shippingAmount={shippingAmount}
       discountAmount={discountAmount}
       shippingMethodId={shippingMethodId}
+      createPaymentForVault={createPaymentForVault}
+      vaultPaymentMethodUrl={vaultPaymentMethodUrl}
     >
       <PayPalButton
-        disabled={isPayButtonDisabled(cartInformation)}
+        disabled={isPayButtonDisabled(cartInformation) && !isPureVault}
         buttonText={buttonText}
         fullWidth={fullWidth}
         flow={flow}
@@ -85,6 +90,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
         height={height}
         shippingOptions={shippingOptions}
         shippingMethodId={shippingMethodId}
+        isPureVault={isPureVault}
       />
     </RenderTemplate>
   );

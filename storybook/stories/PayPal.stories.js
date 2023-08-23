@@ -1,5 +1,5 @@
 import { PayPal } from "../../src/components/PayPal";
-import { params } from "./constants";
+import { params, vaultingParams } from "./constants";
 
 export default {
   title: "Components/PayPal",
@@ -99,5 +99,22 @@ export const Vaulting = {
     tagline: true,
     height: 55,
     shippingOptions: shippingOptions,
+  },
+};
+
+export const PureVaulting = {
+  args: {
+    ...params,
+    ...vaultingParams,
+    flow: "vault",
+    buttonColor: "blue",
+    commit: true,
+    payLater: false,
+    locale: "en_GB",
+    intent: "capture",
+    shape: "pill",
+    size: "small",
+    tagline: true,
+    height: 55,
   },
 };

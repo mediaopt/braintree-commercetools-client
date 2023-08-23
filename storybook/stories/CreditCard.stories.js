@@ -1,5 +1,5 @@
 import { CreditCard } from "../../src/components/CreditCard";
-import { params } from "./constants";
+import { params, vaultingParams } from "./constants";
 
 export default {
   title: "Components/CreditCard",
@@ -17,5 +17,12 @@ export const Vaulting = {
   args: {
     ...params,
     enableVaulting: true,
+  },
+};
+
+export const PureVaulting = {
+  args: {
+    ...params,
+    ...vaultingParams,
   },
 };

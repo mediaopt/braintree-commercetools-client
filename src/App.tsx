@@ -36,7 +36,7 @@ import {
 
 const COFE_IDENTIFIER: string = "jye";
 const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI3NmE3YjA4MS0xMDBmLTRiZmMtYjM1Zi1mMThlMWIyN2QwYTciLCJ3aXNobGlzdElkIjoiNGY1NzE2ZDItOTRlMi00MjY3LTk3NzUtZDcwZGIyNjA3ZWJkIn0.eSqZhXmHVtNRU-P_L_4Qe2NrhP-6Tr-yTxvP-OURQPA";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIxZDQ1OGJiNC01OTk3LTRiNmYtOWU5Mi1mMGYwMzJlYTAwYzYiLCJ3aXNobGlzdElkIjoiZjc0MTBkNTAtMzY0My00ZTZlLTkxMTctZjczYTExNjMxMTE4IiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiIyZDgzZjQ3MC1mYjU5LTRmOWUtYWI3MS1kZDI3YjMwZWYyNjYiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwiZmlyc3ROYW1lIjoiSmFuZSIsImxhc3ROYW1lIjoiRG9lIiwiYmlydGhkYXkiOiIxOTc0LTA5LTIwVDAwOjAwOjAwLjAwMFoiLCJjb25maXJtZWQiOnRydWUsImFkZHJlc3NlcyI6W3siYWRkcmVzc0lkIjoiSWdkZzZrbnYiLCJmaXJzdE5hbWUiOiJKYW5lIiwibGFzdE5hbWUiOiJEb2UiLCJzdHJlZXROYW1lIjoiRmlyc3QgU3RyZWV0Iiwic3RyZWV0TnVtYmVyIjoiMTIiLCJwb3N0YWxDb2RlIjoiMTIzNDUiLCJjaXR5IjoiRXhhbXBsZSBDaXR5IiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrMzEyMzQ1Njc4IiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfSx7ImFkZHJlc3NJZCI6Imltd25SUFJGIiwiZmlyc3ROYW1lIjoiSmFuZSIsImxhc3ROYW1lIjoiRG9lIiwic3RyZWV0TmFtZSI6IlRoaXJkIFN0cmVldCIsInN0cmVldE51bWJlciI6IjM0IiwicG9zdGFsQ29kZSI6IjEyMzQ1IiwiY2l0eSI6IkV4YW1wbGUgQ2l0eSIsImNvdW50cnkiOiJOTCIsInBob25lIjoiKzMxMTIzNDU2NzgiLCJpc0RlZmF1bHRCaWxsaW5nQWRkcmVzcyI6dHJ1ZSwiaXNEZWZhdWx0U2hpcHBpbmdBZGRyZXNzIjp0cnVlfSx7ImFkZHJlc3NJZCI6IlplYTMwTXVpIiwiZmlyc3ROYW1lIjoiU2ltZW9uZSIsImxhc3ROYW1lIjoiRWxzZSIsInN0cmVldE5hbWUiOiJVbm5hbWVkc3RyIiwic3RyZWV0TnVtYmVyIjoiMjM0IiwicG9zdGFsQ29kZSI6IjEyMzQ1IiwiY2l0eSI6IlRvd24iLCJjb3VudHJ5IjoiREUiLCJwaG9uZSI6IjEyNDMyNTM2NTQ2NDIzMTQzNTY3IiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfV19fQ.dhkEkyM9HCwhdbf4YBPYSBFy2bqdmU1z0HK3raUVuz8";
 
 function App() {
   const cartInformation = {
@@ -112,6 +112,12 @@ function App() {
     shippingAmount: "0.00",
     discountAmount: "0.00",
     shippingMethodId: "da416140-39bf-4677-8882-8b6cab23d981",
+  };
+
+  const vaultingParams = {
+    createPaymentForVault: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPaymentForVault`,
+    vaultPaymentMethodUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/vaultPaymentMethod`,
+    isPureVault: true,
   };
 
   const localPaymentParams = {
@@ -290,9 +296,31 @@ function App() {
       />
     ),
   };
+
+  const [choosenVaultMethod, setChoosenVaultMethod] = useState("");
+  const vaultMethods: { [index: string]: JSX.Element } = {
+    CreditCardVault: <CreditCard {...params} {...vaultingParams} />,
+    PayPalVault: (
+      <PayPal
+        flow={"vault" as FlowType}
+        buttonColor={"blue" as ButtonColorOption}
+        buttonLabel={"paypal" as ButtonLabelOption}
+        commit={true}
+        payLater={false}
+        locale="en_GB"
+        intent={"capture" as Intent}
+        {...params}
+        {...vaultingParams}
+      />
+    ),
+  };
   const changePaymentMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.checked) return;
     setChoosenPaymentMethod(e.target.value);
+  };
+  const changeVaultMethod = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.checked) return;
+    setChoosenVaultMethod(e.target.value);
   };
 
   return (
@@ -311,6 +339,22 @@ function App() {
         </div>
       ))}
       <div>{paymentMethods[choosenPaymentMethod] ?? <></>}</div>
+      <hr />
+      <h2>Pure Vaults</h2>
+      {Object.keys(vaultMethods).map((entry, index) => (
+        <div key={index}>
+          <label>
+            <input
+              onChange={changeVaultMethod}
+              type="radio"
+              name="vaultmethod"
+              value={entry}
+            />
+            {entry}
+          </label>
+        </div>
+      ))}
+      <div>{vaultMethods[choosenVaultMethod] ?? <></>}</div>
     </div>
   );
 }

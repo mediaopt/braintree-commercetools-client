@@ -5,12 +5,13 @@ export const useHandleGetClientToken = (
   disabled: boolean,
   merchantAccountId?: string,
   shippingMethodId?: string,
+  vaultPayment?: boolean
 ) => {
   const { handleGetClientToken } = usePayment();
 
   useEffect(() => {
     if (disabled) return;
 
-    handleGetClientToken(merchantAccountId);
+    handleGetClientToken(merchantAccountId, vaultPayment);
   }, [disabled, shippingMethodId]);
 };
