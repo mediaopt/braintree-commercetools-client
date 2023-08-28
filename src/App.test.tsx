@@ -4,14 +4,14 @@ import App from "./App";
 
 test("CreditCard is shown", () => {
   render(<App />);
-  const linkElement = screen.getByText(/CreditCard/i);
-  expect(linkElement).toBeInTheDocument();
+  const linkElement = screen.getAllByText(/CreditCard/i);
+  expect(linkElement.length).toEqual(2);
 });
 
 test("PayPal is shown", () => {
   render(<App />);
   const linkElement = screen.getAllByText(/PayPal/i);
-  expect(linkElement.length).toEqual(2);
+  expect(linkElement.length).toEqual(3);
 });
 
 test("GooglePay is shown", () => {
