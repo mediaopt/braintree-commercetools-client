@@ -10,17 +10,17 @@ Each payment component takes a set of props that will be the same for everything
    _POST_-Request - we get a [_CreatePaymentResponse_](src/types/index.ts)  
    It is **your** responsibility to develop this API  
    The url that gets called to the endpoint of the connect app to create a payment in commerce tools. Communicates with CommerceTools backend  
-   See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+   See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - **getClientTokenUrl**: `string`  
    _POST_-Request - we get a [_ClientTokenResponse_](<(src/types/index.ts)>)  
    It is **your** responsibility to develop this API  
    The url that gets called to the endpoint of the connect app to get the client token. Communicates with CommerceTools backend
-  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+  See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - **purchaseUrl**: `string`  
    _POST_-Request - we get a [_TransactionSaleRequest_](src/types/index.ts) that will be returned from the Braintree integration module  
    It is **your** responsibility to develop this API  
    The url that gets called to the endpoint of the connect app to make the purchase at. Communicates with CommerceTools backend
-  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+  See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - **purchaseCallback**: `(result: any) => void`  
    Function to execute after a successful purchase.
 - **sessionValue**: `string`  
@@ -32,7 +32,7 @@ Each payment component takes a set of props that will be the same for everything
 - **buttonText**: `string`  
    The text to be shown on the pay button. Could be the final amount the customer has to pay.
 - **shippingMethodId**: `string`  
-  The id of the selected shipping. It will be sent back in the create purchase call to calculate the correct shipping costs.  
+  The id of the selected shipping. It will be sent back in the create purchase call to calculate the correct shipping costs.
 - **cartInformation**: `object`  
   Information about the customers cart to crate payments with.
   Structure:
@@ -182,7 +182,7 @@ They accept the following props:
 - **saveLocalPaymentIdUrl**: `string`  
   It is **your** responsibility to develop this API  
   The url that gets called to the endpoint of the connect app to map the id of local payments to the transaction as recommended in Braintrees documentation. Communicates with CommerceTools backend
-  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+  See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - **paymentType**: `any`  
   Determined by the specific payment method being used. Refer to [this table](https://developer.paypal.com/braintree/docs/guides/local-payment-methods/client-side-custom/javascript/v3/#render-local-payment-method-buttons).
 - **countryCode**: `any`  
@@ -196,24 +196,29 @@ They accept the following props:
 - **fallbackUrl**: `string`  
   Users with a mobile App will be redirected from their payment provider to this url where they can complete the payment
 - **fallbackButtonText**: `string` - optional  
-  The text to appear on the button  
+  The text to appear on the button
 
+## Pure Vaulting
 
-## Pure Vaulting  
 The Credit-Card and PayPal components can offer pure vaulting for registered customers, so they can go through checkouts faster in the future.  
 In addition to the general payment properties mentioned earlier, both of them need:
+
 - createPaymentForVault: `string`  
-  _POST_-Request - we get a [_CreatePaymentResponse_](src/types/index.ts)  with an amount of 0.  
+  _POST_-Request - we get a [_CreatePaymentResponse_](src/types/index.ts) with an amount of 0.  
   It is **your** responsibility to develop this API  
   The url that gets called to the endpoint of the connect app to create a payment in commerce tools. Communicates with CommerceTools backend  
-  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+  See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - vaultPaymentMethodUrl: `string`  
   _POST_-Request - we get a success/fail that will be returned from the Braintree integration module  
   It is **your** responsibility to develop this API  
   The url that gets called to the endpoint of the connect app to vault the payment method for the current customer. Communicates with CommerceTools backend  
-  See the examples in our [CoFe repository](https://github.com/frontastic-developers/customer-mediaopt/tree/master/packages/poc/backend/payment-braintree)
+  See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - isPureVault: `boolean`
   Must be true to enable pure vaulting.
+
+## Braintree Commercetools Connector
+
+In order to use this client package you need to run [braintree-commercetools-connector](https://github.com/mediaopt/braintree-commercetools-connector) connect app as well.
 
 ## Available Scripts
 
