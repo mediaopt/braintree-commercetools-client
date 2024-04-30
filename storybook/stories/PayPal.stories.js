@@ -1,5 +1,5 @@
 import { PayPal } from "../../src/components/PayPal";
-import { params, vaultingParams } from "./constants";
+import { params, vaultingParams, requestHeader } from "./constants";
 
 export default {
   title: "Components/PayPal",
@@ -60,7 +60,8 @@ export const Main = {
     size: "small",
     tagline: true,
     height: 55,
-    shippingOptions: shippingOptions,
+    //shippingOptions: shippingOptions,
+    requestHeader,
   },
 };
 
@@ -78,7 +79,8 @@ export const PayLater = {
     size: "small",
     tagline: true,
     height: 55,
-    shippingOptions: shippingOptions,
+    //shippingOptions: shippingOptions,
+    requestHeader,
   },
 };
 
@@ -98,7 +100,8 @@ export const Vaulting = {
     size: "small",
     tagline: true,
     height: 55,
-    shippingOptions: shippingOptions,
+    //shippingOptions: shippingOptions,
+    requestHeader,
   },
 };
 
@@ -116,5 +119,6 @@ export const PureVaulting = {
     size: "small",
     tagline: true,
     height: 55,
+    requestHeader,
   },
 };

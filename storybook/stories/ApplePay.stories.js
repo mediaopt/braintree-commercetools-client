@@ -1,5 +1,5 @@
 import { ApplePay } from "../../src/components/ApplePay";
-import { params } from "./constants";
+import { params, requestHeader } from "./constants";
 
 export default {
   title: "Components/ApplePay",
@@ -10,5 +10,6 @@ export const Main = {
   args: {
     ...params,
     applePayDisplayName: "My Store",
+    requestHeader,
   },
 };

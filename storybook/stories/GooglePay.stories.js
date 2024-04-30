@@ -1,5 +1,5 @@
 import { GooglePay } from "../../src/components/GooglePay";
-import { params } from "./constants";
+import { params, requestHeader } from "./constants";
 
 export default {
   title: "Components/GooglePay",
@@ -13,5 +13,6 @@ export const Main = {
     googleMerchantId: "merchant-id-from-google",
     acquirerCountryCode: "DE",
     environment: "TEST",
+    requestHeader,
   },
 };

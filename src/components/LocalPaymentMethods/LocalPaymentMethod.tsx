@@ -20,8 +20,6 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
   getClientTokenUrl,
   purchaseUrl,
   saveLocalPaymentIdUrl,
-  sessionKey,
-  sessionValue,
   purchaseCallback,
   cartInformation,
   paymentType,
@@ -39,14 +37,14 @@ export const LocalPaymentMethod: React.FC<LocalPaymentMethodType> = ({
   shippingAmount,
   discountAmount,
   shippingMethodId,
+  requestHeader,
 }: LocalPaymentMethodType) => {
   return (
     <RenderTemplate
+      requestHeader={requestHeader}
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
       taxAmount={taxAmount}

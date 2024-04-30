@@ -33,10 +33,10 @@ const lineItems = [
   {
     name: "Product",
     kind: "debit",
-    quantity: "6",
-    unitAmount: "1.00",
+    quantity: "2",
+    unitAmount: "158.00",
     unitOfMeasure: "unit",
-    totalAmount: "6.00",
+    totalAmount: "316.00",
     taxAmount: "0.00",
     discountAmount: "0.00",
     productCode: "54321",
@@ -49,13 +49,20 @@ const shipping = {
   lastName: "Doe",
 };
 
+export const baseUrl =
+  "https://poc-mediaopt.frontastic.rocks/frontastic/action";
+
+export const requestHeader = {
+  "Frontastic-Session":
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3aXNobGlzdElkIjoiM2NjMzg4ZWMtNTUxMi00NDQ2LWI2MTAtMmM3ZWY5N2VjMTViIiwiY2FydElkIjoiZWJiMmFmNWMtZDBmYy00Njg4LWJkYjctZTk4NmI5OTc1YzQ2In0.Ujy0mrAFIwldmhTIhVVWY95qSJazn5e-B0wU4qa0KoE",
+  "Commercetools-Frontend-Extension-Version": "devmajidabbasi",
+};
+
 export const params = {
-  createPaymentUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPayment`,
-  getClientTokenUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/getClientToken`,
-  purchaseUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPurchase`,
-  sessionKey: "frontastic-session",
-  sessionValue:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiJhODhiYzhmZS1iNzA2LTQzM2YtYTBkMS1kODUwMzk1MTg4MGYiLCJ3aXNobGlzdElkIjoiNmM5MmU4MDItYWU2Yi00MDgxLTllNzItNzAxM2YyZTljYjQ5In0.cRzoVt9pqimSGaPh_jC7_bULzHODah8FEcLQdKFEK34",
+  createPaymentUrl: `${baseUrl}/payment/createPayment`,
+  getClientTokenUrl: `${baseUrl}/payment/getClientToken`,
+  purchaseUrl: `${baseUrl}/payment/createPurchase`,
+
   purchaseCallback: (result, options) => {
     console.log("purchaseCallback", result, options);
   },
@@ -72,13 +79,13 @@ export const params = {
 };
 
 export const vaultingParams = {
-  createPaymentForVault: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/createPaymentForVault`,
-  vaultPaymentMethodUrl: `https://poc-mediaopt.frontastic.io/frontastic/action/payment/vaultPaymentMethod`,
+  createPaymentForVault: `${baseUrl}/payment/createPaymentForVault`,
+  vaultPaymentMethodUrl: `${baseUrl}/payment/vaultPaymentMethod`,
   isPureVault: true,
 };
 
 export const localPaymentParams = {
-  saveLocalPaymentIdUrl: `https://poc-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
+  saveLocalPaymentIdUrl: `${baseUrl}/payment/setLocalPaymentId`,
   fallbackUrl: "/test",
   fallbackButtonText: "purchase",
   merchantAccountId: "",

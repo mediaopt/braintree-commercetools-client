@@ -1,15 +1,15 @@
 import { makeRequest } from "../api";
 
+import { RequestHeader } from "../types";
+
 export const makeTransactionSaleRequest = async (
-  sessionKey: string,
-  sessionValue: string,
+  requestHeader: RequestHeader,
   url: string,
   data: object
 ) => {
   try {
     const result = await makeRequest<any, any>(
-      sessionKey,
-      sessionValue,
+      requestHeader,
       url,
       "POST",
       data

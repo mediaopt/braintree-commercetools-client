@@ -34,9 +34,9 @@ import {
   ButtonSizeOption,
 } from "paypal-checkout-components";
 
-const COFE_IDENTIFIER: string = "jye";
-const COFE_SESSION_VALUE: string =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiIxZDQ1OGJiNC01OTk3LTRiNmYtOWU5Mi1mMGYwMzJlYTAwYzYiLCJ3aXNobGlzdElkIjoiZjc0MTBkNTAtMzY0My00ZTZlLTkxMTctZjczYTExNjMxMTE4IiwiYWNjb3VudCI6eyJhY2NvdW50SWQiOiIyZDgzZjQ3MC1mYjU5LTRmOWUtYWI3MS1kZDI3YjMwZWYyNjYiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwiZmlyc3ROYW1lIjoiSmFuZSIsImxhc3ROYW1lIjoiRG9lIiwiYmlydGhkYXkiOiIxOTc0LTA5LTIwVDAwOjAwOjAwLjAwMFoiLCJjb25maXJtZWQiOnRydWUsImFkZHJlc3NlcyI6W3siYWRkcmVzc0lkIjoiSWdkZzZrbnYiLCJmaXJzdE5hbWUiOiJKYW5lIiwibGFzdE5hbWUiOiJEb2UiLCJzdHJlZXROYW1lIjoiRmlyc3QgU3RyZWV0Iiwic3RyZWV0TnVtYmVyIjoiMTIiLCJwb3N0YWxDb2RlIjoiMTIzNDUiLCJjaXR5IjoiRXhhbXBsZSBDaXR5IiwiY291bnRyeSI6IlVTIiwicGhvbmUiOiIrMzEyMzQ1Njc4IiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfSx7ImFkZHJlc3NJZCI6Imltd25SUFJGIiwiZmlyc3ROYW1lIjoiSmFuZSIsImxhc3ROYW1lIjoiRG9lIiwic3RyZWV0TmFtZSI6IlRoaXJkIFN0cmVldCIsInN0cmVldE51bWJlciI6IjM0IiwicG9zdGFsQ29kZSI6IjEyMzQ1IiwiY2l0eSI6IkV4YW1wbGUgQ2l0eSIsImNvdW50cnkiOiJOTCIsInBob25lIjoiKzMxMTIzNDU2NzgiLCJpc0RlZmF1bHRCaWxsaW5nQWRkcmVzcyI6dHJ1ZSwiaXNEZWZhdWx0U2hpcHBpbmdBZGRyZXNzIjp0cnVlfSx7ImFkZHJlc3NJZCI6IlplYTMwTXVpIiwiZmlyc3ROYW1lIjoiU2ltZW9uZSIsImxhc3ROYW1lIjoiRWxzZSIsInN0cmVldE5hbWUiOiJVbm5hbWVkc3RyIiwic3RyZWV0TnVtYmVyIjoiMjM0IiwicG9zdGFsQ29kZSI6IjEyMzQ1IiwiY2l0eSI6IlRvd24iLCJjb3VudHJ5IjoiREUiLCJwaG9uZSI6IjEyNDMyNTM2NTQ2NDIzMTQzNTY3IiwiaXNEZWZhdWx0QmlsbGluZ0FkZHJlc3MiOmZhbHNlLCJpc0RlZmF1bHRTaGlwcGluZ0FkZHJlc3MiOmZhbHNlfV19fQ.dhkEkyM9HCwhdbf4YBPYSBFy2bqdmU1z0HK3raUVuz8";
+const CC_FRONTEND_EXTENSION_VERSION: string = "devmajidabbasi";
+const FRONTASTIC_SESSION: string =
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjYXJ0SWQiOiI2YjRhMGIyYy1lYmFlLTRhZGMtYmQyNS1mMTg4MjliOTNlYzAiLCJ3aXNobGlzdElkIjoiMmI3ZDc4OWYtMGJmNi00NGQ3LThkZDctYzJlMjg0OGJiNTJkIn0.96b5PacXfBwfqkiI8lm5OEDsJb7o3Cps-hHayaF4b3I";
 
 function App() {
   const cartInformation = {
@@ -61,6 +61,11 @@ function App() {
       country: "DE",
       postalCode: "12045",
     },
+  };
+
+  const requestHeader = {
+    "Frontastic-Session": FRONTASTIC_SESSION,
+    "Commercetools-Frontend-Extension-Version": CC_FRONTEND_EXTENSION_VERSION,
   };
 
   const lineItems: LineItem[] = [
@@ -94,12 +99,13 @@ function App() {
     },
   ];
 
+  const ENDPOINT_URL: string =
+    "https://poc-mediaopt.frontastic.rocks/frontastic/action";
+
   const params = {
-    createPaymentUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPayment`,
-    getClientTokenUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getClientToken`,
-    purchaseUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPurchase`,
-    sessionKey: "frontastic-session",
-    sessionValue: COFE_SESSION_VALUE,
+    createPaymentUrl: `${ENDPOINT_URL}/payment/createPayment`,
+    getClientTokenUrl: `${ENDPOINT_URL}/payment/getClientToken`,
+    purchaseUrl: `${ENDPOINT_URL}/payment/createPurchase`,
     purchaseCallback: (result: any, options: any) => {
       console.log("Do something", result, options);
     },
@@ -115,13 +121,13 @@ function App() {
   };
 
   const vaultingParams = {
-    createPaymentForVault: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/createPaymentForVault`,
-    vaultPaymentMethodUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/vaultPaymentMethod`,
+    createPaymentForVault: `${ENDPOINT_URL}/payment/createPaymentForVault`,
+    vaultPaymentMethodUrl: `${ENDPOINT_URL}/payment/vaultPaymentMethod`,
     isPureVault: true,
   };
 
   const localPaymentParams = {
-    saveLocalPaymentIdUrl: `https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/setLocalPaymentId`,
+    saveLocalPaymentIdUrl: `${ENDPOINT_URL}/payment/setLocalPaymentId`,
     fallbackUrl: "/test",
     fallbackButtonText: "purchase",
     merchantAccountId: "",
@@ -141,10 +147,16 @@ function App() {
   const [choosenPaymentMethod, setChoosenPaymentMethod] = useState("");
   const paymentMethods: { [index: string]: JSX.Element } = {
     CreditCard: (
-      <CreditCard {...params} enableVaulting={true} useKount={true} />
+      <CreditCard
+        requestHeader={requestHeader}
+        {...params}
+        enableVaulting={true}
+        useKount={true}
+      />
     ),
     PayPal: (
       <PayPal
+        requestHeader={requestHeader}
         flow={"checkout" as FlowType}
         buttonColor={"blue" as ButtonColorOption}
         buttonLabel={"pay" as ButtonLabelOption}
@@ -163,6 +175,7 @@ function App() {
     ),
     PayPalBuyNow: (
       <PayPal
+        requestHeader={requestHeader}
         flow={"checkout" as FlowType}
         buttonColor={"blue" as ButtonColorOption}
         buttonLabel={"buynow" as ButtonLabelOption}
@@ -177,6 +190,7 @@ function App() {
     ),
     GooglePay: (
       <GooglePay
+        requestHeader={requestHeader}
         totalPriceStatus={"FINAL"}
         googleMerchantId={"merchant-id-from-google"}
         acquirerCountryCode={"DE"}
@@ -186,6 +200,7 @@ function App() {
     ),
     Venmo: (
       <Venmo
+        requestHeader={requestHeader}
         desktopFlow={"desktopWebLogin"}
         mobileWebFallBack={true}
         paymentMethodUsage={"multi_use"}
@@ -196,17 +211,25 @@ function App() {
         {...params}
       />
     ),
-    ApplePay: <ApplePay applePayDisplayName="My Store" {...params} />,
+    ApplePay: (
+      <ApplePay
+        requestHeader={requestHeader}
+        applePayDisplayName="My Store"
+        {...params}
+      />
+    ),
     ACH: (
       <ACH
+        requestHeader={requestHeader}
         mandateText='By clicking ["Checkout"], I authorize Braintree, a service of PayPal, on behalf of [your business name here] (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.'
-        getAchVaultTokenURL={`https://poc-${COFE_IDENTIFIER}-mediaopt.frontastic.dev/frontastic/action/payment/getAchVaultToken`}
+        getAchVaultTokenURL={`${ENDPOINT_URL}/payment/getAchVaultToken`}
         useKount={true}
         {...params}
       />
     ),
     Bancontact: (
       <Bancontact
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -217,6 +240,7 @@ function App() {
     ),
     P24: (
       <P24
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -227,6 +251,7 @@ function App() {
     ),
     Sofort: (
       <Sofort
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -237,6 +262,7 @@ function App() {
     ),
     BLIK: (
       <BLIK
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"PLN"}
@@ -247,6 +273,7 @@ function App() {
     ),
     MyBank: (
       <MyBank
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -257,6 +284,7 @@ function App() {
     ),
     EPS: (
       <EPS
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -267,6 +295,7 @@ function App() {
     ),
     Giropay: (
       <Giropay
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -277,6 +306,7 @@ function App() {
     ),
     Grabpay: (
       <Grabpay
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"SGD"}
@@ -287,6 +317,7 @@ function App() {
     ),
     iDeal: (
       <IDeal
+        requestHeader={requestHeader}
         {...params}
         {...localPaymentParams}
         currencyCode={"EUR"}
@@ -299,9 +330,16 @@ function App() {
 
   const [choosenVaultMethod, setChoosenVaultMethod] = useState("");
   const vaultMethods: { [index: string]: JSX.Element } = {
-    CreditCardVault: <CreditCard {...params} {...vaultingParams} />,
+    CreditCardVault: (
+      <CreditCard
+        requestHeader={requestHeader}
+        {...params}
+        {...vaultingParams}
+      />
+    ),
     PayPalVault: (
       <PayPal
+        requestHeader={requestHeader}
         flow={"vault" as FlowType}
         buttonColor={"blue" as ButtonColorOption}
         buttonLabel={"paypal" as ButtonLabelOption}

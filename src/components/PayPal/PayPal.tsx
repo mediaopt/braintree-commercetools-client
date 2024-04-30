@@ -18,8 +18,6 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  sessionKey,
-  sessionValue,
   purchaseCallback,
   cartInformation,
   fullWidth,
@@ -48,14 +46,13 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
   isPureVault,
   createPaymentForVault,
   vaultPaymentMethodUrl,
+  requestHeader,
 }: PayPalComponentProps) => {
   return (
     <RenderTemplate
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
       taxAmount={taxAmount}
@@ -64,6 +61,7 @@ export const PayPal: React.FC<PayPalComponentProps> = ({
       shippingMethodId={shippingMethodId}
       createPaymentForVault={createPaymentForVault}
       vaultPaymentMethodUrl={vaultPaymentMethodUrl}
+      requestHeader={requestHeader}
     >
       <PayPalButton
         disabled={isPayButtonDisabled(cartInformation) && !isPureVault}

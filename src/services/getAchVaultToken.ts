@@ -1,10 +1,9 @@
 import { makeRequest } from "../api";
 
-import { AchVaultRequest, AchVaultResponse } from "../types";
+import { AchVaultRequest, AchVaultResponse, RequestHeader } from "../types";
 
 export const getAchVaultToken = async (
-  sessionKey: string,
-  sessionValue: string,
+  requestHeader: RequestHeader,
   url: string,
   paymentMethodNonce: string
 ) => {
@@ -14,8 +13,7 @@ export const getAchVaultToken = async (
     };
 
     const result = await makeRequest<AchVaultResponse, AchVaultRequest>(
-      sessionKey,
-      sessionValue,
+      requestHeader,
       url,
       "POST",
       data

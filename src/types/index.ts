@@ -47,14 +47,15 @@ export type GeneralPayButtonProps = {
 } & UseKount &
   LineItemsShipping;
 
+export type RequestHeader = { [key: string]: string };
+
 export type GeneralComponentsProps = {
+  requestHeader: RequestHeader;
   purchaseUrl: string;
   createPaymentUrl: string;
   createPaymentForVault?: string;
   vaultPaymentMethodUrl?: string;
   getClientTokenUrl: string;
-  sessionKey: string;
-  sessionValue: string;
   taxAmount?: string;
   shippingAmount?: string;
   discountAmount?: string;
