@@ -16,8 +16,6 @@ export const Venmo: React.FC<VenmoProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  sessionKey,
-  sessionValue,
   purchaseCallback,
   cartInformation,
   fullWidth,
@@ -34,14 +32,14 @@ export const Venmo: React.FC<VenmoProps> = ({
   shippingAmount,
   discountAmount,
   shippingMethodId,
+  requestHeader,
 }: VenmoProps) => {
   return (
     <RenderTemplate
+      requestHeader={requestHeader}
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
       taxAmount={taxAmount}

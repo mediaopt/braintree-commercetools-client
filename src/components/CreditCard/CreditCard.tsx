@@ -13,8 +13,6 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   createPaymentUrl,
   getClientTokenUrl,
   purchaseUrl,
-  sessionKey,
-  sessionValue,
   purchaseCallback,
   cartInformation,
   fullWidth,
@@ -36,14 +34,14 @@ export const CreditCard: React.FC<CreditCardProps> = ({
   isPureVault,
   createPaymentForVault,
   vaultPaymentMethodUrl,
+  requestHeader,
 }: CreditCardProps) => {
   return (
     <RenderTemplate
+      requestHeader={requestHeader}
       getClientTokenUrl={getClientTokenUrl}
       createPaymentUrl={createPaymentUrl}
       purchaseUrl={purchaseUrl}
-      sessionKey={sessionKey}
-      sessionValue={sessionValue}
       purchaseCallback={purchaseCallback}
       cartInformation={cartInformation}
       taxAmount={taxAmount}

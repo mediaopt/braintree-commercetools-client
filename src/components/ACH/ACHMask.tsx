@@ -71,9 +71,8 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
   const {
     handlePurchase,
     clientToken,
-    sessionKey,
-    sessionValue,
     handleGetVaultedPaymentMethods,
+    requestHeader,
   } = usePayment();
   const { notify } = useNotifications();
   const { isLoading } = useLoader();
@@ -226,8 +225,7 @@ export const ACHMask: React.FC<React.PropsWithChildren<ACHMaskProps>> = ({
                 }
 
                 const vaultResponse = await getAchVaultToken(
-                  sessionKey,
-                  sessionValue,
+                  requestHeader,
                   getAchVaultTokenURL,
                   tokenizedPayload.nonce
                 );

@@ -23,10 +23,6 @@ Each payment component takes a set of props that will be the same for everything
   See the examples in our [CoFe integration example repository](https://github.com/mediaopt/braintree-commercetools-cofe-integration/tree/main/packages/poc/backend/payment-braintree)
 - **purchaseCallback**: `(result: any) => void`  
    Function to execute after a successful purchase.
-- **sessionValue**: `string`  
-   The session value is to be able to connect to the cart. We send it in the header of requests with the value of **sessionKey**
-- **sessionKey**: `string`  
-   The key for the session to be used in conjunction with the session value.
 - **fullWidth**: `boolean`  
    Makes the pay button use the full amount of width available (defaults to true).
 - **buttonText**: `string`  
@@ -72,6 +68,15 @@ shipping: {
   postalCode: string;
 };
 ```
+
+- **requestHeader**: `object`
+  Information that you want to send to the server as a header.
+  Structure for CoFe:
+
+  ```
+  "Frontastic-Session": string;
+  "Commercetools-Frontend-Extension-Version": string;
+  ```
 
 ## Payment specific properties
 

@@ -16,14 +16,13 @@ export const RenderTemplate: FC<
   createPaymentForVault,
   purchaseUrl,
   vaultPaymentMethodUrl,
-  sessionKey,
-  sessionValue,
   purchaseCallback,
   cartInformation,
   taxAmount,
   shippingAmount,
   discountAmount,
   shippingMethodId,
+  requestHeader,
 }) => {
   return (
     <NotificationsProvider>
@@ -34,14 +33,13 @@ export const RenderTemplate: FC<
           createPaymentForVault={createPaymentForVault}
           purchaseUrl={purchaseUrl}
           vaultPaymentMethodUrl={vaultPaymentMethodUrl}
-          sessionKey={sessionKey}
-          sessionValue={sessionValue}
           purchaseCallback={purchaseCallback}
           cartInformation={cartInformation}
           taxAmount={taxAmount}
           shippingAmount={shippingAmount}
           discountAmount={discountAmount}
           shippingMethodId={shippingMethodId}
+          requestHeader={requestHeader}
         >
           <RenderPurchase>{children}</RenderPurchase>
         </PaymentProvider>

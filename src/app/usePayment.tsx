@@ -14,6 +14,7 @@ import {
   PaymentInfo,
   CartInformationInitial,
   TransactionSaleResponse,
+  RequestHeader,
 } from "../types";
 import { makeTransactionSaleRequest } from "../services/makeTransactionSaleRequest";
 import { useNotifications } from "./useNotifications";
@@ -43,9 +44,8 @@ type PaymentContextT = {
   paymentInfo: PaymentInfo;
   vaultedPaymentMethods: FetchPaymentMethodsPayload[];
   handleGetVaultedPaymentMethods: () => Promise<FetchPaymentMethodsPayload[]>;
-  sessionKey: string;
-  sessionValue: string;
   braintreeCustomerId: string;
+  requestHeader: RequestHeader;
 };
 
 const PaymentInfoInitialObject = {
@@ -56,8 +56,6 @@ const PaymentInfoInitialObject = {
   lineItems: [],
   shippingMethod: {},
   cartInformation: CartInformationInitial,
-  sessionKey: "",
-  sessionValue: "",
 };
 
 const PaymentContext = createContext<PaymentContextT>({
@@ -73,9 +71,8 @@ const PaymentContext = createContext<PaymentContextT>({
     new Promise<FetchPaymentMethodsPayload[]>(
       (resolve) => [] as FetchPaymentMethodsPayload[]
     ),
-  sessionKey: "",
-  sessionValue: "",
   braintreeCustomerId: "",
+  requestHeader: {},
 });
 
 export const PaymentProvider: FC<
@@ -86,8 +83,6 @@ export const PaymentProvider: FC<
   getClientTokenUrl,
   purchaseUrl,
   vaultPaymentMethodUrl,
-  sessionKey,
-  sessionValue,
   purchaseCallback,
   children,
   cartInformation,
@@ -95,6 +90,7 @@ export const PaymentProvider: FC<
   shippingAmount,
   discountAmount,
   shippingMethodId,
+  requestHeader,
 }) => {
   const [gettingClientToken, setGettingClientToken] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -127,8 +123,7 @@ export const PaymentProvider: FC<
             ? createPaymentForVault
             : createPaymentUrl;
         const createPaymentResult = (await createPayment(
-          sessionKey,
-          sessionValue,
+          requestHeader,
           createPaymentEndpoint,
           cartInformation,
           shippingMethodId
@@ -149,8 +144,7 @@ export const PaymentProvider: FC<
           createPaymentResult.version
         ) {
           const clientTokenresult = (await getClientToken(
-            sessionKey,
-            sessionValue,
+            requestHeader,
             getClientTokenUrl,
             createPaymentResult.id,
             createPaymentResult.version,
@@ -235,8 +229,7 @@ export const PaymentProvider: FC<
       saveLocalPaymentUrl: string
     ) => {
       const response = (await setLocalPaymentIdRequest(
-        sessionKey,
-        sessionValue,
+        requestHeader,
         saveLocalPaymentUrl,
         paymentInfo.id,
         paymentInfo.version,
@@ -276,8 +269,7 @@ export const PaymentProvider: FC<
 
       isLoading(true);
       const response = (await makeTransactionSaleRequest(
-        sessionKey,
-        sessionValue,
+        requestHeader,
         purchaseUrl,
         requestBody
       )) as TransactionSaleResponse;
@@ -309,8 +301,7 @@ export const PaymentProvider: FC<
 
       isLoading(true);
       const response = await makeVaultRequest(
-        sessionKey,
-        sessionValue,
+        requestHeader,
         vaultPaymentMethodUrl,
         requestBody
       );
@@ -338,9 +329,8 @@ export const PaymentProvider: FC<
       paymentInfo,
       vaultedPaymentMethods,
       handleGetVaultedPaymentMethods,
-      sessionValue,
-      sessionKey,
       braintreeCustomerId,
+      requestHeader,
     };
   }, [clientToken, gettingClientToken]);
 

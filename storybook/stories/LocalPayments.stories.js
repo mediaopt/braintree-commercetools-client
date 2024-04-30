@@ -1,5 +1,5 @@
 import { LocalPaymentMethod } from "../../src/components/LocalPaymentMethods/LocalPaymentMethod";
-import { params, localPaymentParams } from "./constants";
+import { params, localPaymentParams, requestHeader } from "./constants";
 
 export default {
   title: "Components/LocalPayments",
@@ -13,6 +13,7 @@ export const Bancontact = {
     currencyCode: "EUR",
     paymentType: "bancontact",
     countryCode: "BE",
+    requestHeader,
   },
 };
 
@@ -23,6 +24,7 @@ export const BLIK = {
     currencyCode: "PLN",
     paymentType: "blik",
     countryCode: "PL",
+    requestHeader,
   },
 };
 
@@ -33,6 +35,7 @@ export const EPS = {
     currencyCode: "EUR",
     paymentType: "EPS",
     countryCode: "AT",
+    requestHeader,
   },
 };
 
@@ -43,6 +46,7 @@ export const Giropay = {
     currencyCode: "EUR",
     paymentType: "giropay",
     countryCode: "DE",
+    requestHeader,
   },
 };
 
@@ -53,6 +57,7 @@ export const Grabpay = {
     currencyCode: "SGD",
     paymentType: "grabpay",
     countryCode: "SG",
+    requestHeader,
   },
 };
 
@@ -63,6 +68,7 @@ export const iDeal = {
     currencyCode: "EUR",
     paymentType: "ideal",
     countryCode: "NL",
+    requestHeader,
   },
 };
 
@@ -73,6 +79,7 @@ export const Sofort = {
     currencyCode: "EUR",
     paymentType: "sofort",
     countryCode: "DE",
+    requestHeader,
   },
   argTypes: {
     currencyCode: {
@@ -92,6 +99,7 @@ export const MyBank = {
     currencyCode: "EUR",
     paymentType: "sofort",
     countryCode: "IT",
+    requestHeader,
   },
 };
 export const P24 = {
@@ -101,6 +109,7 @@ export const P24 = {
     currencyCode: "EUR",
     paymentType: "p24",
     countryCode: "PL",
+    requestHeader,
   },
   argTypes: {
     currencyCode: {

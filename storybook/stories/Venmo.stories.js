@@ -1,5 +1,5 @@
 import { Venmo } from "../../src/components/Venmo";
-import { params } from "./constants";
+import { params, requestHeader } from "./constants";
 
 export default {
   title: "Components/Venmo",
@@ -15,5 +15,6 @@ export const Main = {
     useTestNonce: true,
     setVenmoUserName: (venmoName) => console.log(venmoName),
     ignoreBowserSupport: true,
+    requestHeader,
   },
 };

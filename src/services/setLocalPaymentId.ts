@@ -1,8 +1,9 @@
 import { makeRequest } from "../api";
 
+import { RequestHeader } from "../types";
+
 export const setLocalPaymentIdRequest = async (
-  sessionKey: string,
-  sessionValue: string,
+  requestHeader: RequestHeader,
   url: string,
   paymentId: string,
   paymentVersion: number,
@@ -15,13 +16,7 @@ export const setLocalPaymentIdRequest = async (
       localPaymentId,
     };
 
-    const result = await makeRequest(
-      sessionKey,
-      sessionValue,
-      url,
-      "POST",
-      data
-    );
+    const result = await makeRequest(requestHeader, url, "POST", data);
 
     return result;
   } catch (error) {
